@@ -1,0 +1,23 @@
+name: Java Application Deployment
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+    workflow_dispatch:  # Allows manual triggering
+
+jobs:
+    build-and-deploy:
+        runs-on: self-hosted  # Uses your self-hosted runner
+        
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+            
+        - name: Run tests
+          run: ./gradlew test
+            
+        - name: Deploy application
+          run: |
+              docker compose up -d
