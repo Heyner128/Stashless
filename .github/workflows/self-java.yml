@@ -21,4 +21,4 @@ jobs:
         - name: Deploy application
           run: |
             touch .env
-            docker compose --env-file default.env --env-file .env up -d
+            docker compose --env-file default.env --env-file .env up --build -d
