@@ -16,8 +16,7 @@ jobs:
           uses: actions/checkout@v3
             
         - name: Run tests
-          run: ./gradlew test
+          run: gradle test
             
         - name: Deploy application
-          run: |
-              docker compose up -d
+          run: docker compose up -d
