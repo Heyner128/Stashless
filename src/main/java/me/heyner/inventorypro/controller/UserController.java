@@ -35,7 +35,7 @@ public class UserController {
 
   private final ModelMapper modelMapper = new ModelMapper();
   
-  @Value("${spring.profiles.active}")
+  @Value("${spring.profiles.active:prod}")
   private String profile;
 
   public UserController(
