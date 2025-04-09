@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "InventoryProApplication",
+            "request": "launch",
+            "mainClass": "me.heyner.inventorypro.InventoryProApplication",
+            "projectName": "InventoryPro",
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "dev"
+            },
+        },
+        {
+            "name": "ng serve --configuration development",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "npm: start",
+            "webRoot": "${workspaceFolder}/web",
+            "url": "http://localhost:4200/",
+        },
+        {
+            "name": "ng test --configuration development",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "npm: test",
+            "webRoot": "${workspaceFolder}/web",
+            "url": "http://localhost:9876/debug.html"
+        }
+    ]
+}

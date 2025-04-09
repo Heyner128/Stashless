@@ -1,0 +1,10 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.test.config": {
+        "name": "Default",
+        "env": {
+            "SPRING_PROFILES_ACTIVE": "test"
+        }
+    }
+}

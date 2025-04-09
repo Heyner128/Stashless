@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: always
+    env_file:
+      - ./default.env
+      - ./.env
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=true
+      - MARIADB_DATABASE=inventorypro
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
+    volumes:
+      - /var/db/inventorypro:/var/lib/mysql:Z
+
+  api:
+    env_file:
+      - ./default.env
+      - ./.env
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "8080:8080"

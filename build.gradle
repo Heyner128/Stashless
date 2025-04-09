@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'me.heyner'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add('-parameters')
+}
+
+configurations {
+    compileOnly {
+        extendsFrom configurations.annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+def modelMapperVersion = '3.2.0'
+def jjwtVersion = '0.12.6'
+def h2Version = '2.3.232'
+def springDocVersion = '2.8.6'
+def mariaDbVersion = '3.5.0'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.session:spring-session-core'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion"
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+    implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
+    implementation "io.jsonwebtoken:jjwt-impl:$jjwtVersion"
+    implementation "io.jsonwebtoken:jjwt-jackson:$jjwtVersion"
+
+    compileOnly 'org.springframework.boot:spring-boot-devtools'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    runtimeOnly "com.h2database:h2:$h2Version"
+    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:$mariaDbVersion"
+
+    testRuntimeOnly "com.h2database:h2:$h2Version"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.withType(Test) {
+    environment 'SPRING_PROFILES_ACTIVE', 'test'
+    useJUnitPlatform()
+}
+
+tasks.named("bootTestRun") {
+    environment 'SPRING_PROFILES_ACTIVE', 'test'
+}
+
+tasks.check {
+    finalizedBy tasks.jacocoTestCoverageVerification
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn tasks.check
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+    }
+}

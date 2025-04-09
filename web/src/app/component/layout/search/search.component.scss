@@ -1,0 +1,21 @@
+@use 'sass:color';
+@use 'styles' as *;
+
+:host {
+    --fixed-size: calc(20 * var(--size-xxlarge));
+}
+
+.header__search-button {
+    border: none;
+    border-radius: calc(0.5 * var(--size-xxsmall));
+    padding: var(--size-xxsmall);
+    background-color: transparent;
+    &:hover {
+        cursor: pointer;
+        background-color: color.adjust($color-background, $lightness: -10%)
+    }
+}
+
+.header__search-bar {
+    @include input-with-icon;
+}

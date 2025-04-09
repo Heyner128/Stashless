@@ -1,0 +1,76 @@
+@use 'sass:color';
+@use 'styles' as *;
+
+:host {
+    display: grid;
+    grid-template-columns: min-content 1fr;    
+    grid-template-rows: min-content 1fr;
+    grid-template-areas: 
+        "nav header"
+        "nav main";
+}
+
+.nav {
+    grid-area: nav;
+    position: sticky;
+    height: 100vh;
+    overflow: hidden;
+    width: fit-content;
+    padding: auto;
+    background-color: var(--color-primary);
+}
+
+.nav ul {
+    margin: 0;
+    padding-inline-start: 0px;
+}
+
+.nav__item {
+    list-style-type: none;
+}
+
+.nav__item a {
+    display: block;
+    padding: var(--size-medium);
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    &:hover {
+        color: white;
+        background-color: color.adjust($color-primary, $lightness: -10%);
+    }
+}
+
+.nav__item a.active {
+    cursor: default;
+    color: white;
+    background-color: color.adjust($color-primary, $lightness: +10%);
+}
+
+
+.nav__item .material-symbols-outlined {
+    font-size: calc(1.5 * var(--size-large));
+}
+
+.content {
+    grid-area: main;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 var(--size-xxlarge);
+    box-sizing: border-box;
+}
+
+.header {
+    grid-area: header;
+    padding: var(--size-small);
+    min-height: calc(2.5 * var(--size-medium));
+}
+
+.header nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--size-small);
+    height: 100%;
+}
+

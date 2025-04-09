@@ -1,0 +1,55 @@
+@use 'styles' as *;
+
+:host {
+    align-self: center;
+}
+
+.card {
+    background-color: var(--color-white);
+    align-self: center;
+    border-radius: var(--size-small);
+    padding: var(--size-medium);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--size-medium);
+    width: calc(20 * var(--size-xxlarge));
+    min-height: calc(4 * var(--size-xxlarge));
+    border: 1px solid rgba($color-grey, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--size-xxlarge);
+}
+
+.card__content {
+    align-self: stretch;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-wrap: break-word;
+}
+
+.card__body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    overflow-wrap: break-word;
+}
+
+.card__title {
+    margin: 0;
+    font-size: var(--size-medium);
+    font-weight: bold;
+}
+
+.card img {
+    width: calc(6 * var(--size-xxlarge));
+    height: calc(4 * var(--size-xxlarge));
+    border-radius: var(--size-small);
+    
+}
+
+.card__button {
+    @include button-secondary;
+    padding: var(--size-xxsmall);
+}
