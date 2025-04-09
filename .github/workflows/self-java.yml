@@ -19,4 +19,6 @@ jobs:
           run: ./gradlew test
             
         - name: Deploy application
-          run: docker compose --env-file default.env --env-file .env up -d
+          run: |
+            touch .env
+            docker compose --env-file default.env --env-file .env up -d
