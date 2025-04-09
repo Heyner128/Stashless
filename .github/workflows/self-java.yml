@@ -10,7 +10,7 @@ on:
 jobs:
     build-and-deploy:
         runs-on: self-hosted  # Uses your self-hosted runner
-        
+        environment: 'Self Hosted Production'
         steps:
         - name: Checkout code
           uses: actions/checkout@v3
