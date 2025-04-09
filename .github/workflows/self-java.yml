@@ -1,4 +1,4 @@
-name: Java Application Deployment
+name: Self Hosted Deploy
 
 on:
     push:
