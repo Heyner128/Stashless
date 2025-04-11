@@ -13,22 +13,6 @@
             "env": {
                 "SPRING_PROFILES_ACTIVE": "dev"
             },
-        },
-        {
-            "name": "ng serve --configuration development",
-            "type": "chrome",
-            "request": "launch",
-            "preLaunchTask": "npm: start",
-            "webRoot": "${workspaceFolder}/web",
-            "url": "http://localhost:4200/",
-        },
-        {
-            "name": "ng test --configuration development",
-            "type": "chrome",
-            "request": "launch",
-            "preLaunchTask": "npm: test",
-            "webRoot": "${workspaceFolder}/web",
-            "url": "http://localhost:9876/debug.html"
         }
     ]
 }
