@@ -65,8 +65,9 @@ public class UserController {
     ResponseCookie sessionCookie =
         ResponseCookie.from(Cookies.SESSION_TOKEN, jwtToken)
             .httpOnly(true)
+            .domain(!profile.equals("dev") ? "heyner.me" : "localhost")
             .secure(!profile.equals("dev"))
-            .sameSite(!profile.equals("dev") ? "None" : "Lax")
+            .sameSite("Lax")
             .path("/")
             .maxAge(jwtService.getJwtExpiration())
             .build();
@@ -74,8 +75,9 @@ public class UserController {
     ResponseCookie userIdCookie =
         ResponseCookie.from(Cookies.USER_ID, jwtService.extractUsername(jwtToken))
             .httpOnly(false)
+            .domain(!profile.equals("dev") ? "heyner.me" : "localhost")
             .secure(!profile.equals("dev"))
-            .sameSite(!profile.equals("dev") ? "None" : "Lax")
+            .sameSite("Lax")
             .path("/")
             .maxAge(jwtService.getJwtExpiration())
             .build();
