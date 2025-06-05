@@ -1,0 +1,110 @@
+@use 'sass:color';
+@use 'fonts' as *;
+@use 'variables' as *;
+
+:root {
+    --color-primary: #{$color-primary};
+    --color-primary-light: #{$color-primary-light};
+    --color-primary-dark: #{$color-primary-dark};
+
+    --color-secondary: #{$color-secondary};
+    --color-secondary-light: #{$color-secondary-light};
+    --color-secondary-dark: #{$color-secondary-dark};
+
+    --color-grey-light: #{$color-grey-light};
+    --color-grey: #{$color-grey};
+    --color-grey-dark: #{$color-grey-dark};
+
+    --color-success: #{$color-success};
+    --color-success-light: #{$color-success-light};
+    --color-success-dark: #{$color-success-dark};
+
+    --color-error: #{$color-error};
+    --color-error-light: #{$color-error-light};
+    --color-error-dark: #{$color-error-dark};
+
+    --color-warning: #{$color-warning};
+    --color-warning-light: #{$color-warning-light};
+    --color-warning-dark: #{$color-warning-dark};
+
+    --color-info: #{$color-info};
+    --color-info-light: #{$color-info-light};
+    --color-info-dark: #{$color-info-dark};
+
+    --color-background: #{$color-background};
+
+    --color-black: #{$color-black};
+    --color-white:#{$color-white};
+
+    --size-xxsmall: #{$size-xxsmall};
+    --size-xsmall: #{$size-xsmall};
+    --size-small: #{$size-small};
+    --size-medium: #{$size-medium};
+    --size-large: #{$size-large};
+    --size-xlarge: #{$size-xlarge};
+    --size-xxlarge: #{$size-xxlarge};
+}
+
+@mixin visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+}
+
+
+.visually-hidden {
+    @include visually-hidden;
+}
+
+
+html, body { 
+    height: 100%;
+    background-color: var(--color-background);
+    font-family: 'Red Hat Display', serif;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+h1 {
+    font-size: var(--size-xlarge);
+    font-weight: 500;
+    margin-block: var(--size-xsmall);
+}
+
+h2 {
+    font-size: var(--size-medium);
+    font-weight: bold;
+    margin-block: var(--size-xsmall);
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+input, textarea {
+    font-family: 'Red Hat Display', serif;
+}
+
+textarea {
+    resize: none;
+    height: max-content;
+    min-height: calc(3 * var(--size-xlarge));
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: var(--size-xsmall) var(--size-small);
+}

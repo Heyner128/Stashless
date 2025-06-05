@@ -6,13 +6,21 @@
     "configurations": [
         {
             "type": "java",
-            "name": "InventoryProApplication",
+            "name": "Backend",
             "request": "launch",
-            "mainClass": "me.heyner.inventorypro.InventoryProApplication",
-            "projectName": "InventoryPro",
+            "mainClass": "me.heyner.stashless.StashlessApplication",
+            "projectName": "Stashless",
             "env": {
                 "SPRING_PROFILES_ACTIVE": "dev"
             },
+        },
+        {
+            "name": "Frontend",
+            "type": "msedge",
+            "request": "launch",
+            "preLaunchTask": "npm: start",
+            "webRoot": "${workspaceFolder}/web",
+            "url": "http://localhost:4200/",
         }
     ]
 }

@@ -1,0 +1,19 @@
+<button type="button" class="header__search-button" (click)="open()" [hidden]="isSearchOpen()">
+    <span class="material-symbols-outlined">search</span>
+</button>
+<div 
+    class="header__search-bar"
+    [@openClose]="isSearchOpen() ? 'open' : 'closed'"
+    (@openClose.done)="onAnimationChange($event)"
+    #container
+>
+    <span class="material-symbols-outlined">search</span>
+    <input type="text" placeholder="Search anything"  #input/>
+</div>
+<app-popover
+    [(isOpen)]="isSearchCompletelyOpen"
+    [anchorElement]="container"
+    [offset]="25"
+>
+    <div>Search results here</div>
+</app-popover>

@@ -1,6 +1,6 @@
-# InventoryPro
+# Stashless
 
-InventoryPro is a inventory management application designed to help businesses keep track of their stock levels.
+Stashless is a lightweight inventory management system designed to help small businesses keep track of their stock levels.
 
 ## Features
 
@@ -8,7 +8,18 @@ InventoryPro is a inventory management application designed to help businesses k
 - **Variant and Options Management**: Create, manage, and track product variants and options.
 - **User Management**: Each user can have unlimited inventories and products
 
-## Installation
+## Self-hosting
+
+### Installation
+
+Create a `.env` file with the following variables:
+
+```ENV
+DB_USER=user
+DB_PASSWORD=password
+CORS_FRONTEND_URL=https://stashless.example.com
+```
+
 
 To start with Docker Compose:
 
@@ -16,7 +27,6 @@ To start with Docker Compose:
 docker compose up -d
 ```
 
-## Usage
+## Live-demo version
 
-1. Open your web browser and navigate to `http://localhost:3000`.
-2. Start managing your inventory by adding products, variants, and generating reports.
+<https://stashless.heyner.me>

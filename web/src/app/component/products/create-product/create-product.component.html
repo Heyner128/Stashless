@@ -1,0 +1,49 @@
+
+<form class="product-form" [formGroup]="productForm" (submit)="create()" ngNativeValidate>
+    <div class="product-form__header">
+        <a class="product-form__header-back" routerLink="/products">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1>New product</h1>
+    </div>  
+    <div class="product-form__fields">
+        <div class="product-form__input">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" [formControl]="productForm.controls.name" required>
+        </div>
+        <div class="product-form__input">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" [formControl]="productForm.controls.brand" required>
+        </div>
+        <div class="product-form__input">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" [formControl]="productForm.controls.description" required></textarea>
+        </div>
+    </div>
+    <form  [formGroup]="optionsForm" (submit)="addToOptionsList()" ngNativeValidate>
+        <div class="options-form__fields">
+            <h2>Options</h2>
+            <div class="options-form__input">
+                <label for="name">Name</label>
+                <div>
+                    <input title="option name" type="text" id="name" name="name" [formControl]="optionsForm.controls.name" required>
+                    <button class="options-form__add" type="submit">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+            </div>
+            <div class="options-form__list">
+                @for(option of options(); track option.name) {
+                    <span class="options-form__item-title">{{option.name}}:</span>
+                    <app-option 
+                        [option]="option"
+                    />
+                }
+            </div>
+        </div>
+    </form>
+    @if (statusMessage) {
+        <span class="product-form__status">{{statusMessage}}</span>
+    }
+    <button class="product-form__submit" type="submit">Create</button>
+</form>

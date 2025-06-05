@@ -1,17 +1,18 @@
 services:
   db:
     image: mariadb:10.11
-    restart: always
+    restart: unless-stopped
     env_file:
       - ./default.env
       - ./.env
     environment:
       - MARIADB_RANDOM_ROOT_PASSWORD=true
-      - MARIADB_DATABASE=inventorypro
+      - MARIADB_DATABASE=stashless
       - MARIADB_USER=${DB_USER}
       - MARIADB_PASSWORD=${DB_PASSWORD}
     healthcheck:
       interval: 30s
+      start_period: 30s
       retries: 3
       test:
         [
@@ -23,17 +24,40 @@ services:
         ]
       timeout: 30s
     volumes:
-      - /var/db/inventorypro:/var/lib/mysql:Z
+      - /var/db/stashless:/var/lib/mysql:Z
 
   api:
     env_file:
       - ./default.env
       - ./.env
     build: .
-    restart: always
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
         restart: true
+    healthcheck:
+      interval: 30s
+      start_period: 60s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/api/actuator/health"
+        ]
+      timeout: 30s
     ports:
       - "7077:8080"
+
+  web:
+    build: 
+      context: ./web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "4400:4000"

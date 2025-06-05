@@ -1,0 +1,20 @@
+
+<form class="option-values" [formGroup]="optionForm" (submit)="addOptionValue()" ngNativeValidate>
+    <input class="option-values__input" type="text" placeholder="{{option().name.toLowerCase()}} values" [formControl]="optionForm.controls.optionValue"/>
+    <button type="submit" class="option-values__add">
+        <span class="material-symbols-outlined">add</span>
+    </button>
+    @if(option().values.length > 0) {
+        <ul class="option-values__list">
+            @for ( value of option().values; track value ) {
+                <li class="option-values__item">
+                    <span>{{value}}</span>
+                    <button type="button" (click)="removeOptionValue(value)">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </li>
+            }
+        </ul>
+    }
+    
+</form>

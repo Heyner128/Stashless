@@ -1,0 +1,22 @@
+@use 'components' as *;
+
+.items-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.items-form__options {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.items-form__select {
+    @include input-with-label;
+}
+
+.items-form__status {
+    color: var(--color-error-dark);
+    font-weight: bold;
+    font-size: var(--size-small);
+}

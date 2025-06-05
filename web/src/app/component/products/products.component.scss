@@ -1,0 +1,32 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'components' as *;
+
+.products__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.products__header a {
+    @include button-secondary-outline;
+}
+
+.products__table {
+    width: 100%;
+}
+
+.products__table-row {
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.products__table-row:hover {
+    background-color: color.adjust($color-white, $lightness: -10%);
+}
+
+.products__table-row--merged {
+    text-align: center;
+}

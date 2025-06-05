@@ -1,0 +1,32 @@
+@use 'sass:color';
+@use 'components' as *;
+@use 'variables' as *;
+
+.inventories__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inventories__header a {
+    @include button-secondary-outline;
+}
+
+.inventories__table {
+    width: 100%;
+}
+
+.inventories__table-row {
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.inventories__table-row:hover {
+    background-color: color.adjust($color-white, $lightness: -10%);
+}
+
+.inventories__table-row--merged {
+    text-align: center;
+}

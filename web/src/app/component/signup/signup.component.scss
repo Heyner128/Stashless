@@ -1,0 +1,55 @@
+@use 'components' as *;
+@use 'variables' as *;
+
+.content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.signup-form {
+    margin-top: calc(2 * var(--size-xxlarge));
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba($color-grey, 0.5);
+    border-radius: var(--size-xxsmall);
+    padding: var(--size-xxlarge);
+}
+
+.signup-form :is(h1, h2, h3) {
+    margin-bottom: calc(2 * var(--size-large));
+}
+
+.signup-form form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: var(--size-large);
+}
+
+.signup-form__input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xxsmall);
+    width: 100%;
+} 
+
+.signup-form__input label {
+    font-weight: bold;
+    font-size: var(--size-small);
+}
+
+
+.signup-form__input input {
+    @include input;
+}
+
+.signup-form__status {
+    color: var(--color-error-dark);
+    font-weight: bold;
+    font-size: var(--size-small);
+}
+
+.signup-form__submit {
+    @include button-secondary;
+}

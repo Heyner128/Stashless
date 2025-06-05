@@ -1,0 +1,39 @@
+<header class="header">
+    <div class="header__logo-container">
+        <button type="button" class="header__menu" aria-label="menu" (click)="toggleSideNav()">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <a class="header__logo" routerLink="/">
+            <img class="header__logo-icon" src="logo-image.svg" alt="Logo icon" />
+            <img class="header__logo-text" src="logo-text.svg" alt="Logo text" />
+        </a>
+    </div>
+    <nav aria-label="header-actions">
+        
+        <!-- <app-search /> -->
+        <app-user-badge />
+    </nav>
+</header>
+<div class="main-container">
+    <aside class="nav" #sideNav>
+        <nav aria-label="main-navigation">
+            <ul>
+                <li class="nav__item"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleSideNav()">
+                    <span class="material-symbols-outlined">home</span>
+                    <span>Home</span>
+                </a></li>
+                <li class="nav__item"><a routerLink="/inventories" routerLinkActive="active"  (click)="toggleSideNav()">
+                    <span class="material-symbols-outlined">source_environment</span>
+                    <span>Inventories</span>
+                </a></li>
+                <li class="nav__item"><a routerLink="/products" routerLinkActive="active"  (click)="toggleSideNav()">
+                    <span class="material-symbols-outlined">pallet</span>
+                    <span>Products</span>
+                </a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="content">
+        <router-outlet></router-outlet>
+    </main>
+</div>

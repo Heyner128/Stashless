@@ -1,0 +1,29 @@
+@use 'sass:color';
+@use 'components' as *;
+@use 'variables' as *;
+
+:host {
+    --fixed-size: calc(20 * var(--size-xxlarge));
+    @media screen and (max-width: 768px) {
+        --fixed-size: calc(6 * var(--size-xxlarge));
+    }
+
+    @media screen and (max-width: 480px) {
+        --fixed-size: calc(4 * var(--size-xxlarge));
+    }
+}
+
+.header__search-button {
+    border: none;
+    border-radius: calc(0.5 * var(--size-xxsmall));
+    padding: var(--size-xxsmall);
+    background-color: transparent;
+    &:hover {
+        cursor: pointer;
+        background-color: color.adjust($color-background, $lightness: -10%)
+    }
+}
+
+.header__search-bar {
+    @include input-with-icon;
+}

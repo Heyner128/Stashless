@@ -1,0 +1,36 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+
+:host ::ng-deep {
+    position: absolute;
+    width: max-content;
+    background-color: var(--color-white);
+    border-radius: calc(0.5 * var(--size-xxsmall));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: -100%;
+    left: -100%;
+    z-index: 1000;
+
+    button {
+        display: flex;
+        align-items: center;
+        gap: var(--size-xxsmall);
+        border: none;
+        background-color: transparent;
+
+        &:hover {
+            cursor: pointer;
+            background-color: color.adjust($color-background, $lightness: -10%)
+        }
+    }
+    
+
+    .popover__arrow {
+        position: absolute;
+        background: var(--color-white);
+        width: 8px;
+        height: 8px;
+        transform: rotate(45deg);
+    }
+}

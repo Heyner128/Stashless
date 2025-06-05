@@ -1,0 +1,49 @@
+<div class="inventories__header">
+    <div class="inventories__header-description">
+        <h1>Inventories</h1>
+        <h2>Create and manage inventories</h2>
+    </div>
+    <a routerLink="/inventories/create" >New Inventory</a>
+</div>
+<table class="inventories__table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(table === undefined || inventories === undefined) {
+            <tr class="inventories__table-row--merged">
+                <td colspan="4">Loading inventories...</td>
+            </tr>
+        } @else if(table.getRowModel().rows.length === 0) {
+            <tr class="inventories__table-row--merged">
+                <td colspan="4">No inventories found</td>
+            </tr>
+        } @else {
+            @for (row of table.getRowModel().rows; track row.id) {
+                <tr class="inventories__table-row" routerLink="/inventories/{{ row.original.id }}" >
+                        @for (cell of row.getVisibleCells(); track cell.id) {
+                            <td>
+                                
+                                    <ng-container
+                                        *flexRender="
+                                            cell.column.columnDef.cell;
+                                            props: cell.getContext();
+                                            let cell
+                                            "
+                                    >
+                                        <div [innerHTML]="cell"></div>
+                                    </ng-container>
+                                
+                            </td>
+                        }
+                
+                </tr>
+            }
+        }
+    </tbody>
+</table>

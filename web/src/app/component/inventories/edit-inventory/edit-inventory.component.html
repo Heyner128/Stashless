@@ -1,0 +1,25 @@
+<form class="inventory-form" [formGroup]="inventoryForm" (submit)="update()" ngNativeValidate>
+    <div class="inventory-form__header">
+        <a class="inventory-form__header-back" routerLink="/inventories">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1>{{title}}</h1>
+    </div>  
+    <div class="inventory-form__fields">
+        <div class="inventory-form__input">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" [formControl]="inventoryForm.controls.name" required>
+        </div>
+        <div class="inventory-form__input">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" [formControl]="inventoryForm.controls.description"></textarea>
+        </div>
+    </div>
+    @if (statusMessage) {
+        <span class="inventory-form__status">{{statusMessage}}</span>
+    }
+    <div class="inventory-form__actions">
+        <button class="inventory-form__delete" type="button" (click)="delete()">Delete</button>
+        <button class="inventory-form__submit" type="submit">Update</button>
+    </div>
+</form>

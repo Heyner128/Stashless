@@ -1,0 +1,42 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+.user-badge__button {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xxsmall);
+    border-radius: calc(0.5 * var(--size-xxsmall));
+    padding: var(--size-small);
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+
+    &:hover{
+        cursor: pointer;
+        background-color: color.adjust($color-background, $lightness: -10%);
+    }
+
+    &:focus{
+        background-color: color.adjust($color-background, $lightness: -10%);
+    }
+}
+
+.user-badge__popover {
+    padding: var(--size-small) 0; 
+}
+
+.user-badge__popover-item {
+    min-width: calc(10 * var(--size-xxlarge));
+    padding: var(--size-small);
+    font-size: var(--size-small);
+}
+
+.user-badge__popover-item__title {
+    font-weight: bold;
+    text-align: center;
+    padding: var(--size-medium);
+}
+
+.user-badge__popover-item .material-symbols-outlined {
+    font-size: var(--size-xlarge);
+}

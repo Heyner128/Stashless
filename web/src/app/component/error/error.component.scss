@@ -1,0 +1,17 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.error__image {
+    height: calc(10 * var(--size-medium));
+    width: auto;
+}
+
+.error__message {
+    font-weight: bold;
+    color: var(--color-error)
+}

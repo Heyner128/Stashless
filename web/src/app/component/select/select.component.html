@@ -1,0 +1,37 @@
+<div 
+    class="select"
+    (click)="toggle()"
+    (blur)="toggle(false)"
+    (keyup.enter)="selectHighlighted()"
+    (keyup.escape)="toggle(false)"
+    (keyup.arrowup)="highlight(highlightedOptionIndex() - 1)"
+    (keyup.arrowdown)="highlight(highlightedOptionIndex() + 1)"
+    tabindex="0"
+    #selectTrigger
+>
+    <span 
+        class="select__title"
+        [style.color]="title() === placeholder() ? 'var(--color-grey)' : 'var(--color-black)'"
+    >{{title()}}</span>
+    <span 
+        class="select__arrow material-symbols-outlined"
+    >arrow_drop_down</span>
+</div>
+<app-popover
+    [(isOpen)]="isOpen"
+    [anchorElement]="selectTrigger"
+>
+    <div class="select__options">
+        @for(option of options(); track option.value) {
+            <span
+                [classList]="`select__option 
+                ${selectedOption()?.value === option.value ? 'active' : ''} 
+                ${highlightedOptionIndex() === options().indexOf(option) ? 'highlighted' : ''}`"
+                (mousedown)="selectEventHandler($event, option)"
+                (keyup)="selectEventHandler($event, option)"
+            >
+                {{option.text}}
+            </span>
+        }
+    </div>
+</app-popover>
