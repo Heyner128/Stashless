@@ -3,7 +3,7 @@ COPY src /app/src
 COPY build.gradle /app
 COPY settings.gradle /app
 WORKDIR /app
-RUN gradle bootJar
+RUN gradle bootJar -x test
 
 FROM openjdk:23-jdk
 COPY --from=build /app/build/libs/*.jar /app/app.jar

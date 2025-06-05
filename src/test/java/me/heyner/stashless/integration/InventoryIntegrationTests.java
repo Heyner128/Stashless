@@ -175,6 +175,8 @@ class InventoryIntegrationTests {
 
     ProductOutputDto createdProduct = createProduct().getBody();
 
+    createOption(createdProduct.getId());
+
     SKUOutputDto createdSKU = createSKU(createdProduct.getId()).getBody();
 
     InventoryItemInputDto inventoryItemInputDto =
