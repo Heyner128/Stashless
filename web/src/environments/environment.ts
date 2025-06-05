@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiBaseUrl: 'http://api.stashless.heyner.me',
+    apiBaseUrl: 'https://apistashless.heyner.me',
 };

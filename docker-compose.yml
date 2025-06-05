@@ -45,7 +45,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:8080/api/actuator/health"
+          "http://localhost:8080/actuator/health"
         ]
       timeout: 30s
     ports:
