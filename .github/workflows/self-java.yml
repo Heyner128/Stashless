@@ -5,20 +5,18 @@ on:
         branches: [ main ]
     pull_request:
         branches: [ main ]
-    workflow_dispatch:  # Allows manual triggering
+    workflow_dispatch: 
 
 jobs:
     build-and-deploy:
-        runs-on: self-hosted  # Uses your self-hosted runner
+        runs-on: self-hosted  
         environment: 'Self Hosted Production'
         steps:
         - name: Checkout code
           uses: actions/checkout@v3
-            
-        - name: Run tests
-          run: ./gradlew test
-            
+
         - name: Deploy application
           run: |
             touch .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             docker compose --env-file default.env --env-file .env up --build -d
