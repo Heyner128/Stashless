@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
     padding: var(--size-xxsmall) var(--size-large);
-    //min-height: calc(1 * var(--size-xxlarge));
+    color: var(--color-black);
     background-color: var(--color-white);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1;
@@ -93,6 +93,7 @@
     background-color: color.adjust($color-background, $lightness: -5%);
     @media (max-width: 768px) {
         position: absolute;
+        z-index: 200;
         transition: transform 0.2s ease-in-out;
     }
 }

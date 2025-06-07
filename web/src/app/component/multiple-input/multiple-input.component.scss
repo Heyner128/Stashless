@@ -1,0 +1,82 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+:host {
+    display: grid;
+    border: solid 1px var(--color-black);
+    border-radius: var(--size-xxsmall);
+    padding: var(--size-xxsmall);
+    grid-template-columns: 1fr max-content;
+    grid-template-rows: repeat(2, minmax(0, auto));
+    grid-template-areas: 
+    "input add"
+    "values values";
+
+    &:focus-visible, &:focus-within {
+        outline: 2px solid var(--color-black);
+        outline-offset: -2px;
+    }
+}
+
+.values__input {
+    grid-area: input;
+    border: none;
+    outline: none;
+}
+
+.values__add {
+    grid-area: add;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    color: color.adjust($color-black, $lightness: +70%);
+
+    &:hover {
+        color: var(--color-black);
+    }
+}
+
+.values__add .material-symbols-outlined {
+    font-size: calc(1.3 * var(--size-medium));
+}
+
+.values__list {
+    grid-area: values;
+    padding: 0;
+    margin: var(--size-xxsmall) 0;
+    display: flex;
+    gap: var(--size-xxsmall);
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.values__item {
+    display: flex;
+    gap: var(--size-xxsmall);
+    align-items: center;
+    background-color: var(--color-grey);
+    color: var(--color-white);
+    border-radius: var(--size-xxsmall);
+    padding: calc(0.5 * var(--size-xxsmall)) var(--size-xxsmall)
+}
+
+.values__item * {
+    font-size: var(--size-small);
+}
+
+.values__item button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: var(--color-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.values__item .material-symbols-outlined {
+    padding: 0;
+}

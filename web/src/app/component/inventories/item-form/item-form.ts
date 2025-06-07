@@ -1,14 +1,15 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, input, signal, WritableSignal } from '@angular/core';
 import { SelectComponent } from "../../select/select.component";
 import { OptionsService } from '../../../service/options.service';
 import { ProductsService } from '../../../service/products.service';
 import { SelectOption } from '../../../model/selectOption';
 import { Option } from '../../../model/option';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: "app-item-form",
-  imports: [SelectComponent],
+  imports: [SelectComponent, ReactiveFormsModule],
   templateUrl: "./item-form.html",
   styleUrl: "./item-form.scss",
 })

@@ -1,15 +1,17 @@
 import { Component, model, input, linkedSignal, computed, signal, WritableSignal, output } from '@angular/core';
 import { PopoverComponent } from '../popover/popover.component';
 import { SelectOption } from '../../model/selectOption';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 
 @Component({
   selector: "app-select",
-  imports: [PopoverComponent],
+  imports: [ReactiveFormsModule, PopoverComponent],
   templateUrl: "./select.component.html",
   styleUrl: "./select.component.scss",
 })
 export class SelectComponent {
+  formControl = input<FormControl>(new FormControl());
   isOpen = model<boolean>(false);
   objects = input.required<Object[] | string[]>();
   valueAttribute = input<string>("");
@@ -42,6 +44,7 @@ export class SelectComponent {
   });
   placeholder = input<string>("Select an option");
   required = input<boolean>(false);
+  name = input.required<string>();
   title = computed<string>(() => {
     const selected = this.selectedOption();
     return selected ? selected.text : this.placeholder();

@@ -21,6 +21,7 @@ describe('SelectComponent', () => {
 
     fixture = TestBed.createComponent(SelectComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('name', 'test-select');
     fixture.componentRef.setInput('objects', MOCK_OPTIONS);
     fixture.componentRef.setInput('valueAttribute', 'id');
     fixture.componentRef.setInput('labelAttribute', 'name');

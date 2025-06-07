@@ -1,6 +1,10 @@
 @use 'sass:color';
 @use 'variables' as *;
 
+:host {
+    position: relative;
+}
+
 .user-badge__button {
     display: flex;
     align-items: center;

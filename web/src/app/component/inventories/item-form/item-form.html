@@ -1,29 +1,26 @@
-<form class="items-form" (submit)="addItem()" ngNativeValidate>
+<div class="items-form__select">
+    <label for="product">Product</label>
+    <app-select
+        name="product"
+        [objects]="products.value()"
+        (select)="selectProduct($event)"
+        valueAttribute="id"
+        labelAttribute="name"
+        [required]="true"
+    ></app-select>
+</div>
+@for(option of options(); track option.name) {
     <div class="items-form__select">
-        <label for="product">Product</label>
+        <label [for]="option.name">{{option.name}}</label>
         <app-select
-            [objects]="products.value()"
-            (select)="selectProduct($event)"
+            [name]="option.name"
+            [objects]="option.values"
             valueAttribute="id"
             labelAttribute="name"
+            [required]="true"
         ></app-select>
     </div>
-    <div class="items-form__options">
-        @if(options().length === 0) {
-            <span>Placeholder text, change me</span>
-        }
-        @for(option of options(); track option.name) {
-            <div class="items-form__select">
-                <label [for]="option.name">{{option.name}}</label>
-                <app-select
-                    [objects]="option.values"
-                    valueAttribute="id"
-                    labelAttribute="name"
-                ></app-select>
-            </div>
-        }
-    </div>
-    @if (statusMessage) {
-        <span class="items-form__status">{{statusMessage}}</span>
-    }
-</form>
+}
+@if (statusMessage) {
+    <span class="items-form__status">{{statusMessage}}</span>
+}

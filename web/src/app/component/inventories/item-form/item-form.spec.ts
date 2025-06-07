@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemForm } from './item-form';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ItemForm', () => {
   let component: ItemForm;
@@ -8,7 +9,10 @@ describe('ItemForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ItemForm]
+      imports: [ItemForm],
+      providers: [
+        provideHttpClient(),
+      ]
     })
     .compileComponents();
 
