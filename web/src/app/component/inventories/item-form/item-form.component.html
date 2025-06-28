@@ -1,0 +1,88 @@
+<div class="items-form__input">
+    <label for="name">Name</label>
+    <input
+        type="text"
+        id="name"
+        name="name"
+        [defaultValue]="item().name ? item().name : ''"
+        (change)="onNameChange($event)"
+        (input)="onNameChange($event)"
+        required
+    >
+</div>
+<div class="items-form__input">
+    <label for="costPrice">Cost Price</label>
+    <input
+        type="number"
+        id="costPrice"
+        name="costPrice"
+        [defaultValue]="item().costPrice"
+        (change)="onCostPriceChange($event)"
+        (input)="onCostPriceChange($event)"
+        required
+    >
+</div>
+<div class="items-form__input">
+    <label for="amountAvailable">Amount Available</label>
+    <input
+        type="number"
+        id="amountAvailable"
+        name="amountAvailable"
+        [defaultValue]="item().amountAvailable"
+        (change)="onAmountAvailableChange($event)"
+        (input)="onAmountAvailableChange($event)"
+        required
+    >
+</div>
+<div class="items-form__input">
+    <label for="marginPercentage">Margin Percentage</label>
+    <input
+        type="number"
+        id="marginPercentage"
+        name="marginPercentage"
+        [defaultValue]="item().marginPercentage"
+        (change)="onMarginPercentageChange($event)"
+        (input)="onMarginPercentageChange($event)"
+        required
+    >
+</div>
+<div class="items-form__input">
+    <label for="quantity">Quantity</label>
+    <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        [defaultValue]="item().quantity"
+        (change)="onQuantityChange($event)"
+        (input)="onQuantityChange($event)"
+        required
+    >
+</div>
+@if(products.value().length > 0) {
+    <div class="items-form__select">
+        <label for="product">Product</label>
+        <app-select
+            name="product"
+            [objects]="products.value()"
+            [defaultValue]="item().productUuid"
+            (select)="selectProduct($event)"
+            valueAttribute="id"
+            labelAttribute="name"
+            [required]="true"
+        ></app-select>
+    </div>
+}
+@for(option of options.value(); track option.id) {
+    <div class="items-form__select">
+        <label [for]="option.name">{{option.name}}</label>
+        <app-select
+            [defaultValue]="getDefaultOptionValue(option)"
+            [name]="option.name"
+            [objects]="option.values"
+            (select)="selectOption($event)"
+            valueAttribute="id"
+            labelAttribute="value"
+            [required]="true"
+        ></app-select>
+    </div>
+}

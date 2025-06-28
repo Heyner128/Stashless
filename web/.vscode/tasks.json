@@ -1,0 +1,60 @@
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "options": {
+        "shell": {
+          "executable": "bash",
+          "args": [
+            "-c",
+            "npm run start"
+          ]
+        }
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": false,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "(bundle generation complete|Component update sent to client)"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "isBackground": true,
+      "options": {
+        "shell": {
+          "executable": "bash",
+          "args": [
+            "-c",
+            "npm run test"
+          ]
+        }
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation complete"
+          }
+        }
+      }
+    }
+  ]
+}
