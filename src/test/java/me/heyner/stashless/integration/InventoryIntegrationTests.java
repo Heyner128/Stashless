@@ -2,10 +2,12 @@ package me.heyner.stashless.integration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import me.heyner.stashless.dto.*;
 import me.heyner.stashless.repository.*;
@@ -90,7 +92,7 @@ class InventoryIntegrationTests {
 
   public ResponseEntity<OptionOutputDto> createOption(UUID productUuid) {
     OptionInputDto optionInputDto =
-        new OptionInputDto().setName("Color").setValues(List.of("Red", "Blue", "Orange"));
+        new OptionInputDto().setName("Color").setValues(Set.of("Red", "Blue", "Orange"));
 
     RequestEntity<OptionInputDto> requestOptionCreation =
         RequestEntity.post("/users/test/products/" + productUuid + "/options")
@@ -175,12 +177,25 @@ class InventoryIntegrationTests {
 
     ProductOutputDto createdProduct = createProduct().getBody();
 
-    createOption(createdProduct.getId());
+    OptionOutputDto createdOption = createOption(createdProduct.getId()).getBody();
 
-    SKUOutputDto createdSKU = createSKU(createdProduct.getId()).getBody();
+    assertThat(createdOption.getName(), notNullValue());
+    assertThat(createdOption.getValues().size(), equalTo(3));
 
     InventoryItemInputDto inventoryItemInputDto =
-        new InventoryItemInputDto().setQuantity(99).setSkuId(createdSKU.getId());
+        new InventoryItemInputDto()
+          .setName("Shirt")
+          .setAmountAvailable(1L)
+          .setMarginPercentage(10)
+          .setProductUuid(createdProduct.getId())
+          .setOptions(
+              Map.of(
+                createdOption.getName(),
+                createdOption.getValues().iterator().next()
+              )
+          )
+          .setCostPrice(BigDecimal.valueOf(1L))
+          .setQuantity(99);
 
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
@@ -202,7 +217,7 @@ class InventoryIntegrationTests {
     SKUOutputDto createdSKU = createSKU(createdProduct.getId()).getBody();
 
     InventoryItemInputDto inventoryItemInputDto =
-        new InventoryItemInputDto().setQuantity(99).setSkuId(createdSKU.getId());
+        new InventoryItemInputDto().setQuantity(99);
 
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")

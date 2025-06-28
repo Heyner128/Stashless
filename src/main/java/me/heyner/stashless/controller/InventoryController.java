@@ -59,7 +59,7 @@ public class InventoryController {
 
   @GetMapping("/{inventoryUuid}/item")
   public List<InventoryItemOutputDto> getInventoryItem(@PathVariable UUID inventoryUuid) {
-    return inventoryService.getInventory(inventoryUuid).getItems();
+    return inventoryService.getInventoryItems(inventoryUuid);
   }
 
   @PostMapping("/{inventoryUuid}/item")
@@ -67,8 +67,16 @@ public class InventoryController {
   public InventoryItemOutputDto addInventoryItem(
       @RequestBody @Valid InventoryItemInputDto inventoryItemInputDto,
       @PathVariable UUID inventoryUuid) {
-    return inventoryService.addOrUpdateInventoryItem(
-        inventoryUuid, inventoryItemInputDto.getSkuId(), inventoryItemInputDto.getQuantity());
+    return inventoryService.addInventoryItem(
+        inventoryUuid, inventoryItemInputDto);
+  }
+
+  @PutMapping("/{inventoryUuid}/item/{skuUuid}")
+  public InventoryItemOutputDto updateInventoryItem(
+      @PathVariable UUID inventoryUuid,
+      @PathVariable UUID skuUuid,
+      @RequestBody @Valid InventoryItemInputDto inventoryItemInputDto) {
+    return inventoryService.updateInventoryItem(inventoryUuid, skuUuid, inventoryItemInputDto);
   }
 
   @DeleteMapping("/{inventoryUuid}/item/{skuUuid}")

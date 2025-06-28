@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
@@ -128,7 +130,7 @@ class UsersIntegrationTests {
                 new UpdateUserDto()
                     .setUsername("test2")
                     .setEmail("test@test.com")
-                    .setAuthorities(List.of(Authority.USER)));
+                    .setAuthorities(Set.of(Authority.USER)));
 
     // Gets the created user information
     ResponseEntity<UserDto> response = restTemplate.exchange(request, UserDto.class);

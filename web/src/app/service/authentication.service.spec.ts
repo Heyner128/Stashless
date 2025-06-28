@@ -48,18 +48,20 @@ describe('AuthenticationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return true if the response from the API is ok', () => {
+  it('should return true if the response from the API is ok', (done) => {
     
     service.isAuthenticated().subscribe((response) => {
       expect(response).toBeTrue();
+      done();
     });
     apiTesting.expectSuccessfulApiResponse();
   });
 
-  it('should return false if the response from the API is not ok', () => {
+  it('should return false if the response from the API is not ok', (done) => {
     mockUserIdCookie("");
     service.isAuthenticated().subscribe((response) => {
       expect(response).toBeFalse();
+      done();
     });
     apiTesting.expectUnsuccessfulApiResponse({
       status: 401,
@@ -67,20 +69,25 @@ describe('AuthenticationService', () => {
     });
   });
 
-  it('login be ok if the credentials are correct', () => {
+  it('login be ok if the credentials are correct', (done) => {
     service.login(MOCK_USERNAME, MOCK_PASSWORD).subscribe((response) => {
       expect(response).toBeDefined();
+      done();
     });
     apiTesting.expectSuccessfulApiResponse();
   });
 
-  it('login should fail if the credentials are incorrect', () => {
+  it('login should fail if the credentials are incorrect', (done) => {
 
     service.login('randomusername', 'randompassword')
     .subscribe({
-      next: () => fail('should have failed with a 401 error'),
+      next: () => {
+        fail('should have failed with a 401 error');
+        done();
+      },
       error: (error: Error) => {
         expect(error).toBeDefined();
+        done();
       }
     });
     apiTesting.expectUnsuccessfulApiResponse({
@@ -89,18 +96,23 @@ describe('AuthenticationService', () => {
     });
   });
 
-  it('logout should be ok if the api response is ok', () => {
+  it('logout should be ok if the api response is ok', (done) => {
     service.logout().subscribe((response) => {
       expect(response).toBeDefined();
+      done();
     });
     apiTesting.expectSuccessfulApiResponse();
   });
 
-  it('logout should fail if the api response is not ok', () => {
+  it('logout should fail if the api response is not ok', (done) => {
     service.logout().subscribe({
-      next: () => fail('should have failed with a 401 error'),
+      next: () => {
+        fail('should have failed with a 401 error');
+        done();
+      },
       error: (error: Error) => {
         expect(error).toBeDefined();
+        done();
       }
     });
     apiTesting.expectUnsuccessfulApiResponse();

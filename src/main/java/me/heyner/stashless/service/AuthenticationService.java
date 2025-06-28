@@ -3,6 +3,8 @@ package me.heyner.stashless.service;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Set;
+
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UserDto;
@@ -54,7 +56,7 @@ public class AuthenticationService {
     try {
       User user =
           new User()
-              .setAuthorities(List.of(Authority.USER))
+              .setAuthorities(Set.of(Authority.USER))
               .setEmail(registerUserDto.getEmail())
               .setUsername(registerUserDto.getUsername())
               .setPassword(passwordEncoder.encode(registerUserDto.getPassword()));

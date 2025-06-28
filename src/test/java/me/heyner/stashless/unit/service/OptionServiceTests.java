@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import me.heyner.stashless.model.*;
 import me.heyner.stashless.repository.OptionRepository;
@@ -42,13 +43,13 @@ class OptionServiceTests {
                     .setEmail("test@test.com")
                     .setPassword("TEst@1")
                     .setUsername("test")
-                    .setAuthorities(List.of(Authority.USER)));
+                    .setAuthorities(Set.of(Authority.USER)));
 
     mockOption =
         new Option()
             .setId(UUID.randomUUID())
             .setName("Color")
-            .setValues(List.of(new OptionValue().setId(1L).setValue("Red")));
+            .setValues(Set.of(new OptionValue().setId(1L).setValue("Red")));
   }
 
   @BeforeEach

@@ -2,11 +2,8 @@ package me.heyner.stashless.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,12 +33,23 @@ public class Option {
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  private List<OptionValue> values = new ArrayList<>();
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "option", orphanRemoval = true)
+  private Set<OptionValue> values;
+
 
   @CreationTimestamp private Date createdAt;
 
   @UpdateTimestamp private Date updateAt;
+
+  public Option setValues(Set<OptionValue> values) {
+    if (this.values == null) {
+      this.values = new HashSet<>();
+    }
+    this.values.clear();
+    values.forEach(value -> value.setOption(this));
+    this.values.addAll(values);
+    return this;
+  }
 
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../service/authentication.service';
 import { Router } from '@angular/router';
@@ -11,7 +11,8 @@ import { of } from 'rxjs';
   selector: 'app-signup',
   imports: [ReactiveFormsModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+  styleUrl: './signup.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupComponent {
   signupForm = new FormGroup({
@@ -21,7 +22,7 @@ export class SignupComponent {
     matchingPassword: new FormControl('')
   });
 
-  statusMessage: string | undefined;
+  statusMessage: WritableSignal<string | undefined> = signal(undefined)
 
   constructor(
     private readonly authenticationService: AuthenticationService,
@@ -38,7 +39,7 @@ export class SignupComponent {
       return;
     }
     if (this.signupForm.value.password !== this.signupForm.value.matchingPassword) {
-      this.statusMessage = 'Passwords do not match';
+      this.statusMessage.set('Passwords do not match');
       return;
     }
 
@@ -51,7 +52,7 @@ export class SignupComponent {
       })
       .subscribe({
         next: () => {this.router.navigate(["/login"])},
-        error: (message) => this.statusMessage = message,
+        error: (error: Error) => this.statusMessage.set(error.message),
       });
   }
 }

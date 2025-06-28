@@ -19,13 +19,15 @@ select {
 .select {
     display: flex;  
     justify-content: space-between;
+    align-items: center;
     border-style: solid;
     border-width: 1px;
     padding: calc(0.5 * var(--size-xxsmall));
     border-radius: var(--size-xxsmall);
     background-color: var(--color-white);
-    border-color: var(--color-black);
+    border-color: color.adjust($color-black, $lightness: +50%);
     overflow: hidden;
+    height: 100%;
     cursor: pointer;
     font-size: var(--size-small);
     -webkit-user-select: none;    
@@ -48,7 +50,6 @@ select {
 }
 
 .select__title {
-    align-self: center;
     text-overflow: ellipsis;
 }
 

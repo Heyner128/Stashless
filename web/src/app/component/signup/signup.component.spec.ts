@@ -99,7 +99,7 @@ describe('SignupComponent', () => {
 
   it('should show an error message if the signup fails', async () => {
     spyOn(authenticationService, "signup").and.returnValue(
-      throwError(() => "Signup failed")
+      throwError(() => new Error("Signup failed"))
     );
 
     InputTesting.insertText(emailInput, MOCK_USER.email);

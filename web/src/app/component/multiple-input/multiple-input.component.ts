@@ -1,16 +1,18 @@
-import { Component, ElementRef, input, InputSignal, model, signal, viewChild, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, input, InputSignal, model, signal, viewChild } from '@angular/core';
 
 @Component({
   selector: 'app-multiple-input',
   imports: [],
   templateUrl: './multiple-input.component.html',
-  styleUrl: './multiple-input.component.scss'
+  styleUrl: './multiple-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiInputComponent {
   name: InputSignal<string> = input.required<string>();
   values: InputSignal<string[]> = model.required();
   currentInput = signal<string>('');
   inputElement = viewChild<ElementRef<HTMLInputElement>>('input');
+  required = input<boolean>(false);
 
 
   onInput(event: Event) {
@@ -19,6 +21,7 @@ export class MultiInputComponent {
   }
 
   addValue() {
+    if(this.values().includes(this.currentInput())) return;
     this.values().push(this.currentInput());
     const inputElement = this.inputElement();
     if(inputElement) {

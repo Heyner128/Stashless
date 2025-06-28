@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.proxy.HibernateProxy;
@@ -44,7 +46,7 @@ public class User implements UserDetails {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)
-  private List<Authority> authorities;
+  private Set<Authority> authorities;
 
   @Override
   public final boolean equals(Object o) {

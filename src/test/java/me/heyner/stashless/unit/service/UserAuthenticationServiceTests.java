@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
@@ -72,7 +74,7 @@ class UserAuthenticationServiceTests {
     user.setUsername(MOCK_USER);
     user.setPassword(ENCODED_MOCK_PASSWORD);
     user.setEmail(MOCK_EMAIL);
-    user.setAuthorities(List.of(Authority.USER));
+    user.setAuthorities(Set.of(Authority.USER));
   }
 
   void setUpDto() {

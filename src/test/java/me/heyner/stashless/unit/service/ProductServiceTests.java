@@ -10,10 +10,7 @@ import me.heyner.stashless.service.UserService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +66,7 @@ class ProductServiceTests {
     user.setUsername("testUser");
     user.setEmail("");
     user.setPassword("testPassword");
-    user.setAuthorities(new ArrayList<>());
+    user.setAuthorities(new HashSet<>());
   }
 
 

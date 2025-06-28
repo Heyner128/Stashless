@@ -10,7 +10,6 @@ import { errorInterceptor } from '../interceptor/error.interceptor';
 import { ApiTesting } from '../../testing/api';
 import { Item, NewItem } from '../model/item';
 import { Option } from '../model/option';
-import { SKU } from '../model/sku';
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -56,44 +55,33 @@ const MOCK_OPTIONS: Option[] = [
   }
 ];
 
-const MOCK_SKUS: SKU[] = [
+const MOCK_INVENTORY_ITEMS: Item[] = [
   {
-    id: "sku1",
+    uuid: "sku1",
+    productUuid: MOCK_PRODUCT_UUID,
     name: "SKU 1",
     costPrice: 100,
     amountAvailable: 50,
     marginPercentage: 20,
     options: {
       option1: "value1",
-      option2: "value3"
+      option2: "value3",
     },
-    createdAt: MOCK_DATE,
-    updatedAt: MOCK_DATE,
+    quantity: 5,
   },
   {
-    id: "sku2",
+    uuid: "sku2",
+    productUuid: MOCK_PRODUCT_UUID,
     name: "SKU 2",
     costPrice: 200,
     amountAvailable: 30,
     marginPercentage: 25,
     options: {
       option1: "value2",
-      option2: "value4"
-    },  
-    createdAt: MOCK_DATE, 
-    updatedAt: MOCK_DATE,
-  }
-];
-
-const MOCK_INVENTORY_ITEMS: Item[] = [
-  {
-    sku: MOCK_SKUS[0],
-    quantity: 5,
-  },
-  {
-    sku: MOCK_SKUS[1],
+      option2: "value4",
+    },
     quantity: 10,
-  }
+  },
 ];
 
 describe('InventoriesService', () => {
@@ -132,63 +120,76 @@ describe('InventoriesService', () => {
   });
 
 
-  it("should get the inventories if the API response is ok", () => {
+  it("should get the inventories if the API response is ok", (done) => {
     
     service.getInventories().subscribe((inventories: Inventory[]) => {
       expect(inventories).toEqual(MOCK_INVENTORIES);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORIES});
   });
   
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service.getInventories().subscribe({
-      error: (error: Error) => expect(error).toBeDefined()
+      error: (error: Error) => {
+        expect(error).toBeDefined()
+        done();
+      }
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
 
-  it("should get the inventory if the API response is ok", () => {
+  it("should get the inventory if the API response is ok", (done) => {
     service
       .getInventory(MOCK_INVENTORIES[0].id)
       .subscribe((inventory: Inventory) => {
         expect(inventory).toEqual(MOCK_INVENTORIES[0]);
+        done();
       });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORIES[0]});
   });
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service
       .getInventory(MOCK_INVENTORIES[0].id)
       .subscribe({
-        error: (error: Error) => expect(error).toBeDefined()
+        error: (error: Error) => {
+          expect(error).toBeDefined();
+          done();
+        }
       });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it("should create the inventory if the API response is ok", () => {
+  it("should create the inventory if the API response is ok", (done) => {
 
     service.createInventory({
       name: MOCK_INVENTORIES[0].name,
       description: MOCK_INVENTORIES[0].description
     }).subscribe((inventory: Inventory) => {
-      expect(inventory).toEqual(MOCK_INVENTORIES[0]);
+      expect(inventory.name).toEqual(MOCK_INVENTORIES[0].name);
+      expect(inventory.description).toEqual(MOCK_INVENTORIES[0].description);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORIES[0], status: 201});  
   });
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service.createInventory({
       name: MOCK_INVENTORIES[0].name,
       description: MOCK_INVENTORIES[0].description
     }).subscribe({
-      error: (error: Error) => expect(error).toBeDefined()
+      error: (error: Error) => {
+        expect(error).toBeDefined();
+        done();
+      }
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it("should update the inventory if the API response is ok", () => {
+  it("should update the inventory if the API response is ok", (done) => {
     service.updateInventory(
       MOCK_INVENTORIES[0].id,
       {
@@ -198,12 +199,13 @@ describe('InventoriesService', () => {
     ).subscribe(
       (inventory: Inventory) => {
         expect(inventory).toEqual(MOCK_INVENTORIES[0]);
+        done();
       }
     );
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORIES[0]});
   });
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service.updateInventory(
       MOCK_INVENTORIES[0].id,
       {
@@ -211,107 +213,127 @@ describe('InventoriesService', () => {
         description: MOCK_INVENTORIES[0].description
       }
     ).subscribe({
-      error: (error: Error) => expect(error).toBeDefined()
+      error: (error: Error) => {
+        expect(error).toBeDefined();
+        done();
+      }
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
 
-  it("should delete the inventory if the API response is ok", () => {
+  it("should delete the inventory if the API response is ok", (done) => {
     service.deleteInventory(MOCK_INVENTORIES[0].id).subscribe(
       () => {
         expect(true).toBeTruthy();
+        done();
       }
     );
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORIES[0]});
   });
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service.deleteInventory(MOCK_INVENTORIES[0].id).subscribe({
-      error: (error: Error) => expect(error).toBeDefined()
+      error: (error: Error) => {
+        expect(error).toBeDefined();
+        done();
+      }
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it("should get the inventory items if the API response is ok", () => {
+  it("should get the inventory items if the API response is ok", (done) => {
     service.getInventoryItems(MOCK_INVENTORIES[0].id).subscribe((items: Item[]) => {
       expect(items).toEqual(MOCK_INVENTORY_ITEMS);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_INVENTORY_ITEMS});
   });
 
-  it("should return an error if the API response is not ok", () => {
+  it("should return an error if the API response is not ok", (done) => {
     service.getInventoryItems(MOCK_INVENTORIES[0].id).subscribe({
-      error: (error: Error) => expect(error).toBeDefined()
+      error: (error: Error) => {
+        expect(error).toBeDefined();
+        done();
+      }
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it("should create an inventory item if the API response is ok", () => {
+  it("should create an inventory item if the API response is ok", (done) => {
     const newItem: NewItem  = {
-        name: MOCK_INVENTORY_ITEMS[0].sku.name,
-        costPrice: MOCK_INVENTORY_ITEMS[0].sku.costPrice,
-        amountAvailable: MOCK_INVENTORY_ITEMS[0].sku.amountAvailable,
-        marginPercentage: MOCK_INVENTORY_ITEMS[0].sku.marginPercentage,
-        options: MOCK_INVENTORY_ITEMS[0].sku.options,
-        quantity: MOCK_INVENTORY_ITEMS[0].quantity
+      productUuid: MOCK_PRODUCT_UUID,
+      name: MOCK_INVENTORY_ITEMS[0].name,
+      costPrice: MOCK_INVENTORY_ITEMS[0].costPrice,
+      amountAvailable: MOCK_INVENTORY_ITEMS[0].amountAvailable,
+      marginPercentage: MOCK_INVENTORY_ITEMS[0].marginPercentage,
+      options: MOCK_INVENTORY_ITEMS[0].options,
+      quantity: MOCK_INVENTORY_ITEMS[0].quantity
     };
-
     service.createInventoryItem(
-      MOCK_INVENTORIES[0].id, MOCK_PRODUCT_UUID, newItem
+      MOCK_INVENTORIES[0].id, newItem
     ).subscribe((item: Item) => {
-      expect(item).toEqual(MOCK_INVENTORY_ITEMS[0]);
+      expect(item.name).toEqual(newItem.name);
+      expect(item.costPrice).toEqual(newItem.costPrice);
+      expect(item.amountAvailable).toEqual(newItem.amountAvailable);
+      expect(item.marginPercentage).toEqual(newItem.marginPercentage);
+      expect(item.options).toEqual(newItem.options);
+      expect(item.quantity).toEqual(newItem.quantity);
+      done();
     });
-    apiTesting.expectSuccessfulApiResponse({body: newItem, status: 201});
+
+    apiTesting.expectSuccessfulApiResponse({body: {
+      ...MOCK_INVENTORY_ITEMS[0]
+    }, status: 201});
   });
 
-  it("should return an error if the item creation api response is not ok", () => {
+  it("should return an error if the item creation api response is not ok", (done) => {
     const newItem: NewItem = {
-      name: MOCK_INVENTORY_ITEMS[0].sku.name,
-      costPrice: MOCK_INVENTORY_ITEMS[0].sku.costPrice,
-      amountAvailable: MOCK_INVENTORY_ITEMS[0].sku.amountAvailable,
-      marginPercentage: MOCK_INVENTORY_ITEMS[0].sku.marginPercentage,
-      options: MOCK_INVENTORY_ITEMS[0].sku.options,
+      productUuid: MOCK_PRODUCT_UUID,
+      name: MOCK_INVENTORY_ITEMS[0].name,
+      costPrice: MOCK_INVENTORY_ITEMS[0].costPrice,
+      amountAvailable: MOCK_INVENTORY_ITEMS[0].amountAvailable,
+      marginPercentage: MOCK_INVENTORY_ITEMS[0].marginPercentage,
+      options: MOCK_INVENTORY_ITEMS[0].options,
       quantity: MOCK_INVENTORY_ITEMS[0].quantity,
     };
-
     service
-      .createInventoryItem(MOCK_INVENTORIES[0].id, MOCK_PRODUCT_UUID, newItem)
+      .createInventoryItem(MOCK_INVENTORIES[0].id, newItem)
       .subscribe({
         next: () => fail('Expected an error, but got item'),
         error: (error: Error) => {
           expect(error).toBeDefined();
+          done();
         }
       });
-
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it("it should delete an inventory item if the API response is ok", () => {
+  it("it should delete an inventory item if the API response is ok", (done) => {
 
     service
       .deleteInventoryItem(
         MOCK_INVENTORIES[0].id,
-        MOCK_PRODUCT_UUID,
-        MOCK_INVENTORY_ITEMS[0].sku.id
+        MOCK_INVENTORY_ITEMS[0].uuid
       )
       .subscribe(() => {
         expect(true).toBeTruthy();
+        done();
       });
     apiTesting.expectSuccessfulApiResponse({status: 204});
   });
 
-  it("should return an error if the inventory item deletion API response is not ok", () => {
+  it("should return an error if the inventory item deletion API response is not ok", (done) => {
     service
       .deleteInventoryItem(
         MOCK_INVENTORIES[0].id,
-        MOCK_PRODUCT_UUID,
-        MOCK_INVENTORY_ITEMS[0].sku.id
+        MOCK_INVENTORY_ITEMS[0].uuid
       )
       .subscribe({
         next: () => fail('Expected an error, but got success'),
         error: (error: Error) => {
           expect(error).toBeDefined();
+          done();
         }
       });
     apiTesting.expectUnsuccessfulApiResponse();

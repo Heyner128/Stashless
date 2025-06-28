@@ -31,7 +31,7 @@ public class SKUController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public SKUOutputDto createSKU(@PathVariable UUID productUuid, @Valid @RequestBody SKUInputDto skuDto) {
-    return skuService.addSKU(productUuid, skuDto);
+    return skuService.saveAndMapSKU(productUuid, skuDto);
   }
 
   @PutMapping

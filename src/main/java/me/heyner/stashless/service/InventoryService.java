@@ -1,25 +1,20 @@
 package me.heyner.stashless.service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import me.heyner.stashless.dto.InventoryInputDto;
-import me.heyner.stashless.dto.InventoryItemOutputDto;
-import me.heyner.stashless.dto.InventoryOutputDto;
-import me.heyner.stashless.dto.SKUOutputDto;
+import me.heyner.stashless.dto.*;
 import me.heyner.stashless.exception.EntityNotFoundException;
 import me.heyner.stashless.exception.ExistingEntityException;
 import me.heyner.stashless.model.Inventory;
-import me.heyner.stashless.model.Option;
-import me.heyner.stashless.model.OptionValue;
 import me.heyner.stashless.model.SKU;
 import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.InventoryRepository;
-import me.heyner.stashless.repository.SKURepository;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,7 +29,7 @@ public class InventoryService {
 
   private final InventoryRepository inventoryRepository;
 
-  private final SKURepository skuRepository;
+  private final SKUService skuService;
 
   private final UserService userService;
 
@@ -42,29 +37,12 @@ public class InventoryService {
 
   public InventoryService(
       InventoryRepository inventoryRepository,
-      SKURepository skuRepository,
+      SKUService skuService,
       UserService userService) {
     this.inventoryRepository = inventoryRepository;
-    this.skuRepository = skuRepository;
+    this.skuService = skuService;
     this.userService = userService;
-        modelMapper
-      .typeMap(SKU.class, SKUOutputDto.class)
-      .addMappings(
-        mapper ->
-          mapper
-            .using(
-              ctx ->
-                ((Map<Option, OptionValue>) ctx.getSource())
-                  .entrySet()
-                  .stream()
-                  .collect(
-                    Collectors.toMap(
-                      e -> e.getKey().getName(),
-                      e -> e.getValue().getValue()
-                    )
-                  )
-            )
-            .map(SKU::getOptions, SKUOutputDto::setOptions));
+
   }
 
   public InventoryOutputDto addInventory(String username, InventoryInputDto inventoryInputDto) {
@@ -95,32 +73,107 @@ public class InventoryService {
     return modelMapper.map(savedInventory, InventoryOutputDto.class);
   }
 
-  public InventoryItemOutputDto addOrUpdateInventoryItem(UUID uuid, UUID skuUuid, Integer quantity) {
+  private InventoryItemOutputDto mapInventoryItem(Map.Entry<SKU, Integer> item) {
+    InventoryItemOutputDto inventoryItemOutputDto = new InventoryItemOutputDto();
+    inventoryItemOutputDto.setUuid(item.getKey().getId());
+    inventoryItemOutputDto.setProductUuid(item.getKey().getProduct().getId());
+    inventoryItemOutputDto.setCostPrice(item.getKey().getCostPrice());
+    inventoryItemOutputDto.setAmountAvailable(item.getKey().getAmountAvailable());
+    inventoryItemOutputDto.setMarginPercentage(item.getKey().getMarginPercentage());
+    inventoryItemOutputDto.setName(item.getKey().getName());
+    inventoryItemOutputDto.setOptions(item.getKey().getOptions()
+        .entrySet()
+        .stream()
+        .collect(
+            java.util.stream.Collectors.toMap(
+                e -> e.getKey().getName(),
+                e -> e.getValue().getValue()
+            )
+        ));
+    inventoryItemOutputDto.setQuantity(item.getValue());
+    return inventoryItemOutputDto;
+  }
+
+  public List<InventoryItemOutputDto> getInventoryItems(UUID uuid) {
     Inventory inventory =
         inventoryRepository
             .findById(uuid)
             .orElseThrow(() -> new EntityNotFoundException("not found"));
 
-    SKU sku =
-        skuRepository.findById(skuUuid).orElseThrow(() -> new EntityNotFoundException("not found"));
+    List<InventoryItemOutputDto> items = inventory
+      .getItems()
+      .entrySet()
+      .stream()
+      .map(this::mapInventoryItem)
+      .toList();
 
-    inventory.getItems().put(sku, quantity);
+    logger.info("Retrieved {} items from inventory {}", items.size(), uuid);
+    return items;
+  }
+
+  public InventoryItemOutputDto addInventoryItem(UUID uuid, InventoryItemInputDto inventoryItemInputDto) {
+    Inventory inventory =
+        inventoryRepository
+            .findById(uuid)
+            .orElseThrow(() -> new EntityNotFoundException("not found"));
+
+    SKUInputDto skuInputDto = new SKUInputDto()
+        .setProductUuid(inventoryItemInputDto.getProductUuid())
+        .setCostPrice(inventoryItemInputDto.getCostPrice())
+        .setAmountAvailable(inventoryItemInputDto.getAmountAvailable())
+        .setMarginPercentage(inventoryItemInputDto.getMarginPercentage())
+        .setName(inventoryItemInputDto.getName())
+        .setOptions(inventoryItemInputDto.getOptions());
+
+    SKU savedSku = skuService.saveSKU(inventoryItemInputDto.getProductUuid(), skuInputDto);
+
+    inventory.getItems().put(savedSku, inventoryItemInputDto.getQuantity());
+
 
     Inventory savedInventory = inventoryRepository.save(inventory);
-    logger.info("Item {} added to inventory {}", sku.getName(), inventory.getId());
+    logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
 
     return savedInventory.getItems()
         .entrySet()
         .stream()
-        .filter(entry -> entry.getKey().getId().equals(skuUuid))
-        .map(entry -> new InventoryItemOutputDto()
-            .setSku(modelMapper.map(entry.getKey(), SKUOutputDto.class))
-            .setQuantity(entry.getValue())
-        )
+        .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
         .findFirst()
+        .map(this::mapInventoryItem)
         .orElseThrow(() -> new EntityNotFoundException("Item not found in inventory"));
-
   }
+
+  public InventoryItemOutputDto updateInventoryItem(UUID uuid, UUID itemUuid, InventoryItemInputDto inventoryItemInputDto) {
+    Inventory inventory =
+      inventoryRepository
+        .findById(uuid)
+        .orElseThrow(() -> new EntityNotFoundException("not found"));
+
+    SKUInputDto skuInputDto = new SKUInputDto()
+      .setProductUuid(inventoryItemInputDto.getProductUuid())
+      .setCostPrice(inventoryItemInputDto.getCostPrice())
+      .setAmountAvailable(inventoryItemInputDto.getAmountAvailable())
+      .setMarginPercentage(inventoryItemInputDto.getMarginPercentage())
+      .setName(inventoryItemInputDto.getName())
+      .setOptions(inventoryItemInputDto.getOptions());
+
+    SKU savedSku = skuService.updateSKU(itemUuid, skuInputDto);
+
+    inventory.getItems().put(savedSku, inventoryItemInputDto.getQuantity());
+
+
+    Inventory savedInventory = inventoryRepository.save(inventory);
+    logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
+
+    return savedInventory.getItems()
+      .entrySet()
+      .stream()
+      .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
+      .findFirst()
+      .map(this::mapInventoryItem)
+      .orElseThrow(() -> new EntityNotFoundException("Item not found in inventory"));
+  }
+
+
 
   public void deleteInventoryItem(UUID uuid, UUID skuUuid) {
     Inventory inventory =
@@ -128,8 +181,7 @@ public class InventoryService {
             .findById(uuid)
             .orElseThrow(() -> new EntityNotFoundException("not found"));
 
-    SKU sku =
-        skuRepository.findById(skuUuid).orElseThrow(() -> new EntityNotFoundException("not found"));
+    SKU sku = skuService.getSKU(skuUuid);
 
     var removedItem = inventory.getItems().remove(sku);
 

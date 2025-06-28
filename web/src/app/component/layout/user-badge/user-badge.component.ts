@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, WritableSignal} from '@angular/core';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { Router } from '@angular/router';
 import { PopoverComponent } from "../../popover/popover.component";
@@ -8,6 +8,7 @@ import { PopoverComponent } from "../../popover/popover.component";
   imports: [PopoverComponent],
   templateUrl: './user-badge.component.html',
   styleUrl: './user-badge.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserBadgeComponent {
 

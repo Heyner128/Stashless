@@ -18,6 +18,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode
 public class SKUOutputDto {
     private UUID id;
+    private UUID productUuid;
     private String name;
     private BigDecimal costPrice;
     private Long amountAvailable;

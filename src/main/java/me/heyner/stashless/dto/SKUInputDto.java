@@ -2,6 +2,8 @@ package me.heyner.stashless.dto;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.UUID;
+
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -11,6 +13,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class SKUInputDto {
+  private UUID productUuid;
   private BigDecimal costPrice;
   private Long amountAvailable;
   private int marginPercentage;

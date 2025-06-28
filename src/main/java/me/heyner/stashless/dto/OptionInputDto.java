@@ -1,6 +1,7 @@
 package me.heyner.stashless.dto;
 
-import java.util.List;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -11,5 +12,5 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode
 public class OptionInputDto {
   private String name;
-  private List<String> values;
+  private Set<String> values;
 }

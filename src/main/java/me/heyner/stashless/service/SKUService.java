@@ -51,11 +51,23 @@ public class SKUService {
                       e -> e.getValue().getValue()
                     )
                   )
+              )
+              .map(SKU::getOptions, SKUOutputDto::setOptions));
+    modelMapper
+      .typeMap(SKU.class,SKUOutputDto.class)
+      .addMappings(
+        mapper ->
+          mapper
+            .using(
+             ctx ->
+              ((Product) ctx.getSource()).getId()
             )
-            .map(SKU::getOptions, SKUOutputDto::setOptions));
+           .map(SKU::getProduct, SKUOutputDto::setProductUuid)
+
+      );
   }
 
-  private SKU joinProduct(SKU sku, UUID productUuid) {
+  private SKU joinProduct(SKU sku, UUID productUuid) throws EntityNotFoundException {
     Product product =
         productRepository
           .findById(productUuid)
@@ -85,8 +97,7 @@ public class SKUService {
   }
 
 
-  public SKUOutputDto addSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
-
+  public SKU saveSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
     SKU sku = modelMapper.map(skuDto, SKU.class);
     sku = joinProduct(sku, productUuid);
     sku = joinOptions(sku, productUuid, skuDto.getOptions());
@@ -96,8 +107,32 @@ public class SKUService {
     sku = skuRepository.save(sku);
 
     logger.info("SKU created: {}", sku);
-    
+
+    return sku;
+  }
+
+
+  public SKUOutputDto saveAndMapSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
+
+    SKU sku = saveSKU(productUuid, skuDto);
     return modelMapper.map(sku, SKUOutputDto.class);
+  }
+
+  public SKU getSKU(UUID skuUuid) throws EntityNotFoundException {
+    return skuRepository
+        .findById(skuUuid)
+        .orElseThrow(() -> new EntityNotFoundException("SKU not found"));
+  }
+
+  public SKU updateSKU(UUID skuUuid, SKUInputDto skuDto) throws EntityNotFoundException {
+    SKU existingSku = getSKU(skuUuid);
+
+    existingSku = joinProduct(existingSku, skuDto.getProductUuid());
+    existingSku = joinOptions(existingSku, existingSku.getProduct().getId(), skuDto.getOptions());
+
+
+    logger.info("Updating SKU: {}", existingSku);
+    return skuRepository.save(existingSku);
   }
 
 

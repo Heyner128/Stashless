@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger, AnimationEvent } from '@angular/animations';
-import { Component, ElementRef, HostListener, linkedSignal, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, linkedSignal, signal, ViewChild } from '@angular/core';
 import { PopoverComponent } from "../../popover/popover.component";
 
 @Component({
@@ -32,7 +32,8 @@ import { PopoverComponent } from "../../popover/popover.component";
     ]
   )],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+  styleUrl: './search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
   isSearchOpen = signal(false);

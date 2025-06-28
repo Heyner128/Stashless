@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserBadgeComponent } from "./user-badge/user-badge.component";
 
@@ -12,6 +12,7 @@ import { UserBadgeComponent } from "./user-badge/user-badge.component";
   ],
   templateUrl: "./layout.component.html",
   styleUrl: "./layout.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent implements AfterViewInit {
 

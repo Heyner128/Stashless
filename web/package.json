@@ -6,7 +6,7 @@
     "start": "ng serve --configuration development",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch",
     "serve:ssr:stashless": "node dist/stashless/server/server.mjs"
   },
   "private": true,

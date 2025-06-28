@@ -19,8 +19,8 @@
                 <label for="matchingPassword">Password Confirmation</label>
                 <input type="password" id="matchingPassword" name="matchingPassword" [formControl]="signupForm.controls.matchingPassword" required>
             </div>
-            @if (statusMessage) {
-                <span class="signup-form__status">{{statusMessage}}</span>
+            @if (statusMessage()) {
+                <span class="signup-form__status">{{statusMessage()}}</span>
             }
             <button class="signup-form__submit" type="submit">Signup</button>
         </form>

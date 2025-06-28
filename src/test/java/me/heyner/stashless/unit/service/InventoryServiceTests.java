@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import me.heyner.stashless.dto.InventoryInputDto;
 import me.heyner.stashless.dto.InventoryOutputDto;
@@ -47,7 +48,7 @@ class InventoryServiceTests {
     user.setUsername("test");
     user.setPassword("teeeST1@");
     user.setEmail("test@test.com");
-    user.setAuthorities(List.of(Authority.USER));
+    user.setAuthorities(Set.of(Authority.USER));
   }
 
   public void setupMockInventory() {

@@ -8,6 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import me.heyner.stashless.controller.UserController;
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
@@ -62,7 +65,7 @@ class UserControllerTests {
     user.setUsername("test");
     user.setPassword("teeeST1@");
     user.setEmail("test@test.com");
-    user.setAuthorities(List.of(Authority.USER));
+    user.setAuthorities(Set.of(Authority.USER));
   }
 
   @Test
@@ -199,7 +202,7 @@ class UserControllerTests {
     UpdateUserDto updatedUserDto = new UpdateUserDto()
         .setUsername(user.getUsername())
         .setEmail(user.getEmail())
-        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).toList())
+        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet()))
         .setOldPassword(user.getPassword())
         .setNewPassword("newPassword12@")
         .setNewMatchingPassword("newPassword12@");
@@ -235,7 +238,7 @@ class UserControllerTests {
     UpdateUserDto updatedUserDto = new UpdateUserDto()
         .setUsername(user.getUsername())
         .setEmail(user.getEmail())
-        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).toList())
+        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet()))
         .setOldPassword(user.getPassword())
         .setNewPassword("newPassword")
         .setNewMatchingPassword("newPasswordNonMatching");

@@ -15,8 +15,28 @@
             <textarea id="description" name="description" [formControl]="inventoryForm.controls.description"></textarea>
         </div>
     </div>
-    @if (statusMessage) {
-        <span class="inventory-form__status">{{statusMessage}}</span>
+    <div class="inventory-form__items">
+        <h2>Items</h2>
+        @for(item of inventoryItems(); track item.name) {
+            <app-item-form
+                [(item)]="inventoryItems()[$index]"
+            />
+        }
+        <div
+            class="inventory-form__items-buttons"
+        >
+            <button class="inventory-form__add-item" type="button" (click)="addItem()">
+                <span class="material-symbols-outlined">add</span>
+                <span>Add item</span>
+            </button>
+            <button class="inventory-form__remove-item" type="button" (click)="removeItem()">
+                <span class="material-symbols-outlined">delete</span>
+                <span>Remove item</span>
+            </button>
+        </div>
+    </div>
+    @if (statusMessage()) {
+        <span class="inventory-form__status">{{statusMessage()}}</span>
     }
     <div class="inventory-form__actions">
         <button class="inventory-form__delete" type="button" (click)="delete()">Delete</button>

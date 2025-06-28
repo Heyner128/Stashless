@@ -12,7 +12,8 @@ import { autoUpdate, computePosition, offset, shift, arrow } from '@floating-ui/
     'tabindex': '-1',
   },
   templateUrl: './popover.component.html',
-  styleUrl: './popover.component.scss'
+  styleUrl: './popover.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PopoverComponent implements OnInit {
   positionStyles: Record<string, string> = {};

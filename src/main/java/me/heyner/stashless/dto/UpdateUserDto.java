@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +32,7 @@ public class UpdateUserDto {
   @NotNull @ValidEmail @Setter private String email;
 
   @Size(min = 1)
-  private List<Authority> authorities;
+  private Set<Authority> authorities;
 
   @Setter
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -52,11 +55,11 @@ public class UpdateUserDto {
   // Spring Security shit don't touch
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities =
-        authorities.stream().map(authority -> Authority.valueOf(authority.getAuthority())).toList();
+        authorities.stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet());
   }
 
   @JsonSetter
-  public UpdateUserDto setAuthorities(List<Authority> authorities) {
+  public UpdateUserDto setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
     return this;
   }

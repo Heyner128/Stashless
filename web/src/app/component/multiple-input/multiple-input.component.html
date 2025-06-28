@@ -1,10 +1,19 @@
-
+<input
+    class="values__native-input"
+    aria-hidden="true"
+    tabindex="-1"
+    [attr.name]="name()"
+    [value]="values().join(';')"
+    [required]="required()"
+    (invalid)="input.focus()"
+/>
 <input 
     class="values__input"
     type="text"
     placeholder="{{name().toLowerCase()}} values"
     (input)="onInput($event)"
     (change)="onInput($event)"
+    (keydown.enter)="false"
     (keyup.enter)="addValue()"
     #input
 />

@@ -82,12 +82,15 @@ describe('EditProductComponent', () => {
       ]
     })
     .compileComponents();
+    
 
     injectDependencies();
     stubAuthentication();
     stubProducts();
     stubOptions();
     await initializeRouter();
+
+    component.options.set([]);
     initializeHtmlElements();
     harness.detectChanges();
   });
@@ -129,6 +132,35 @@ describe('EditProductComponent', () => {
     deleteButton = harness.routeNativeElement!.querySelector('button.product-form__delete');
   }
 
+  
+
+  async function fillForm() {
+    InputTesting.insertText(nameInput!, "Updated Product");
+    InputTesting.insertText(descriptionInput!, "Updated Description");
+    InputTesting.insertText(brandInput!, "Updated Brand");
+    InputTesting.insertText(optionNameInput!, "New Option");
+    addOptionButton!.click();
+    harness.detectChanges();
+    fillOptionValue("any value");
+    harness.detectChanges();
+
+    submitButton!.click();
+
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+  }
+
+  function fillOptionValue(value: string) {
+    const optionValue = harness.routeNativeElement!.querySelector(
+      "app-multiple-input .values__input"
+    ) as HTMLInputElement;
+    InputTesting.insertText(optionValue, value);
+    const addValueButton = harness.routeNativeElement!.querySelector(
+      "app-multiple-input .values__add"
+    ) as HTMLButtonElement;
+    addValueButton.click();
+  }
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -140,37 +172,16 @@ describe('EditProductComponent', () => {
   });
 
   it('should redirect to /products if the update is successful', async () => {
-    InputTesting.insertText(nameInput!, 'Updated Product');
-    InputTesting.insertText(descriptionInput!, 'Updated Description');
-    InputTesting.insertText(brandInput!, 'Updated Brand');
-    submitButton!.click();
+    updateProductSpy.and.returnValue(of(MOCK_PRODUCT));
+    await fillForm();
 
-    await harness.fixture.whenStable();
-    expect(router.url).toBe('/products');
-  });
-
-  it('should redirect to /products if the update is successful with options', async () => {
-    InputTesting.insertText(nameInput!, 'Updated Product');
-    InputTesting.insertText(descriptionInput!, 'Updated Description');
-    InputTesting.insertText(brandInput!, 'Updated Brand');
-    InputTesting.insertText(optionNameInput!, 'New Option');
-    addOptionButton!.click();
-    submitButton!.click();
-
-    await harness.fixture.whenStable();
     expect(router.url).toBe('/products');
   });
 
   it('should show an error message if the update fails', async () => {
     const errorMessage = 'Update failed'; 
     updateProductSpy.and.returnValue(throwError(() => new Error(errorMessage)));
-    InputTesting.insertText(nameInput!, 'Updated Product');
-    InputTesting.insertText(descriptionInput!, 'Updated Description');
-    InputTesting.insertText(brandInput!, 'Updated Brand');
-    submitButton!.click();
-
-    await harness.fixture.whenStable();
-    harness.detectChanges();
+    await fillForm();
 
     expect(harness.routeNativeElement?.textContent).toContain(errorMessage);
   });
@@ -178,6 +189,7 @@ describe('EditProductComponent', () => {
   it('should delete the product and redirect to /products', async () => {
     deleteButton!.click();
     await harness.fixture.whenStable();
+
     expect(router.url).toBe('/products');
   });
 
@@ -186,8 +198,9 @@ describe('EditProductComponent', () => {
     deleteProductSpy.and.returnValue(throwError(() => new Error(errorMessage)));
     deleteButton!.click();
 
-    await harness.fixture.whenStable();
     harness.detectChanges();
+    await harness.fixture.whenStable();
+    
 
     expect(harness.routeNativeElement?.textContent).toContain(errorMessage);
   });

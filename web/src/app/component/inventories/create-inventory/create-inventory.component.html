@@ -19,7 +19,9 @@
     <div class="inventory-form__items">
         <h2>Items</h2>
         @for(item of inventoryItems(); track item.toString()) {
-            <app-item-form />
+            <app-item-form
+                [(item)]="inventoryItems()[$index]"
+            />
         }
         <div
             class="inventory-form__items-buttons"
@@ -34,5 +36,8 @@
             </button>
         </div>
     </div>
+    @if (statusMessage()) {
+        <span class="inventory-form__status">{{statusMessage()}}</span>
+    }
     <button class="inventory-form__submit" type="submit">Create</button>
 </form>

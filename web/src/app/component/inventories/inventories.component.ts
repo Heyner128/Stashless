@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import { InventoriesService } from '../../service/inventories.service';
 import { Inventory } from '../../model/inventory';
 import RelativeTimeElement from '@github/relative-time-element';
 import { createAngularTable, createColumnHelper, FlexRenderDirective, getCoreRowModel, Table } from '@tanstack/angular-table';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
 
 @Component({
   selector: "app-inventories",
@@ -13,6 +12,7 @@ import { tap } from 'rxjs';
   templateUrl: "./inventories.component.html",
   styleUrl: "./inventories.component.scss",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoriesComponent implements OnInit {
   private readonly columnHelper = createColumnHelper<Inventory>();

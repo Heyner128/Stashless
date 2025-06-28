@@ -83,7 +83,7 @@ describe('LoginComponent', () => {
 
   it('should show an error message when login fails', async () => {
     spyOn(authenticationService, "login").and.returnValue(
-      throwError(() => "Login failed")
+      throwError(() => new Error("Login failed"))
     );
 
     InputTesting.insertText(usernameInput, MOCK_USER.username);

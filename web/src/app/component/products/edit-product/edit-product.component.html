@@ -1,4 +1,4 @@
-<form class="product-form" [formGroup]="productForm" (submit)="update()" ngNativeValidate>
+<form class="product-form" [formGroup]="productForm" (submit)="update()" (keydown.enter)="preventEnterSubmit($event)" (keyup.enter)="preventEnterSubmit($event)" ngNativeValidate>
     <div class="product-form__header">
         <a class="product-form__header-back" routerLink="/products">
             <span class="material-symbols-outlined">arrow_back</span>
@@ -19,30 +19,38 @@
             <textarea id="description" name="description" [formControl]="productForm.controls.description" required></textarea>
         </div>
     </div>
-    <form  [formGroup]="optionsForm" (submit)="addToOptionsList()" ngNativeValidate>
-        <div class="options-form__fields">
-            <h2>Options</h2>
-            <div class="options-form__input">
-                <label for="name">Name</label>
-                <div>
-                    <input type="text" id="name" name="name" [formControl]="optionsForm.controls.name">
-                    <button class="options-form__add" type="submit">
-                        <span class="material-symbols-outlined">add</span>
-                    </button>
-                </div>
-            </div>
-            <div class="options-form__list">
-                @for(option of options(); track option.name) {
-                    <span class="options-form__item-title">{{option.name}}:</span>
-                    <app-option 
-                        [option]="option"
-                    />
-                }
+    <div class="options-form__fields">
+        <h2>Options</h2>
+        <div class="options-form__input">
+            <label for="name">Name</label>
+            <div>
+                <input
+                    title="option name"
+                    type="text"
+                    id="name"
+                    name="name"
+                    (keydown.enter)="false"
+                    [formControl]="productForm.controls.optionName"
+                    (keyup.enter)="addToOptionsList()"
+                >
+                <button class="options-form__add" type="button" (click)="addToOptionsList()">
+                    <span class="material-symbols-outlined">add</span>
+                </button>
             </div>
         </div>
-    </form>
-    @if (statusMessage) {
-        <span class="product-form__status">{{statusMessage}}</span>
+        <div class="options-form__list">
+            @for(option of options(); track option.name) {
+                <span class="options-form__item-title">{{option.name}}:</span>
+                <app-multiple-input
+                    [name]="option.name"
+                    [values]="option.values"
+                    [required]="true"
+                />
+            }
+        </div>
+    </div>
+    @if (statusMessage()) {
+        <span class="product-form__status">{{statusMessage()}}</span>
     }
     <div class="product-form__actions">
         <button class="product-form__delete" type="button" (click)="delete()">Delete</button>

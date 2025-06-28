@@ -121,19 +121,9 @@ describe('CreateProductComponent', () => {
     InputTesting.insertText(nameInput!, MOCK_PRODUCT.name);
     InputTesting.insertText(descriptionInput!, MOCK_PRODUCT.description);
     InputTesting.insertText(brandInput!, MOCK_PRODUCT.brand);
-
-    submitButton!.click();
-    await harness.fixture.whenStable();
-    harness.detectChanges();
-    expect(router.url).toBe('/products');
-  });
-
-  it('should redirect to /products if the api response is ok and options are created', async () => {
-    InputTesting.insertText(nameInput!, MOCK_PRODUCT.name);
-    InputTesting.insertText(descriptionInput!, MOCK_PRODUCT.description);
-    InputTesting.insertText(brandInput!, MOCK_PRODUCT.brand);
     InputTesting.insertText(optionsInput!, MOCK_OPTIONS[0].name);
     optionsAddButton!.click();
+
     submitButton!.click();
     await harness.fixture.whenStable();
     harness.detectChanges();

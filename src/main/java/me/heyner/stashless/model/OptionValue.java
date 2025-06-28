@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +16,6 @@ import org.hibernate.proxy.HibernateProxy;
 @Getter
 @Setter
 @Accessors(chain = true)
-@ToString
 @NoArgsConstructor
 public class OptionValue {
   @Id
@@ -22,12 +23,26 @@ public class OptionValue {
   @JsonIgnore
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String value;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "option_id", nullable = false)
+  private Option option;
+
+  @ManyToMany(mappedBy = "options", fetch = FetchType.LAZY)
+  Set<SKU> skus;
 
   @CreationTimestamp private Date createdDate;
 
   @UpdateTimestamp private Date updateDate;
+
+  @PreRemove
+  private void preRemove() {
+    if (skus != null) {
+      skus.forEach(sku -> sku.getOptions().remove(this.getOption()));
+    }
+  }
 
   @Override
   public final boolean equals(Object o) {

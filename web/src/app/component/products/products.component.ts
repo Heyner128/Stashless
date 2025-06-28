@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { createAngularTable, createColumnHelper, FlexRenderDirective, getCoreRowModel, Table } from '@tanstack/angular-table';
 import { Product } from '../../model/product';
@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: "./products.component.html",
   styleUrl: "./products.component.scss",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
   private readonly columnHelper = createColumnHelper<Product>();

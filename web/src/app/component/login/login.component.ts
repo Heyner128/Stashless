@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, PLATFORM_ID, signal, WritableSignal } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
 import { AuthenticationService } from '../../service/authentication.service';
 import { Router, RouterLink } from '@angular/router';
@@ -8,7 +8,8 @@ import { isPlatformServer } from '@angular/common';
   selector: 'app-login',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
 
@@ -20,7 +21,7 @@ export class LoginComponent {
     password: new FormControl('')
   })
 
-  statusMessage: string | undefined;
+  statusMessage: WritableSignal<string | undefined> = signal(undefined)
 
   constructor(
     private readonly authenticationService: AuthenticationService,
@@ -44,8 +45,8 @@ export class LoginComponent {
         next: () => {
           this.router.navigateByUrl(this.getRedirectUrl());
         },
-        error: (message) => {
-          this.statusMessage = message
+        error: (error: Error) => {
+          this.statusMessage.set(error.message)
         }
         , 
       });

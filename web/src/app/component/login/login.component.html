@@ -13,8 +13,8 @@
                     <input type="password" id="password" name="password" [formControl]="loginForm.controls.password" required>
                 </div>
                 <span>Don't have an account? <a class="login-form__signup" routerLink="/signup">sign up</a></span>
-                @if (statusMessage) {
-                    <span class="login-form__status">{{statusMessage}}</span>
+                @if (statusMessage()) {
+                    <span class="login-form__status">{{statusMessage()}}</span>
                 }
                 <button class="login-form__submit" type="submit">Login</button>
             </form>

@@ -2,7 +2,10 @@ package me.heyner.stashless.service;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import me.heyner.stashless.dto.OptionInputDto;
 import me.heyner.stashless.dto.OptionOutputDto;
 import me.heyner.stashless.exception.EntityNotFoundException;
@@ -34,10 +37,10 @@ public class OptionService {
       .addMappings(
         mapper -> mapper
           .using(
-            ctx -> ((List<OptionValue>) ctx.getSource())
+            ctx -> ((Set<OptionValue>) ctx.getSource())
               .stream()
               .map(OptionValue::getValue)
-              .toList()
+              .collect(Collectors.toSet())
           )
           .map(Option::getValues,OptionOutputDto::setValues)
       );
@@ -46,10 +49,10 @@ public class OptionService {
       .typeMap(OptionInputDto.class, Option.class)
       .addMappings( mapper -> mapper
         .using(
-          ctx -> ((List<String>) ctx.getSource())
+          ctx -> ((Set<String>) ctx.getSource())
             .stream()
             .map(value -> new OptionValue().setValue(value))
-            .toList()
+            .collect(Collectors.toSet())
         )
         .map(OptionInputDto::getValues,Option::setValues));
   }
@@ -82,8 +85,9 @@ public class OptionService {
   public List<OptionOutputDto> updateOptions(UUID productUuid, List<OptionInputDto> optionsDto)
       throws EntityNotFoundException {
 
-    List<Option> options = optionRepository.findByProductId(productUuid);
-    for(Option option : options) {
+    List<Option> currentOptions = optionRepository.findByProductId(productUuid);
+
+    for (Option option : currentOptions) {
       optionRepository.delete(option);
     }
 

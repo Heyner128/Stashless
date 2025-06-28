@@ -42,6 +42,52 @@
     @include input-with-label;
 }
 
+.inventory-form__items {
+    @include card;
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-form__items-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--size-xlarge);
+}
+
+.inventory-form__add-item {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: var(--size-xxsmall);
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    color: var(--color-secondary);
+    padding: var(--size-small) 0;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--color-secondary-dark);
+    }
+}
+
+.inventory-form__remove-item {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: var(--size-xxsmall);
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    color: var(--color-error);
+    padding: var(--size-small) 0;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--color-error-dark);
+    }
+}
+
 .inventory-form__status {
     color: var(--color-error-dark);
     font-weight: bold;

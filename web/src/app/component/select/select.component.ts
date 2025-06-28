@@ -1,19 +1,20 @@
-import { Component, model, input, linkedSignal, computed, signal, WritableSignal, output } from '@angular/core';
+import { Component, model, input, linkedSignal, computed, signal, WritableSignal, output, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { PopoverComponent } from '../popover/popover.component';
 import { SelectOption } from '../../model/selectOption';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-
 
 @Component({
   selector: "app-select",
   imports: [ReactiveFormsModule, PopoverComponent],
   templateUrl: "./select.component.html",
   styleUrl: "./select.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent {
+export class SelectComponent implements AfterViewInit {
   formControl = input<FormControl>(new FormControl());
   isOpen = model<boolean>(false);
   objects = input.required<Object[] | string[]>();
+  defaultValue = input();
   valueAttribute = input<string>("");
   labelAttribute = input<string>("");
   options = linkedSignal<SelectOption[]>(
@@ -50,6 +51,12 @@ export class SelectComponent {
     return selected ? selected.text : this.placeholder();
   });
 
+  ngAfterViewInit(): void {
+    this.selectedOption.set(
+      this.options().find((opt)=> opt.value === this.defaultValue())
+    );
+  }
+
   selectEventHandler(event: Event, option: SelectOption) {
     event.preventDefault();
     this.selectedOption.set(option);
@@ -67,7 +74,10 @@ export class SelectComponent {
     } else {
       const highlightedIndex = this.highlightedOptionIndex();
       if (highlightedIndex >= 0 && highlightedIndex < this.options().length) {
-        this.selectEventHandler(new MouseEvent("click"), this.options()[highlightedIndex]);
+        this.selectEventHandler(
+          new MouseEvent("click"),
+          this.options()[highlightedIndex]
+        );
       }
     }
   }

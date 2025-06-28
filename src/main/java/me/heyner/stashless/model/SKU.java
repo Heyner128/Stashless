@@ -18,7 +18,7 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 @Accessors(chain = true)
 @NoArgsConstructor
-@Table(name = "sku",uniqueConstraints = @UniqueConstraint(columnNames = {"option_id", "option_value_id"}))
+@Table(name = "sku")
 public class SKU {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -43,9 +43,10 @@ public class SKU {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
-      name = "sku_options",
-      joinColumns = @JoinColumn(name = "sku_id", referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "option_value_id", referencedColumnName = "id")
+    name = "sku_options",
+    joinColumns = @JoinColumn(name = "sku_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "option_value_id", referencedColumnName = "id"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"option_id", "option_value_id"})
   )
   @MapKeyJoinColumn(name = "option_id", referencedColumnName = "id")
   private Map<Option, OptionValue> options;

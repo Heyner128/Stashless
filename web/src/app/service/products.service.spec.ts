@@ -67,102 +67,127 @@ describe('ProductsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get the products if the api response is ok', () => {
+  it('should get the products if the api response is ok', (done) => {
     service.getProducts().subscribe((products) => {
       expect(products).toEqual(MOCK_PRODUCTS);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_PRODUCTS});
   });
 
-  it('should return an error if the api response is not ok', () => {
+  it('should return an error if the api response is not ok', (done) => {
     service.getProducts().subscribe({
-      next: () => fail('expected an error, not products'),
+      next: () => {
+        fail('expected an error, not products');
+        done();
+      },
       error: (error) => {
         expect(error).toBeTruthy();
+        done();
       },
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it('should get the product if the api response is ok', () => {
+  it('should get the product if the api response is ok', (done) => {
     service.getProduct(MOCK_PRODUCTS[0].id).subscribe((product) => {
       expect(product).toEqual(MOCK_PRODUCTS[0]);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_PRODUCTS[0]});
   });
 
-  it('should return an error if the api response is not ok', () => {
+  it('should return an error if the api response is not ok', (done) => {
     service.getProduct(MOCK_PRODUCTS[0].id).subscribe({
-      next: () => fail('expected an error, not product'),
+      next: () => {
+        fail('expected an error, not product');
+        done();
+      },
       error: (error) => {
         expect(error).toBeTruthy();
+        done();
       },
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it('should create the product if the api response is ok', () => {
+  it('should create the product if the api response is ok', (done) => {
     service.createProduct({
       name: MOCK_PRODUCTS[0].name,
       description: MOCK_PRODUCTS[0].description,
       brand: MOCK_PRODUCTS[0].brand,
     }).subscribe((product) => {
       expect(product).toEqual(MOCK_PRODUCTS[0]);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_PRODUCTS[0]});
   });
 
-  it('should return an error if the api response is not ok', () => {
+  it('should return an error if the api response is not ok', (done) => {
     service.createProduct({
       name: MOCK_PRODUCTS[0].name,
       description: MOCK_PRODUCTS[0].description,
       brand: MOCK_PRODUCTS[0].brand,
     }).subscribe({
-      next: () => fail('expected an error, not product'),
+      next: () => {
+        fail('expected an error, not product');
+        done();
+      },
       error: (error) => {
         expect(error).toBeTruthy();
+        done();
       },
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it('should update the product if the api response is ok', () => {
+  it('should update the product if the api response is ok', (done) => {
     service.updateProduct(MOCK_PRODUCTS[0].id, {
       name: MOCK_PRODUCTS[0].name,
       description: MOCK_PRODUCTS[0].description,
       brand: MOCK_PRODUCTS[0].brand,
     }).subscribe((product) => {
       expect(product).toEqual(MOCK_PRODUCTS[0]);
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_PRODUCTS[0]});
   });
 
-  it('should return an error if the api response is not ok', () => {
+  it('should return an error if the api response is not ok', (done) => {
     service.updateProduct(MOCK_PRODUCTS[0].id, {
       name: MOCK_PRODUCTS[0].name,
       description: MOCK_PRODUCTS[0].description,
       brand: MOCK_PRODUCTS[0].brand,
     }).subscribe({
-      next: () => fail('expected an error, not product'),
+      next: () => {
+        fail('expected an error, not product');
+        done();
+      },
       error: (error) => {
         expect(error).toBeTruthy();
+        done();
       },
     });
     apiTesting.expectUnsuccessfulApiResponse();
   });
 
-  it('should delete the product if the api response is ok', () => {
+  it('should delete the product if the api response is ok', (done) => {
     service.deleteProduct(MOCK_PRODUCTS[0].id).subscribe(() => {
       expect(true).toBeTruthy();
+      done();
     });
     apiTesting.expectSuccessfulApiResponse({body: MOCK_PRODUCTS[0]});
   });
 
-  it('should return an error if the api response is not ok', () => {
+  it('should return an error if the api response is not ok', (done) => {
     service.deleteProduct(MOCK_PRODUCTS[0].id).subscribe({
-      next: () => fail('expected an error, not product'),
+      next: () => {
+        fail('expected an error, not product');
+        done();
+      },
       error: (error) => {
         expect(error).toBeDefined();
+        done();
       },
     });
     apiTesting.expectUnsuccessfulApiResponse();

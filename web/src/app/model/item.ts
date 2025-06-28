@@ -1,12 +1,14 @@
-import type { NewSKU, SKU } from './sku';
 
 export type Item = {
-  sku: SKU;
+  uuid: string
+  productUuid: string;
+  costPrice: number;
+  amountAvailable: number;
+  marginPercentage: number;
+  name: string;
+  options: Record<string, string>;
   quantity: number;
 }
 
 
-export type NewItem = Omit<
-  NewSKU,
-  "id" | "createdAt" | "updatedAt"
-> & { quantity: number }; 
+export type NewItem = Omit<Item, 'uuid'>;

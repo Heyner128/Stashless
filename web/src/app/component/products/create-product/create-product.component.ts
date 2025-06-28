@@ -1,29 +1,28 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductsService } from '../../../service/products.service';
 import { Option } from '../../../model/option';
 import { Router, RouterLink } from '@angular/router';
-import { OptionComponent } from '../option/option.component';
 import { OptionsService } from '../../../service/options.service';
-import { defaultIfEmpty, merge, switchMap } from 'rxjs';
+import { defaultIfEmpty, merge,switchMap } from 'rxjs';
+import { MultiInputComponent } from "../../multiple-input/multiple-input.component";
 
 @Component({
   selector: "app-create",
-  imports: [ReactiveFormsModule, RouterLink, OptionComponent],
+  imports: [ReactiveFormsModule, RouterLink, MultiInputComponent],
   templateUrl: "./create-product.component.html",
   styleUrl: "./create-product.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateProductComponent {
   productForm = new FormGroup({
     name: new FormControl(""),
     description: new FormControl(""),
     brand: new FormControl(""),
-  });
-  optionsForm = new FormGroup({
-    name: new FormControl(""),
+    optionName: new FormControl(""),
   });
   options: WritableSignal<Option[]> = signal([]);
-  statusMessage?: string;
+  statusMessage: WritableSignal<string | undefined> = signal(undefined);
 
   constructor(
     private readonly productsService: ProductsService,
@@ -40,36 +39,44 @@ export class CreateProductComponent {
         brand: this.productForm.value.brand ?? "",
       })
       .pipe(
-        switchMap(product => 
+        switchMap((product) =>
           merge(
-            ...this.options().map(option => 
-              this.optionsService.createOption(product.id, option)
+            ...this.options().map((option) =>
+              this.optionsService
+                .createOption(product.id, option)
             )
           ).pipe(
-            defaultIfEmpty(product)
+            defaultIfEmpty(product),
           )
-        )
+        ),
       )
       .subscribe({
         next: () => {
           this.router.navigateByUrl("/products");
         },
-        error: (message) => (this.statusMessage = message),
+        error: (error) => {
+          this.statusMessage.set(error.message);
+        },
       });
   }
 
   addToOptionsList() {
     if (
-      !this.optionsForm.value.name ||
+      !this.productForm.value.optionName ||
       this.options()
         .map((opt) => opt.name)
-        .includes(this.optionsForm.value.name)
+        .includes(this.productForm.value.optionName)
     )
       return;
     this.options().push({
-      name: this.optionsForm.value.name,
+      name: this.productForm.value.optionName ?? "",
       values: [],
     });
-    this.optionsForm.reset(); 
+    this.productForm.patchValue({ optionName: "" });
+  }
+
+  preventEnterSubmit(event: Event) {
+    event.preventDefault();
+    return false;
   }
 }
