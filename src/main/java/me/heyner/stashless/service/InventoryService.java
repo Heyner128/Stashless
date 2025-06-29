@@ -13,6 +13,7 @@ import me.heyner.stashless.model.SKU;
 import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.InventoryRepository;
 
+import me.heyner.stashless.repository.SKURepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
@@ -34,15 +35,18 @@ public class InventoryService {
   private final UserService userService;
 
   private final ModelMapper modelMapper = new ModelMapper();
+  private final SKURepository sKURepository;
 
   public InventoryService(
       InventoryRepository inventoryRepository,
       SKUService skuService,
-      UserService userService) {
+      UserService userService,
+      SKURepository sKURepository) {
     this.inventoryRepository = inventoryRepository;
     this.skuService = skuService;
     this.userService = userService;
 
+    this.sKURepository = sKURepository;
   }
 
   public InventoryOutputDto addInventory(String username, InventoryInputDto inventoryInputDto) {
@@ -190,6 +194,8 @@ public class InventoryService {
     }
 
     inventoryRepository.save(inventory);
+
+    sKURepository.delete(sku);
 
     logger.info("Item {} removed from inventory {}", sku.getName(), inventory.getId());
   }

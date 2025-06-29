@@ -3,9 +3,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InventoriesService } from '../../../service/inventories.service';
 import { Inventory } from '../../../model/inventory';
-import { Item } from '../../../model/item';
+import { Item, NewItem } from '../../../model/item';
 import { ItemForm } from "../item-form/item-form.component";
-import { switchMap, merge, concat, forkJoin } from 'rxjs';
+import { switchMap, merge, concat, forkJoin, defaultIfEmpty } from 'rxjs';
 
 @Component({
   selector: "app-details",
@@ -92,21 +92,22 @@ export class EditInventoryComponent implements OnInit {
         switchMap(inventory => 
           forkJoin(
             this.inventoryItems().map((item) => {
-              return this.inventoriesService.updateInventoryItem(
-                inventory.id,
-                {
-                  uuid: item.uuid,
-                  name: item.name,
-                  amountAvailable: item.amountAvailable,
-                  costPrice: item.costPrice,
-                  marginPercentage: item.marginPercentage,
-                  quantity: item.quantity,
-                  productUuid: item.productUuid,
-                  options: item.options,
+                if(item.uuid) {
+                  return this.inventoriesService.updateInventoryItem(
+                    inventory.id,
+                    item
+                  );
+                } else {
+                  return this.inventoriesService.createInventoryItem(
+                    inventory.id,
+                    item as NewItem
+                  );
                 }
-                );
               }
             )
+          )
+          .pipe(
+            defaultIfEmpty(inventory)
           )
         )
       )
@@ -130,13 +131,21 @@ export class EditInventoryComponent implements OnInit {
 
   addItem() {
     this.inventoryItems.update((items) => [
-      ...items
+      ...items,
+      {} as Item
     ]);
   }
 
   removeItem() {
     this.inventoryItems.update((items) => {
       if (items.length > 0) {
+        const itemToDelete = items[items.length - 1];
+        if(this.inventoryId && itemToDelete.uuid) {
+          this.inventoriesService.deleteInventoryItem(this.inventoryId, itemToDelete.uuid)
+          .subscribe({
+            error: (error: Error) => (this.statusMessage.set(error.message)),
+          });
+        }
         items.pop();
       }
       return items;

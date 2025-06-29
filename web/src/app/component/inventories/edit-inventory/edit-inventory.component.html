@@ -17,7 +17,7 @@
     </div>
     <div class="inventory-form__items">
         <h2>Items</h2>
-        @for(item of inventoryItems(); track item.name) {
+        @for(item of inventoryItems(); track item.uuid) {
             <app-item-form
                 [(item)]="inventoryItems()[$index]"
             />

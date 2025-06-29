@@ -4,7 +4,7 @@ import { InventoriesService } from '../../../service/inventories.service';
 import { Router, RouterLink } from '@angular/router';
 import { ItemForm } from "../item-form/item-form.component";
 import { NewItem } from '../../../model/item';
-import { merge, switchMap } from 'rxjs';
+import { defaultIfEmpty, forkJoin, merge, switchMap } from 'rxjs';
 
 @Component({
   selector: "app-create",
@@ -36,16 +36,18 @@ export class CreateInventoryComponent {
         description: this.inventoryForm.value.description ?? "",
       })
       .pipe(
-        switchMap((inventory) => {
-          return merge(
-            ...this.inventoryItems().map((item) =>
+        switchMap((inventory) => 
+          forkJoin(
+            this.inventoryItems().map((item) =>
               this.inventoriesService.createInventoryItem(
                 inventory.id,
                 item
               )
             )
-          );
-        })
+          ).pipe(
+            defaultIfEmpty(inventory)
+          )
+        )
       )
       .subscribe({
         next: () => {
