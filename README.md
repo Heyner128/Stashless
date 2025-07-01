@@ -30,3 +30,6 @@ docker compose up -d
 ## Live-demo version
 
 <https://stashless.heyner.me>
+
+Username: demo
+Password: demoUser1@
