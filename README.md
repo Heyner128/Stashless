@@ -32,4 +32,5 @@ docker compose up -d
 <https://stashless.heyner.me>
 
 Username: demo
+
 Password: demoUser1@
