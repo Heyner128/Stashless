@@ -44,7 +44,7 @@ public class SKU {
     name = "sku_options",
     joinColumns = @JoinColumn(name = "sku_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "option_value_id", referencedColumnName = "id"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"option_id", "option_value_id"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {"sku_id", "option_id", "option_value_id"})
   )
   @MapKeyJoinColumn(name = "option_id", referencedColumnName = "id")
   private Map<Option, OptionValue> options;
