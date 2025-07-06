@@ -1,20 +1,30 @@
-plugins {
-    id 'java'
-    id 'jacoco'
-    id 'org.springframework.boot' version '3.4.6'
-    id 'io.spring.dependency-management' version '1.1.6'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-core:4.29.2"
+    }
 }
 
-group = 'me.heyner'
-version = '0.0.1-SNAPSHOT'
+plugins {
+    id "java"
+    id "jacoco"
+    id "org.springframework.boot" version "3.4.6"
+    id "io.spring.dependency-management" version "1.1.6"
+    id "org.liquibase.gradle" version "3.0.2"
+}
+
+group = "me.heyner"
+version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_23
-    targetCompatibility = JavaVersion.VERSION_23
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs.add('-parameters')
+    options.compilerArgs.add("-parameters")
 }
 
 configurations {
@@ -27,44 +37,81 @@ repositories {
     mavenCentral()
 }
 
-def modelMapperVersion = '3.2.0'
-def jjwtVersion = '0.12.6'
-def h2Version = '2.3.232'
-def springDocVersion = '2.8.6'
-def mariaDbVersion = '3.5.0'
+
+
+def modelMapperVersion = "3.2.0"
+def jjwtVersion = "0.12.6"
+def h2Version = "2.3.232"
+def springDocVersion = "2.8.6"
+def postgresqlVersion = "42.7.7"
+def liquibaseVersion = "4.29.2"
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.session:spring-session-core'
+
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.session:spring-session-core"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion"
     implementation "org.modelmapper:modelmapper:$modelMapperVersion"
     implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     implementation "io.jsonwebtoken:jjwt-impl:$jjwtVersion"
     implementation "io.jsonwebtoken:jjwt-jackson:$jjwtVersion"
+    implementation "org.liquibase:liquibase-core:$liquibaseVersion"
 
-    compileOnly 'org.springframework.boot:spring-boot-devtools'
+    liquibaseRuntime "org.liquibase:liquibase-core:$liquibaseVersion"
+    liquibaseRuntime "info.picocli:picocli:4.7.5"
+    liquibaseRuntime "org.yaml:snakeyaml:1.33"
+    liquibaseRuntime "org.postgresql:postgresql:$postgresqlVersion"
 
-    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
 
-    runtimeOnly "com.h2database:h2:$h2Version"
-    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:$mariaDbVersion"
+    annotationProcessor "org.projectlombok:lombok"
+
+    runtimeOnly "org.postgresql:postgresql:$postgresqlVersion"
 
     testRuntimeOnly "com.h2database:h2:$h2Version"
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+}
+
+apply plugin: "org.liquibase.gradle"
+
+def envProperties = new Properties()
+def defaultEnvPropertiesFile = file("default.env")
+def envPropertiesFile = file(".env")
+if(defaultEnvPropertiesFile.exists()) {
+    defaultEnvPropertiesFile.withReader("UTF-8") {
+        reader -> envProperties.load(reader)
+    }
+}
+if(envPropertiesFile.exists()) {
+    envPropertiesFile.withReader("UTF-8") {
+        reader -> envProperties.load(reader)
+    }
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile "src/main/resources/db/changelog/db.changelog-master.yaml"
+            url envProperties.getProperty("DB_URL")
+            username envProperties.getProperty("DB_USER")
+            password envProperties.getProperty("DB_PASSWORD")
+            referenceUrl envProperties.getProperty("DB_URL")
+        }
+    }
 }
 
 tasks.withType(Test) {
-    environment 'SPRING_PROFILES_ACTIVE', 'test'
+    environment "SPRING_PROFILES_ACTIVE", "test"
     useJUnitPlatform()
 }
 
 tasks.named("bootTestRun") {
-    environment 'SPRING_PROFILES_ACTIVE', 'test'
+    environment "SPRING_PROFILES_ACTIVE", "test"
 }
 
 tasks.check {

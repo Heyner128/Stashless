@@ -1,0 +1,499 @@
+databaseChangeLog:
+- changeSet:
+    id: 1751822426957-1
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: BIGINT
+        - column:
+            name: authorities
+            type: VARCHAR(255)
+        tableName: user_authorities
+- changeSet:
+    id: 1751822426957-2
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: inventory_pkey
+            name: id
+            type: UUID
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: BIGINT
+        tableName: inventory
+- changeSet:
+    id: 1751822426957-3
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: application_user_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: password
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: username
+            type: VARCHAR(255)
+        tableName: application_user
+- changeSet:
+    id: 1751822426957-4
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: sku_options_pkey
+            name: sku_id
+            type: UUID
+        - column:
+            constraints:
+              nullable: false
+            name: option_value_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: sku_options_pkey
+            name: option_id
+            type: UUID
+        tableName: sku_options
+- changeSet:
+    id: 1751822426957-5
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: option_pkey
+            name: id
+            type: UUID
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: update_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: product_id
+            type: UUID
+        tableName: option
+- changeSet:
+    id: 1751822426957-6
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: product_pkey
+            name: product_id
+            type: UUID
+        - column:
+            constraints:
+              nullable: false
+            name: brand
+            type: VARCHAR(255)
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: BIGINT
+        tableName: product
+- changeSet:
+    id: 1751822426957-7
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: option_value_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: created_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: update_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: value
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: option_id
+            type: UUID
+        tableName: option_value
+- changeSet:
+    id: 1751822426957-8
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_id, name
+        constraintName: UK3ra1k8trajwois46lqhsdfrgv
+        tableName: inventory
+- changeSet:
+    id: 1751822426957-9
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: UK424cf939n9yras1t70rn93t5k
+        tableName: application_user
+- changeSet:
+    id: 1751822426957-10
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: username
+        constraintName: UKdppr8tjy1qeltnj5yfwe2c82a
+        tableName: application_user
+- changeSet:
+    id: 1751822426957-11
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: sku_id, option_id, option_value_id
+        constraintName: UK74jugu7bivk1vmih7jf07k8rb
+        tableName: sku_options
+- changeSet:
+    id: 1751822426957-12
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: product_id, name
+        constraintName: UKa6kippvp1v9saf6y4opkj78a8
+        tableName: option
+- changeSet:
+    id: 1751822426957-13
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_id, name
+        constraintName: UKbix31wm16f4ihgv0rmnd14e6e
+        tableName: product
+- changeSet:
+    id: 1751822426957-14
+    author: heyner (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: value
+        constraintName: UKrf3x8gi8o9p0dosaq2qfe3kdx
+        tableName: option_value
+- changeSet:
+    id: 1751822426957-15
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: inventory_items_pkey
+            name: inventory_id
+            type: UUID
+        - column:
+            constraints:
+              nullable: false
+            name: quantity
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: inventory_items_pkey
+            name: sku_id
+            type: UUID
+        tableName: inventory_items
+- changeSet:
+    id: 1751822426957-16
+    author: heyner (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: sku_pkey
+            name: id
+            type: UUID
+        - column:
+            constraints:
+              nullable: false
+            name: amount_available
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: cost_price
+            type: numeric(38, 2)
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: margin_percentage
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: update_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: product_id
+            type: UUID
+        tableName: sku
+- changeSet:
+    id: 1751822426957-17
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: sku_id
+        baseTableName: sku_options
+        constraintName: FK1w6oc41do2qlsja3hd0xby6nt
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: sku
+        validate: true
+- changeSet:
+    id: 1751822426957-18
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: option_value_id
+        baseTableName: sku_options
+        constraintName: FK4m8aooiybcd3olxub5w14lqfy
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: option_value
+        validate: true
+- changeSet:
+    id: 1751822426957-19
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: option_id
+        baseTableName: sku_options
+        constraintName: FK4y9yjsu7af06kdratay9ryvgf
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: option
+        validate: true
+- changeSet:
+    id: 1751822426957-20
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: inventory_id
+        baseTableName: inventory_items
+        constraintName: FKbs11i0jyao6awhdclxqprrpf7
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: inventory
+        validate: true
+- changeSet:
+    id: 1751822426957-21
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: sku_id
+        baseTableName: inventory_items
+        constraintName: FKdil05r765mkfjltc11iedesdq
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: sku
+        validate: true
+- changeSet:
+    id: 1751822426957-22
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: inventory
+        constraintName: FKfggk9pnf5n239l5pubeiy96nt
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: application_user
+        validate: true
+- changeSet:
+    id: 1751822426957-23
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: product_id
+        baseTableName: option
+        constraintName: FKkktl41u3x6goks9q92ujgbu5n
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: product_id
+        referencedTableName: product
+        validate: true
+- changeSet:
+    id: 1751822426957-24
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: product_id
+        baseTableName: sku
+        constraintName: FKl3ki6lnjbejx5cjurx0bs4nem
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: product_id
+        referencedTableName: product
+        validate: true
+- changeSet:
+    id: 1751822426957-25
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: product
+        constraintName: FKlsjtn70nmnbqa2x0wthphva6v
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: application_user
+        validate: true
+- changeSet:
+    id: 1751822426957-26
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: option_id
+        baseTableName: option_value
+        constraintName: FKnp65190aoo63x95cm5a8xex7e
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: option
+        validate: true
+- changeSet:
+    id: 1751822426957-27
+    author: heyner (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_authorities
+        constraintName: FKrm58obt7dd3qn3oxv09kiaoi2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: application_user
+        validate: true
+

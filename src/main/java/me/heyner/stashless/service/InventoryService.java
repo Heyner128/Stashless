@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.transaction.Transactional;
 import me.heyner.stashless.dto.*;
 import me.heyner.stashless.exception.EntityNotFoundException;
 import me.heyner.stashless.exception.ExistingEntityException;
@@ -115,6 +116,7 @@ public class InventoryService {
     return items;
   }
 
+  @Transactional
   public InventoryItemOutputDto addInventoryItem(UUID uuid, InventoryItemInputDto inventoryItemInputDto) {
     Inventory inventory =
         inventoryRepository
@@ -133,11 +135,9 @@ public class InventoryService {
 
     inventory.getItems().put(savedSku, inventoryItemInputDto.getQuantity());
 
-
-    Inventory savedInventory = inventoryRepository.save(inventory);
     logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
 
-    return savedInventory.getItems()
+    return inventory.getItems()
         .entrySet()
         .stream()
         .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
@@ -146,6 +146,7 @@ public class InventoryService {
         .orElseThrow(() -> new EntityNotFoundException("Item not found in inventory"));
   }
 
+  @Transactional
   public InventoryItemOutputDto updateInventoryItem(UUID uuid, UUID itemUuid, InventoryItemInputDto inventoryItemInputDto) {
     Inventory inventory =
       inventoryRepository
@@ -164,11 +165,9 @@ public class InventoryService {
 
     inventory.getItems().put(savedSku, inventoryItemInputDto.getQuantity());
 
-
-    Inventory savedInventory = inventoryRepository.save(inventory);
     logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
 
-    return savedInventory.getItems()
+    return inventory.getItems()
       .entrySet()
       .stream()
       .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
@@ -179,6 +178,7 @@ public class InventoryService {
 
 
 
+  @Transactional
   public void deleteInventoryItem(UUID uuid, UUID skuUuid) {
     Inventory inventory =
         inventoryRepository
@@ -192,8 +192,6 @@ public class InventoryService {
     if (removedItem == null) {
       throw new EntityNotFoundException("not found");
     }
-
-    inventoryRepository.save(inventory);
 
     sKURepository.delete(sku);
 
