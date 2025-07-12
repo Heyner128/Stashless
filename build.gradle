@@ -110,6 +110,11 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
+tasks.register("devBootRun") {
+    bootRun.environment("SPRING_PROFILES_ACTIVE", "dev")
+    finalizedBy tasks.bootRun
+}
+
 tasks.named("bootTestRun") {
     environment "SPRING_PROFILES_ACTIVE", "test"
 }

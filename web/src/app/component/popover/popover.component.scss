@@ -12,7 +12,7 @@
     left: -100%;
     z-index: 100;
 
-    button {
+    button, a {
         display: flex;
         align-items: center;
         gap: var(--size-xxsmall);

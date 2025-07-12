@@ -12,6 +12,15 @@
     <div class="user-badge__popover-item__title">
         <span>{{getUsername()}}</span>
     </div>
+    <a
+            type="button"
+            routerLink="/user"
+            (click)="toggleMenu()"
+            class="user-badge__popover-item"
+    >
+        <span class="material-symbols-outlined">account_circle</span>
+        Profile
+    </a>
     <button 
         type="button"
         (click)="logout()"

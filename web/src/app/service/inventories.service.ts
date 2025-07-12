@@ -109,7 +109,6 @@ export class InventoriesService {
       }
     ).pipe(
       map((response: HttpResponse<Item[]>) => {
-        console.log("Response from getInventoryItems:", response);
         return response.body || [] as Item[];
       })
     );

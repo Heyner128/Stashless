@@ -11,6 +11,7 @@ import { ErrorComponent } from './component/error/error.component';
 import { ProductsComponent } from './component/products/products.component';
 import { CreateProductComponent  } from './component/products/create-product/create-product.component';
 import { EditProductComponent  } from './component/products/edit-product/edit-product.component';
+import {EditUserComponent} from "./component/edit-user/edit-user.component";
 
 export const routes: Routes = [
   {
@@ -53,6 +54,10 @@ export const routes: Routes = [
       {
         path: 'products/:id',
         component: EditProductComponent
+      },
+      {
+        path: 'user',
+        component: EditUserComponent
       },
       {
         path: 'error',

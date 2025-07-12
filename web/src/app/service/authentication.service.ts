@@ -92,4 +92,35 @@ export class AuthenticationService {
         )
       );
   }
+
+  getCurrentUser() {
+    return this.httpClient
+      .get(
+        `${environment.apiBaseUrl}/users/${this.getUsername()}`,
+        {
+          observe: 'response',
+        }
+      )
+      .pipe(
+        map(
+          response => response.body as User
+        )
+      );
+  }
+
+  updateCurrentUser(updatedUser: NewUser) {
+    return this.httpClient
+      .put(
+          `${environment.apiBaseUrl}/users/${this.getUsername()}`,
+          updatedUser,
+          {
+            observe: 'response',
+          }
+      )
+      .pipe(
+          map(
+              response => response.body as User
+          )
+      )
+  }
 }
