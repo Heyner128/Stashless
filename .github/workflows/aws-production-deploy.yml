@@ -26,12 +26,10 @@ jobs:
           run: ./gradlew test
 
         - name: Build Backend Docker image
-          uses: actions/checkout@v2
-        - run: docker build . --file Dockerfile --tag stashless-api:latest
+          run: docker build . --file Dockerfile --tag stashless-api:latest
 
         - name: Build Frontend Docker image
-          uses: actions/checkout@v2
-        - run: docker build ./web --file Dockerfile --tag stashless-web:latest
+          run: docker build ./web --file Dockerfile --tag stashless-web:latest
 
         - name: Push Backend Image to ECR
           id: ecr-backend
