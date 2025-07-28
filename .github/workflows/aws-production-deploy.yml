@@ -1,0 +1,55 @@
+name: AWS production deploy
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-24.04-arm  
+        environment: 'AWS production'
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'temurin'
+            java-version: 23
+        - name: Setup Gradle
+          uses: gradle/actions/setup-gradle@v4
+          
+        - name: Run tests with gradle
+          run: ./gradlew test
+
+        - name: Build Backend Docker image
+          uses: actions/checkout@v2
+        - run: docker build . --file Dockerfile --tag stashless-api:latest
+
+        - name: Build Frontend Docker image
+          uses: actions/checkout@v2
+        - run: docker build ./web --file Dockerfile --tag stashless-web:latest
+
+        - name: Push Backend Image to ECR
+          id: ecr-backend
+          uses: jwalton/gh-ecr-push@v2
+          with:
+            access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            region: eu-west-3
+            local-image: stashless-api:latest
+            image: stashless-api:latest, stashless-api:latest
+
+        - name: Push Frontend Image to ECR
+          id: ecr-frontend
+          uses: jwalton/gh-ecr-push@v2
+          with:
+            access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            region: eu-west-3
+            local-image: stashless-web:latest
+            image: stashless-web:latest, stashless-web:latest
+        
