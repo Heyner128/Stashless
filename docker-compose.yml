@@ -17,7 +17,7 @@ services:
     ports:
         - "5432:5432"
     volumes:
-      - /var/db/stashless:/var/lib/postgresql/data:Z
+      - /var/db/stashless:/var/lib/postgresql/data
 
   api:
     env_file:
