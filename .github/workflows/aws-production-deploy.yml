@@ -29,7 +29,7 @@ jobs:
           run: docker build . --file Dockerfile --tag stashless-api:latest
 
         - name: Build Frontend Docker image
-          run: docker build ./web --file Dockerfile --tag stashless-web:latest
+          run: docker build web --file web/Dockerfile --tag stashless-web:latest
 
         - name: Push Backend Image to ECR
           id: ecr-backend
