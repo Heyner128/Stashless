@@ -3,7 +3,6 @@ services:
     image: postgres:17
     restart: unless-stopped
     env_file:
-      - ./default.env
       - ./.env
     environment:
       - POSTGRES_DB=stashless
@@ -21,7 +20,6 @@ services:
 
   api:
     env_file:
-      - ./default.env
       - ./.env
     build: .
     restart: unless-stopped
