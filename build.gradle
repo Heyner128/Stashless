@@ -97,10 +97,10 @@ liquibase {
     activities {
         main {
             changelogFile "src/main/resources/db/changelog/db.changelog-master.yaml"
-            url envProperties.getProperty("DB_URL")
-            username envProperties.getProperty("DB_USER")
-            password envProperties.getProperty("DB_PASSWORD")
-            referenceUrl envProperties.getProperty("DB_URL")
+            url envProperties.getProperty("DB_URL") ?: System.getenv("DB_URL")
+            username envProperties.getProperty("DB_USER") ?: System.getenv("DB_USER")
+            password envProperties.getProperty("DB_PASSWORD") ?: System.getenv("DB_PASSWORD")
+            referenceUrl envProperties.getProperty("DB_URL") ?: System.getenv("DB_URL")
         }
     }
 }
