@@ -1,0 +1,68 @@
+name: Build docker imager and push to AWS ECR
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'web/src/**'
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-24.04-arm
+    environment: 'AWS production'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 23
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run tests with gradle
+        run: ./gradlew test
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install node packages
+        run: npm ci
+
+      - name: Run frontend tests
+        run: npm run test
+
+      - name: Build Backend Docker image
+        run: docker build . --file Dockerfile --tag stashless-api:latest
+
+      - name: Build Frontend Docker image
+        run: docker build web --file web/Dockerfile --tag stashless-web:latest
+
+      - name: Push Backend Image to ECR
+        id: ecr-backend
+        uses: jwalton/gh-ecr-push@v2
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: eu-west-3
+          local-image: stashless-api:latest
+          image: stashless-api:latest, stashless-api:latest
+
+      - name: Push Frontend Image to ECR
+        id: ecr-frontend
+        uses: jwalton/gh-ecr-push@v2
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: eu-west-3
+          local-image: stashless-web:latest
+          image: stashless-web:latest, stashless-web:latest
+
