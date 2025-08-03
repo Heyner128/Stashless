@@ -41,6 +41,9 @@ jobs:
         with:
           node-version: 24
 
+      - name: Setup chromium
+        uses: browser-actions/setup-chrome@v2
+
       - name: Install node packages
         working-directory: web
         run: npm ci
