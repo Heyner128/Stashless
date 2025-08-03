@@ -20,6 +20,20 @@
     }
 }
 
+@mixin button-icon {
+    height: calc(1.5 * var(--size-xxlarge));
+    width: calc(1.5 * var(--size-xxlarge));
+    border-radius: calc(0.5 * var(--size-xxsmall));
+    border: none;
+    background-color: transparent;
+
+    &:hover{
+        cursor: pointer;
+        background-color: color.adjust($color-background, $lightness: -10%);
+    }
+
+}
+
 @mixin button-secondary {
     @include button;
     background-color: var(--color-secondary);

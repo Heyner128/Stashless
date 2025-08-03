@@ -1,5 +1,40 @@
+
+<div class="items-form__select">
+    <label for="product">Product</label>
+    <div class="items-form__products-select">
+        <app-select
+                name="product"
+                [objects]="products.value()"
+                [defaultValue]="item().productUuid"
+                (select)="selectProduct($event)"
+                valueAttribute="id"
+                labelAttribute="name"
+                [required]="true"
+        ></app-select>
+        <button type="button" (click)="refreshProducts()"><span class="material-symbols-outlined">refresh</span></button>
+    </div>
+    <span class="items-form__select-legend">You can create a product in <a routerLink="/products/create" target="_blank">the products page</a></span>
+    @if(item().productUuid && options.value().length === 0) {
+        <span class="items-form__select-legend">No options, please add options to the product</span>
+    }
+</div>
+
+@for(option of options.value(); track option.id) {
+    <div class="items-form__select">
+        <label [for]="option.name">{{option.name}}</label>
+        <app-select
+                [defaultValue]="getDefaultOptionValue(option)"
+                [name]="option.name"
+                [objects]="option.values"
+                (select)="selectOption($event)"
+                valueAttribute="id"
+                labelAttribute="value"
+                [required]="true"
+        ></app-select>
+    </div>
+}
 <div class="items-form__input">
-    <label for="name">Name</label>
+    <label for="name">SKU Name</label>
     <input
         type="text"
         id="name"
@@ -58,31 +93,3 @@
         required
     >
 </div>
-@if(products.value().length > 0) {
-    <div class="items-form__select">
-        <label for="product">Product</label>
-        <app-select
-            name="product"
-            [objects]="products.value()"
-            [defaultValue]="item().productUuid"
-            (select)="selectProduct($event)"
-            valueAttribute="id"
-            labelAttribute="name"
-            [required]="true"
-        ></app-select>
-    </div>
-}
-@for(option of options.value(); track option.id) {
-    <div class="items-form__select">
-        <label [for]="option.name">{{option.name}}</label>
-        <app-select
-            [defaultValue]="getDefaultOptionValue(option)"
-            [name]="option.name"
-            [objects]="option.values"
-            (select)="selectOption($event)"
-            valueAttribute="id"
-            labelAttribute="value"
-            [required]="true"
-        ></app-select>
-    </div>
-}

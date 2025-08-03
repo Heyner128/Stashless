@@ -1,4 +1,5 @@
 @use 'components' as *;
+@use 'styles' as *;
 
 :host {
     display: flex;
@@ -31,6 +32,7 @@
 .product-form__header-back {
     display: flex;
     align-items: center;
+    @include unstyled-link;
 }
 
 .product-form__fields, .options-form__fields {

@@ -1,4 +1,4 @@
-@use 'sass:color';
+ @use 'sass:color';
 @use 'components' as *;
 @use 'variables' as *;
 
@@ -27,7 +27,8 @@ select {
     background-color: var(--color-white);
     border-color: color.adjust($color-black, $lightness: +50%);
     overflow: hidden;
-    height: 100%;
+    box-sizing: border-box;
+    min-height: calc(1.5 * var(--size-xxlarge));
     cursor: pointer;
     font-size: var(--size-small);
     -webkit-user-select: none;    

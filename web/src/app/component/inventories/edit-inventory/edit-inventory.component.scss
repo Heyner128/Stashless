@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use 'components' as *;
+@use 'styles' as *;
 
 :host {
     display: flex;
@@ -32,6 +33,7 @@
 .inventory-form__header-back {
     display: flex;
     align-items: center;
+    @include unstyled-link;
 }
 
 .inventory-form__fields {

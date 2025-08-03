@@ -1,24 +1,14 @@
 @use 'sass:color';
 @use 'variables' as *;
+@use 'components' as *;
+@use 'styles' as *;
 
 :host {
     position: relative;
 }
 
 .user-badge__button {
-    display: flex;
-    align-items: center;
-    gap: var(--size-xxsmall);
-    border-radius: calc(0.5 * var(--size-xxsmall));
-    padding: var(--size-small);
-    border: none;
-    background-color: transparent;
-    font-weight: bold;
-
-    &:hover{
-        cursor: pointer;
-        background-color: color.adjust($color-background, $lightness: -10%);
-    }
+    @include button-icon;
 
     &:focus{
         background-color: color.adjust($color-background, $lightness: -10%);
@@ -33,6 +23,7 @@
     min-width: calc(10 * var(--size-xxlarge));
     padding: var(--size-small);
     font-size: var(--size-small);
+    @include unstyled-link;
 }
 
 .user-badge__popover-item__title {

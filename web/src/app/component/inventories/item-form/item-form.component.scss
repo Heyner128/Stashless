@@ -16,6 +16,23 @@
 .items-form__select {
     @include input-with-label;
     width: 100%;
+
+    .items-form__select-legend {
+        padding-top: var(--size-xsmall);
+        font-size: var(--size-small);
+    }
+}
+
+.items-form__products-select {
+    display: flex;
+    gap: var(--size-small);
+    app-select {
+        flex-grow: 1;
+    }
+
+    button {
+        @include button-icon;
+    }
 }
 
 .items-form__status {

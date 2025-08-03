@@ -32,6 +32,10 @@ export class CreateProductComponent {
 
   create() {
     if (!this.productForm.value.name) return;
+    if(this.options().length === 0) {
+      this.statusMessage.set("Product must have at least one option");
+      return;
+    }
     this.productsService
       .createProduct({
         name: this.productForm.value.name,

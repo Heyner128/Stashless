@@ -91,6 +91,10 @@ export class EditProductComponent implements OnInit {
       !this.productForm.value.brand
     )
       return;
+    if(this.options().length === 0) {
+      this.statusMessage.set("Product must have at least one option");
+      return;
+    }
     this.productsService
       .updateProduct(this.productId, {
         name: this.productForm.value.name,

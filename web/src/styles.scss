@@ -57,6 +57,11 @@
     white-space: nowrap;
 }
 
+@mixin unstyled-link {
+    text-decoration: none;
+    color: var(--color-black);
+}
+
 
 .visually-hidden {
     @include visually-hidden;
@@ -86,10 +91,7 @@ h2 {
     margin-block: var(--size-xsmall);
 }
 
-a {
-    text-decoration: none;
-    color: var(--color-black);
-}
+
 
 input, textarea {
     font-family: 'Red Hat Display', serif;
