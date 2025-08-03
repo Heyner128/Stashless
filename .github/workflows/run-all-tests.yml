@@ -30,8 +30,10 @@ jobs:
           node-version: 24
 
       - name: Install node packages
+        working-directory: web
         run: npm ci
 
       - name: Run frontend tests
+        working-directory: web
         run: npm run test
 
