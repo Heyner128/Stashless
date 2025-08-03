@@ -30,7 +30,7 @@ jobs:
           node-version: 24
 
       - name: Setup chromium
-        uses: browser-actions/setup-chrome@v2
+        run: apt install chromium
 
       - name: Install node packages
         working-directory: web
