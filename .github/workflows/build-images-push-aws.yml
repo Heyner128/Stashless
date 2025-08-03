@@ -1,12 +1,19 @@
-name: Build docker imager and push to AWS ECR
+name: Build docker images and push to AWS ECR
 
 on:
+  push:
+    paths:
+      - 'src/**'
+      - 'web/src/**'
+    branches:
+      - main
   pull_request:
     paths:
       - 'src/**'
       - 'web/src/**'
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
