@@ -42,7 +42,7 @@ jobs:
           node-version: 24
 
       - name: Setup chromium
-        run: apt install chromium
+        run: sudo apt install chromium
 
       - name: Install node packages
         working-directory: web
