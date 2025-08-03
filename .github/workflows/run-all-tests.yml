@@ -6,7 +6,7 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  build-and-deploy:
+  run-tests:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Checkout code
