@@ -15,6 +15,7 @@ Stashless is a lightweight inventory management system designed to help small bu
 Create a `.env` file with the following variables:
 
 ```ENV
+DB_URL=jdbc:postgresql://localhost:5432/stashless
 DB_USER=user
 DB_PASSWORD=password
 CORS_FRONTEND_URL=https://stashless.example.com
