@@ -17,7 +17,7 @@ import {RouterLink} from "@angular/router";
   styleUrl: "./item-form.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemForm {
+export class ItemFormComponent {
   products = rxResource({
     stream: () => this.productsService.getProducts(),
     defaultValue: [],

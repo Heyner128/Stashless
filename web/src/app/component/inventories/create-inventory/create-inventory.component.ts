@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, Signal, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component,  signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InventoriesService } from '../../../service/inventories.service';
 import { Router, RouterLink } from '@angular/router';
-import { ItemForm } from "../item-form/item-form.component";
+import {ItemFormComponent} from "../item-form/item-form.component";
 import { NewItem } from '../../../model/item';
-import { defaultIfEmpty, forkJoin, merge, switchMap } from 'rxjs';
+import { defaultIfEmpty, forkJoin, switchMap } from 'rxjs';
 
 @Component({
   selector: "app-create",
-  imports: [ReactiveFormsModule, RouterLink, ItemForm],
+  imports: [ReactiveFormsModule, RouterLink, ItemFormComponent],
   templateUrl: "./create-inventory.component.html",
   styleUrl: "./create-inventory.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -16,6 +16,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Getter
 @Setter
 @Accessors(chain = true)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"option_id", "value"}, name = "uq_option_id_value"))
 @NoArgsConstructor
 public class OptionValue {
   @Id
@@ -23,7 +24,7 @@ public class OptionValue {
   @JsonIgnore
   private Long id;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String value;
 
   @ManyToOne(fetch = FetchType.LAZY)

@@ -9,6 +9,7 @@
                 (select)="selectProduct($event)"
                 valueAttribute="id"
                 labelAttribute="name"
+                [disabled]="products.value().length === 0"
                 [required]="true"
         ></app-select>
         <button type="button" (click)="refreshProducts()"><span class="material-symbols-outlined">refresh</span></button>
