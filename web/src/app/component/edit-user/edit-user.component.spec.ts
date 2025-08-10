@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditUserComponent } from './edit-user.component';
+import {provideHttpClient} from "@angular/common/http";
 
 describe('EditUserComponent', () => {
   let component: EditUserComponent;
@@ -8,7 +9,10 @@ describe('EditUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditUserComponent]
+      imports: [EditUserComponent],
+      providers: [
+        provideHttpClient()
+      ]
     })
     .compileComponents();
 
