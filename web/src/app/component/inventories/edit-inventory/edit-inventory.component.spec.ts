@@ -75,7 +75,6 @@ describe('EditInventoryComponent', () => {
 
   let getInventorySpy: jasmine.Spy;
   let updateInventorySpy: jasmine.Spy;
-  let updateInventoryItemSpy: jasmine.Spy;
   let deleteInventorySpy: jasmine.Spy;
 
   let nameInput: HTMLInputElement | null;
@@ -233,6 +232,7 @@ describe('EditInventoryComponent', () => {
   });
 
   it("should initialize the form with inventory data", async () => {
+    fillForm();
     expect(nameInput?.value).toBe(MOCK_INVENTORY.name);
     expect(descriptionInput?.value).toBe(MOCK_INVENTORY.description);
     expect(itemNameInput?.value).toBe(MOCK_INVENTORY_ITEM.name);

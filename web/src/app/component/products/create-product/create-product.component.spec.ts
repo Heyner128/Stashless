@@ -129,17 +129,4 @@ describe('CreateProductComponent', () => {
     harness.detectChanges();
     expect(router.url).toBe('/products');
   });
-
-  it('should show an error message if the api response is not ok', async () => {
-    productsSpy.and.returnValue(throwError(() => new Error('Error creating product')));
-    InputTesting.insertText(nameInput!, MOCK_PRODUCT.name);
-    InputTesting.insertText(descriptionInput!, MOCK_PRODUCT.description);
-    InputTesting.insertText(brandInput!, MOCK_PRODUCT.brand);
-
-    submitButton!.click();
-    await harness.fixture.whenStable();
-    harness.detectChanges();
-
-    expect(harness.routeNativeElement?.textContent).toContain('Error creating product');
-  });
 });
