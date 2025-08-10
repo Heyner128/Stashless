@@ -15,11 +15,9 @@ on:
       - 'web/src/**'
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build-and-push:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-24.04-arm
     environment: 'AWS production'
     steps:
