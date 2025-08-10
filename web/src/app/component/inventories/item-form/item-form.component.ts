@@ -8,15 +8,16 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewItem } from '../../../model/item';
 import { map, of } from 'rxjs';
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-item-form",
-  imports: [SelectComponent, ReactiveFormsModule],
+  imports: [SelectComponent, ReactiveFormsModule, RouterLink],
   templateUrl: "./item-form.component.html",
   styleUrl: "./item-form.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemForm {
+export class ItemFormComponent {
   products = rxResource({
     stream: () => this.productsService.getProducts(),
     defaultValue: [],
@@ -99,6 +100,10 @@ export class ItemForm {
       ...item,
       quantity: parseInt(inputElement.value),
     }));
+  }
+
+  refreshProducts() {
+    this.products.reload()
   }
 
   selectProduct(selectedProductOption: SelectOption) {

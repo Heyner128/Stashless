@@ -12,8 +12,9 @@
         </option>
     }
 </select>
-<div 
+<div
     class="select"
+    [class.disabled]="disabled()"
     (click)="toggle()"
     (blur)="toggle(false)"
     (keyup.enter)="selectHighlighted()"

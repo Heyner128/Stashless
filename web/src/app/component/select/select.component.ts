@@ -45,6 +45,7 @@ export class SelectComponent implements AfterViewInit {
   });
   placeholder = input<string>("Select an option");
   required = input<boolean>(false);
+  disabled = input<boolean>(false);
   name = input.required<string>();
   title = computed<string>(() => {
     const selected = this.selectedOption();
@@ -52,6 +53,9 @@ export class SelectComponent implements AfterViewInit {
   });
 
   ngAfterViewInit(): void {
+    if(this.disabled()) {
+      this.formControl().disable();
+    }
     this.selectedOption.set(
       this.options().find((opt)=> opt.value === this.defaultValue())
     );

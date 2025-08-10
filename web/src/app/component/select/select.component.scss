@@ -3,76 +3,82 @@
 @use 'variables' as *;
 
 :host {
-    position: relative;
+  position: relative;
 }
 
 select {
-    position: absolute;
-    border-radius: var(--size-xxsmall);
-    width: 100%;
-    top: 0;
-    left: 0;
-    height: 100%;
-    z-index: -100;
+  position: absolute;
+  border-radius: var(--size-xxsmall);
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -100;
 }
 
 .select {
-    display: flex;  
-    justify-content: space-between;
-    align-items: center;
-    border-style: solid;
-    border-width: 1px;
-    padding: calc(0.5 * var(--size-xxsmall));
-    border-radius: var(--size-xxsmall);
-    background-color: var(--color-white);
-    border-color: color.adjust($color-black, $lightness: +50%);
-    overflow: hidden;
-    height: 100%;
-    cursor: pointer;
-    font-size: var(--size-small);
-    -webkit-user-select: none;    
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-style: solid;
+  border-width: 1px;
+  padding: calc(0.5 * var(--size-xxsmall));
+  border-radius: var(--size-xxsmall);
+  background-color: var(--color-white);
+  border-color: color.adjust($color-black, $lightness: +50%);
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: calc(1.5 * var(--size-xxlarge));
+  cursor: pointer;
+  font-size: var(--size-small);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .select:focus,
 .select:focus-within,
 .select:focus-visible {
-    outline-width: 2px;
-    outline-style: solid;
-    outline-color: rgba($color-secondary, 0.5);
-    outline-offset: 2px;
+  outline: rgba($color-secondary, 0.5) solid 2px;
+  outline-offset: 2px;
 
-    &:not(:hover) {
-        border-color: transparent;
-    }
+  &:not(:hover) {
+    border-color: transparent;
+  }
+}
+
+.select.disabled {
+  pointer-events: none;
+  background-color: var(--color-grey-light);
+  color: var(--color-grey-light);
+  border-color: color.adjust($color-grey, $lightness: -50%);
 }
 
 .select__title {
-    text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 .select__options {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .select__option {
-    cursor: pointer;
-    padding: var(--size-xxsmall);
-    font-size: var(--size-small);
+  cursor: pointer;
+  padding: var(--size-xxsmall);
+  font-size: var(--size-small);
 }
 
 .select__option.active {
-    background-color: color.adjust($color-secondary, $lightness: +30%);
+  background-color: color.adjust($color-secondary, $lightness: +30%);
 }
 
 .select__option.highlighted {
-    background-color: color.adjust($color-secondary, $lightness: +35%);
+  background-color: color.adjust($color-secondary, $lightness: +35%);
 }
 
 .select__option:hover {
-    background-color: color.adjust($color-secondary, $lightness: +35%);
+  background-color: color.adjust($color-secondary, $lightness: +35%);
 }

@@ -1,0 +1,10 @@
+databaseChangeLog:
+- changeSet:
+    id: 002-add-unique-option-value-per-option
+    author: heyner
+    changes:
+      - addUniqueConstraint:
+          constraintName: uq_option_id_value
+          tableName: option_value
+          schemaName: public
+          columnNames: option_id, value

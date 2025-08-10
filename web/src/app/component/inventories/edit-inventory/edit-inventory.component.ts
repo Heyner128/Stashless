@@ -4,12 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InventoriesService } from '../../../service/inventories.service';
 import { Inventory } from '../../../model/inventory';
 import { Item, NewItem } from '../../../model/item';
-import { ItemForm } from "../item-form/item-form.component";
-import { switchMap, merge, concat, forkJoin, defaultIfEmpty } from 'rxjs';
+import { ItemFormComponent } from "../item-form/item-form.component";
+import { switchMap, forkJoin, defaultIfEmpty } from 'rxjs';
 
 @Component({
   selector: "app-details",
-  imports: [ReactiveFormsModule, RouterLink, ItemForm],
+  imports: [ReactiveFormsModule, RouterLink, ItemFormComponent],
   templateUrl: "./edit-inventory.component.html",
   styleUrl: "./edit-inventory.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
