@@ -7,10 +7,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import me.heyner.stashless.controller.UserController;
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
@@ -125,9 +123,7 @@ class UserControllerTests {
             .accept(MediaType.APPLICATION_JSON)
             .content(jacksonObjectMapper.writeValueAsString(mockRegisterUserDto));
 
-    mockMvc
-        .perform(requestBuilder)
-        .andExpect(status().isBadRequest());
+    mockMvc.perform(requestBuilder).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -199,13 +195,17 @@ class UserControllerTests {
     when(userService.updateUser(eq(user.getUsername()), any(UpdateUserDto.class)))
         .thenReturn(modelMapper.map(user, UserDto.class));
 
-    UpdateUserDto updatedUserDto = new UpdateUserDto()
-        .setUsername(user.getUsername())
-        .setEmail(user.getEmail())
-        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet()))
-        .setOldPassword(user.getPassword())
-        .setNewPassword("newPassword12@")
-        .setNewMatchingPassword("newPassword12@");
+    UpdateUserDto updatedUserDto =
+        new UpdateUserDto()
+            .setUsername(user.getUsername())
+            .setEmail(user.getEmail())
+            .setAuthorities(
+                user.getAuthorities().stream()
+                    .map(authority -> Authority.valueOf(authority.getAuthority()))
+                    .collect(Collectors.toSet()))
+            .setOldPassword(user.getPassword())
+            .setNewPassword("newPassword12@")
+            .setNewMatchingPassword("newPassword12@");
 
     var requestBuilder =
         MockMvcRequestBuilders.put("/users/test")
@@ -235,13 +235,17 @@ class UserControllerTests {
     when(userService.updateUser(eq(user.getUsername()), any(UpdateUserDto.class)))
         .thenReturn(modelMapper.map(user, UserDto.class));
 
-    UpdateUserDto updatedUserDto = new UpdateUserDto()
-        .setUsername(user.getUsername())
-        .setEmail(user.getEmail())
-        .setAuthorities(user.getAuthorities().stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet()))
-        .setOldPassword(user.getPassword())
-        .setNewPassword("newPassword")
-        .setNewMatchingPassword("newPasswordNonMatching");
+    UpdateUserDto updatedUserDto =
+        new UpdateUserDto()
+            .setUsername(user.getUsername())
+            .setEmail(user.getEmail())
+            .setAuthorities(
+                user.getAuthorities().stream()
+                    .map(authority -> Authority.valueOf(authority.getAuthority()))
+                    .collect(Collectors.toSet()))
+            .setOldPassword(user.getPassword())
+            .setNewPassword("newPassword")
+            .setNewMatchingPassword("newPasswordNonMatching");
 
     var requestBuilder =
         MockMvcRequestBuilders.put("/users/test")
@@ -250,8 +254,6 @@ class UserControllerTests {
             .accept(MediaType.APPLICATION_JSON)
             .content(jacksonObjectMapper.writeValueAsString(updatedUserDto));
 
-    mockMvc
-        .perform(requestBuilder)
-        .andExpect(status().isBadRequest());
+    mockMvc.perform(requestBuilder).andExpect(status().isBadRequest());
   }
 }

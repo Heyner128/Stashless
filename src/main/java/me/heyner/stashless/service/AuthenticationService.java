@@ -1,10 +1,7 @@
 package me.heyner.stashless.service;
 
 import jakarta.validation.Valid;
-
-import java.util.List;
 import java.util.Set;
-
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UserDto;
@@ -49,7 +46,7 @@ public class AuthenticationService {
         userRepository
             .findByUsername(loginUserDto.getUsername())
             .orElseThrow(() -> new EntityNotFoundException("Not found")),
-      UserDto.class);
+        UserDto.class);
   }
 
   public UserDto signUp(@Valid RegisterUserDto registerUserDto) throws ExistingEntityException {

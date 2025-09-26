@@ -2,7 +2,6 @@ package me.heyner.stashless.unit.service;
 
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

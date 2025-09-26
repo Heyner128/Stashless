@@ -1,11 +1,10 @@
 package me.heyner.stashless.service;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import me.heyner.stashless.dto.OptionInputDto;
 import me.heyner.stashless.dto.OptionOutputDto;
 import me.heyner.stashless.exception.EntityNotFoundException;
@@ -33,42 +32,40 @@ public class OptionService {
     this.productRepository = productRepository;
     this.optionRepository = optionRepository;
     modelMapper
-      .typeMap(Option.class, OptionOutputDto.class)
-      .addMappings(
-        mapper -> mapper
-          .using(
-            ctx -> ((Set<OptionValue>) ctx.getSource())
-              .stream()
-              .map(OptionValue::getValue)
-              .collect(Collectors.toSet())
-          )
-          .map(Option::getValues,OptionOutputDto::setValues)
-      );
+        .typeMap(Option.class, OptionOutputDto.class)
+        .addMappings(
+            mapper ->
+                mapper
+                    .using(
+                        ctx ->
+                            ((Set<OptionValue>) ctx.getSource())
+                                .stream().map(OptionValue::getValue).collect(Collectors.toSet()))
+                    .map(Option::getValues, OptionOutputDto::setValues));
 
     modelMapper
-      .typeMap(OptionInputDto.class, Option.class)
-      .addMappings( mapper -> mapper
-        .using(
-          ctx -> ((Set<String>) ctx.getSource())
-            .stream()
-            .map(value -> new OptionValue().setValue(value))
-            .collect(Collectors.toSet())
-        )
-        .map(OptionInputDto::getValues,Option::setValues));
+        .typeMap(OptionInputDto.class, Option.class)
+        .addMappings(
+            mapper ->
+                mapper
+                    .using(
+                        ctx ->
+                            ((Set<String>) ctx.getSource())
+                                .stream()
+                                    .map(value -> new OptionValue().setValue(value))
+                                    .collect(Collectors.toSet()))
+                    .map(OptionInputDto::getValues, Option::setValues));
   }
 
   public OptionOutputDto addOption(UUID productUuid, OptionInputDto optionDto)
       throws EntityNotFoundException {
-        
 
-
-    Option option = modelMapper
-      .map(optionDto, Option.class)
-      .setProduct(
-        productRepository
-            .findById(productUuid)
-            .orElseThrow(() -> new EntityNotFoundException("Not found"))
-      );
+    Option option =
+        modelMapper
+            .map(optionDto, Option.class)
+            .setProduct(
+                productRepository
+                    .findById(productUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Not found")));
 
     option = optionRepository.save(option);
 
@@ -82,6 +79,7 @@ public class OptionService {
     logger.info("Getting {} options for product {}", options.size(), productUuid);
     return options.stream().map(opt -> modelMapper.map(opt, OptionOutputDto.class)).toList();
   }
+
   public List<OptionOutputDto> updateOptions(UUID productUuid, List<OptionInputDto> optionsDto)
       throws EntityNotFoundException {
 
@@ -91,20 +89,17 @@ public class OptionService {
       optionRepository.delete(option);
     }
 
-    List<Option> savedOptions= new ArrayList<>();
+    List<Option> savedOptions = new ArrayList<>();
 
-    for(OptionInputDto optionDto : optionsDto) {
+    for (OptionInputDto optionDto : optionsDto) {
       Option option = modelMapper.map(optionDto, Option.class);
       option.setProduct(
-        productRepository
-          .findById(productUuid)
-          .orElseThrow(() -> new EntityNotFoundException("Not found"))
-      );
+          productRepository
+              .findById(productUuid)
+              .orElseThrow(() -> new EntityNotFoundException("Not found")));
       savedOptions.add(optionRepository.save(option));
     }
 
-    return savedOptions.stream()
-      .map(opt -> modelMapper.map(opt, OptionOutputDto.class))
-      .toList();
+    return savedOptions.stream().map(opt -> modelMapper.map(opt, OptionOutputDto.class)).toList();
   }
 }

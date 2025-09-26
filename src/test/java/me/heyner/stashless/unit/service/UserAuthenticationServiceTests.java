@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
@@ -59,8 +57,7 @@ class UserAuthenticationServiceTests {
       UserService userService,
       AuthenticationService authenticationService,
       AuthenticationManager authenticationManager,
-      PasswordEncoder passwordEncoder
-    ) {
+      PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.userService = userService;
     this.authenticationService = authenticationService;
@@ -122,7 +119,8 @@ class UserAuthenticationServiceTests {
 
   @Test
   void testSignUp() {
-    UserDto signedUpUser = modelMapper.map(authenticationService.signUp(registerUserDto), UserDto.class);
+    UserDto signedUpUser =
+        modelMapper.map(authenticationService.signUp(registerUserDto), UserDto.class);
     assertNotEquals(signedUpUser.getPassword(), registerUserDto.getPassword());
     assertEquals(signedUpUser.getUsername(), user.getUsername());
     assertEquals(signedUpUser.getEmail(), user.getEmail());
@@ -168,6 +166,7 @@ class UserAuthenticationServiceTests {
   void testUpdateUserWithInvalidPassword() {
     updateUserDto.setOldPassword(FAKE_PASSWORD);
     String username = user.getUsername();
-    assertThrows(IllegalArgumentException.class, () -> userService.updateUser(username, updateUserDto));
+    assertThrows(
+        IllegalArgumentException.class, () -> userService.updateUser(username, updateUserDto));
   }
 }

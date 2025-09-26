@@ -1,15 +1,12 @@
 package me.heyner.stashless.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,6 @@ import lombok.experimental.Accessors;
 import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.validation.PasswordMatches;
 import me.heyner.stashless.validation.ValidEmail;
-
 import org.springframework.security.core.GrantedAuthority;
 
 @Getter
@@ -41,7 +37,9 @@ public class UserDto {
   // Spring Security shit don't touch
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities =
-        authorities.stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet());
+        authorities.stream()
+            .map(authority -> Authority.valueOf(authority.getAuthority()))
+            .collect(Collectors.toSet());
   }
 
   @JsonSetter

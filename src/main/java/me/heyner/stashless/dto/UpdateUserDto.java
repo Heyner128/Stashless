@@ -6,10 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,6 @@ import lombok.experimental.Accessors;
 import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.validation.PasswordMatches;
 import me.heyner.stashless.validation.ValidEmail;
-
 import org.springframework.security.core.GrantedAuthority;
 
 @Getter
@@ -45,8 +42,7 @@ public class UpdateUserDto {
           "The password should contain an uppercase letter, a lowercase letter, a digit an special character in @$!%*?& and be at least 8 characters long")
   private String newPassword;
 
-  @Setter
-  private String newMatchingPassword;
+  @Setter private String newMatchingPassword;
 
   public boolean passwordMatches() {
     return newPassword.equals(newMatchingPassword);
@@ -55,7 +51,9 @@ public class UpdateUserDto {
   // Spring Security shit don't touch
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities =
-        authorities.stream().map(authority -> Authority.valueOf(authority.getAuthority())).collect(Collectors.toSet());
+        authorities.stream()
+            .map(authority -> Authority.valueOf(authority.getAuthority()))
+            .collect(Collectors.toSet());
   }
 
   @JsonSetter

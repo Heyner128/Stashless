@@ -3,7 +3,6 @@ package me.heyner.stashless.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import java.util.HashMap;
 import java.util.Map;
 import me.heyner.stashless.dto.LoginUserDto;
@@ -34,7 +33,7 @@ public class UserController {
   private final JwtService jwtService;
 
   private final ModelMapper modelMapper = new ModelMapper();
-  
+
   @Value("${spring.profiles.active:prod}")
   private String profile;
 
@@ -82,8 +81,7 @@ public class UserController {
             .maxAge(jwtService.getJwtExpiration())
             .build();
 
-    return  ResponseEntity
-        .ok()
+    return ResponseEntity.status(HttpStatus.OK)
         .header(HttpHeaders.SET_COOKIE, sessionCookie.toString())
         .header(HttpHeaders.SET_COOKIE, userIdCookie.toString())
         .body(responseBody);
@@ -108,13 +106,11 @@ public class UserController {
             .maxAge(0)
             .build();
 
-    return ResponseEntity
-        .noContent()
+    return ResponseEntity.noContent()
         .header(HttpHeaders.SET_COOKIE, sessionCookie.toString())
         .header(HttpHeaders.SET_COOKIE, userIdCookie.toString())
         .build();
   }
-
 
   @SecurityRequirement(name = "JWT token")
   @GetMapping("/{username}")
@@ -124,7 +120,8 @@ public class UserController {
 
   @SecurityRequirement(name = "JWT token")
   @PutMapping("/{username}")
-  public UserDto updateUser(@PathVariable String username, @RequestBody @Valid UpdateUserDto userDto) {
+  public UserDto updateUser(
+      @PathVariable String username, @RequestBody @Valid UpdateUserDto userDto) {
     return userService.updateUser(username, userDto);
   }
 }

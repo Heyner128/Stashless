@@ -1,7 +1,6 @@
 package me.heyner.stashless.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;

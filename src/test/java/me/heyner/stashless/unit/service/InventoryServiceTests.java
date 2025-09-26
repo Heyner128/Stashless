@@ -76,7 +76,8 @@ class InventoryServiceTests {
   @Test
   public void testAddInventory() {
     InventoryInputDto inventoryInputDto = modelMapper.map(inventory, InventoryInputDto.class);
-    InventoryOutputDto newInventory = inventoryService.addInventory(user.getUsername(), inventoryInputDto);
+    InventoryOutputDto newInventory =
+        inventoryService.addInventory(user.getUsername(), inventoryInputDto);
     assertEquals(newInventory, modelMapper.map(inventory, InventoryOutputDto.class));
   }
 
@@ -91,14 +92,13 @@ class InventoryServiceTests {
   @Test
   public void testGetInventory() {
     InventoryOutputDto gottenInventory = inventoryService.getInventory(inventory.getId());
-    assertEquals(
-      gottenInventory, modelMapper.map(inventory, InventoryOutputDto.class)
-    );
+    assertEquals(gottenInventory, modelMapper.map(inventory, InventoryOutputDto.class));
   }
 
   @Test
   public void testGetInventoriesByUsername() {
-    List<InventoryOutputDto> inventoriesDto = inventoryService.getInventoriesByUsername(user.getUsername());
+    List<InventoryOutputDto> inventoriesDto =
+        inventoryService.getInventoriesByUsername(user.getUsername());
     assertEquals(inventoriesDto.getFirst(), modelMapper.map(inventory, InventoryOutputDto.class));
   }
 }

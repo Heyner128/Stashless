@@ -2,9 +2,8 @@ package me.heyner.stashless.configuration;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-
 import java.util.Arrays;
-
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -35,21 +34,21 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-  @Value("${cors.frontend-url}") private String corsFrontendUrl;
-
+  @Value("${cors.frontend-url}")
+  private String corsFrontendUrl;
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList(corsFrontendUrl));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With"));
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Collections.singletonList(corsFrontendUrl));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(
+        Arrays.asList("Content-Type", "Authorization", "X-Requested-With"));
     configuration.setAllowCredentials(true);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
-
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
   @Bean
   public AuthenticationManager authenticationManager(
@@ -76,15 +75,12 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-
-    http
-        .httpBasic(Customizer.withDefaults())
+    http.httpBasic(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .cors(Customizer.withDefaults())
         .authorizeHttpRequests(
             auth ->
-                auth.
-                    requestMatchers(HttpMethod.GET, "/actuator/health")
+                auth.requestMatchers(HttpMethod.GET, "/actuator/health")
                     .permitAll()
                     .requestMatchers(
                         HttpMethod.GET, "/swagger-ui/*", "/swagger-ui.html", "/v3/api-docs/**")
@@ -97,15 +93,12 @@ public class SecurityConfiguration {
                     .hasVariable("username")
                     .equalTo(Authentication::getName)
                     .anyRequest()
-                    .permitAll()
-        )
+                    .permitAll())
         .sessionManagement(
             configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtFilterRegistration().getFilter(), UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(
+            jwtFilterRegistration().getFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
-
-
-  
 }

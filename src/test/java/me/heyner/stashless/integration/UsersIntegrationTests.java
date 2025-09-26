@@ -3,10 +3,8 @@ package me.heyner.stashless.integration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
@@ -32,7 +30,6 @@ class UsersIntegrationTests {
   @Autowired OptionRepository optionRepository;
   @Autowired ProductRepository productRepository;
   @Autowired UserRepository userRepository;
-  
 
   @BeforeEach
   void setUp() {
@@ -50,10 +47,10 @@ class UsersIntegrationTests {
   public ResponseEntity<UpdateUserDto> registerRequest() {
     RegisterUserDto registerUserDto =
         new RegisterUserDto()
-        .setEmail("test@test.com")
-        .setUsername("test")
-        .setPassword("teeeST@1")
-        .setMatchingPassword("teeeST@1");
+            .setEmail("test@test.com")
+            .setUsername("test")
+            .setPassword("teeeST@1")
+            .setMatchingPassword("teeeST@1");
 
     return restTemplate.postForEntity("/users", registerUserDto, UpdateUserDto.class);
   }

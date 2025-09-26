@@ -1,7 +1,6 @@
 package me.heyner.stashless.dto;
 
 import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.Accessors;
 

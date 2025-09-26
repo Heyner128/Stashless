@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +15,11 @@ import org.hibernate.proxy.HibernateProxy;
 @Getter
 @Setter
 @Accessors(chain = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"option_id", "value"}, name = "uq_option_id_value"))
+@Table(
+    uniqueConstraints =
+        @UniqueConstraint(
+            columnNames = {"option_id", "value"},
+            name = "uq_option_id_value"))
 @NoArgsConstructor
 public class OptionValue {
   @Id

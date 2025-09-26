@@ -5,7 +5,6 @@ import me.heyner.stashless.dto.UserDto;
 import me.heyner.stashless.exception.EntityNotFoundException;
 import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.UserRepository;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,17 +41,13 @@ public class UserService implements UserDetailsService {
     user.setUsername(userDto.getUsername());
     user.setEmail(userDto.getEmail());
     user.setAuthorities(userDto.getAuthorities());
-    if(
-      userDto.getNewPassword() != null
-    ) {
-      if(
-        !passwordEncoder.matches(userDto.getOldPassword(), user.getPassword())
-      ) {
+    if (userDto.getNewPassword() != null) {
+      if (!passwordEncoder.matches(userDto.getOldPassword(), user.getPassword())) {
         throw new IllegalArgumentException("Invalid password");
       }
       user.setPassword(userDto.getNewPassword());
     }
-    
+
     User savedUser = userRepository.save(user);
     logger.info("Updated user: {}", user);
     return modelMapper.map(savedUser, UserDto.class);

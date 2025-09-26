@@ -29,13 +29,14 @@ public class GlobalExceptionHandler {
     ex.getBindingResult()
         .getGlobalErrors()
         .forEach(error -> validationErrors.put("__global__", error.getDefaultMessage()));
-    errors.put("errors", validationErrors);    
+    errors.put("errors", validationErrors);
     return ResponseEntity.badRequest().body(errors);
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(ExistingEntityException.class)
-  public ResponseEntity<Map<String, String>> handleUniqueEntityException(ExistingEntityException ex) {
+  public ResponseEntity<Map<String, String>> handleUniqueEntityException(
+      ExistingEntityException ex) {
     Map<String, String> errors = new HashMap<>();
     errors.put("message", ex.getMessage());
     logger.error(ex.getMessage(), ex);

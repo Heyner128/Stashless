@@ -7,11 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
 import me.heyner.stashless.model.Cookies;
 import me.heyner.stashless.service.JwtService;
 import me.heyner.stashless.service.UserService;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -47,27 +45,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private String getTokenFromRequest(HttpServletRequest request) {
-      boolean isOnBearerHeader = request.getHeader(HttpHeaders.AUTHORIZATION) != null
-          && request.getHeader(HttpHeaders.AUTHORIZATION).startsWith("Bearer ");
+    boolean isOnBearerHeader =
+        request.getHeader(HttpHeaders.AUTHORIZATION) != null
+            && request.getHeader(HttpHeaders.AUTHORIZATION).startsWith("Bearer ");
 
-      Cookie[] cookies = request.getCookies() != null ? request.getCookies() : new Cookie[0];
+    Cookie[] cookies = request.getCookies() != null ? request.getCookies() : new Cookie[0];
 
-      boolean isOnCookie = List.of(cookies)
-        .stream()
-        .anyMatch(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN));
+    boolean isOnCookie =
+        List.of(cookies).stream()
+            .anyMatch(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN));
 
-      if (isOnBearerHeader) {
-          return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
-      } else if (isOnCookie) {  
-          return List.of(cookies)
-              .stream()
-              .filter(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN))
-              .findFirst()
-              .orElseThrow()
-              .getValue();
-      } else {
-          return null;
-      }
+    if (isOnBearerHeader) {
+      return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
+    } else if (isOnCookie) {
+      return List.of(cookies).stream()
+          .filter(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN))
+          .findFirst()
+          .orElseThrow()
+          .getValue();
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -76,7 +74,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
-
 
     final String jwtToken = getTokenFromRequest(request);
 
@@ -111,19 +108,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
 
-    RequestMatcher protectedRoutesMatcher = new NegatedRequestMatcher(
-      new AntPathRequestMatcher("/users/**")
-    );
+    RequestMatcher protectedRoutesMatcher =
+        new NegatedRequestMatcher(new AntPathRequestMatcher("/users/**"));
 
-    RequestMatcher matcher = new OrRequestMatcher(
-      protectedRoutesMatcher,
-      new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
-      new AntPathRequestMatcher("/users", HttpMethod.POST.name())
-    );
+    RequestMatcher matcher =
+        new OrRequestMatcher(
+            protectedRoutesMatcher,
+            new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
+            new AntPathRequestMatcher("/users", HttpMethod.POST.name()));
 
     return matcher.matches(request);
   }
-
-
-
 }

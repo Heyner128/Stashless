@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @SecurityRequirement(name = "JWT token")
 @Tag(name = "Inventories")
 @RestController
@@ -29,10 +28,9 @@ public class InventoryController {
 
   @GetMapping
   public List<InventoryOutputDto> getMethodName(@PathVariable String username) {
-      return inventoryService.getInventoriesByUsername(username);
+    return inventoryService.getInventoriesByUsername(username);
   }
-  
-  
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public InventoryOutputDto createInventory(
@@ -67,8 +65,7 @@ public class InventoryController {
   public InventoryItemOutputDto addInventoryItem(
       @RequestBody @Valid InventoryItemInputDto inventoryItemInputDto,
       @PathVariable UUID inventoryUuid) {
-    return inventoryService.addInventoryItem(
-        inventoryUuid, inventoryItemInputDto);
+    return inventoryService.addInventoryItem(inventoryUuid, inventoryItemInputDto);
   }
 
   @PutMapping("/{inventoryUuid}/item/{skuUuid}")

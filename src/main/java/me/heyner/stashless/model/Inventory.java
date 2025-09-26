@@ -32,8 +32,7 @@ public class Inventory {
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "inventory_items",
-      joinColumns = @JoinColumn(name = "inventory_id", referencedColumnName = "id")
-  )
+      joinColumns = @JoinColumn(name = "inventory_id", referencedColumnName = "id"))
   @Column(name = "quantity", nullable = false)
   @MapKeyJoinColumn(name = "sku_id", referencedColumnName = "id")
   private Map<SKU, Integer> items;

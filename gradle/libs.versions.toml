@@ -1,0 +1,44 @@
+[versions]
+liquibase =  "4.29.2"
+spring-boot = "3.5.6"
+spring-dependency-management = "1.1.7"
+liquibase-plugin = "3.0.2"
+modelmapper = "3.2.0"
+jjwt = "0.12.6"
+springdoc = "2.8.6"
+postgresql = "42.7.7"
+h2 = "2.3.232"
+picocli = "4.7.5"
+snakeyaml = "1.33"
+spotless = "8.0.0"
+
+[libraries]
+liquibase-core = { group = "org.liquibase", name = "liquibase-core",version.ref = "liquibase"}
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-session = { group = "org.springframework.session", name = "spring-session-core" }
+springdoc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+modelmapper = { group = "org.modelmapper", name = "modelmapper", version.ref = "modelmapper" }
+jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }
+picocli = { group = "info.picocli", name = "picocli", version.ref = "picocli" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
+spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
+lombok = { group = "org.projectlombok", name = "lombok" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+driver-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
+driver-h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
+
+[bundles]
+jjwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]
+
+[plugins]
+liquibase = { id = "org.liquibase.gradle", version.ref = "liquibase-plugin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management"}
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

@@ -1,9 +1,7 @@
 package me.heyner.stashless.model;
 
 import jakarta.persistence.*;
-
 import java.util.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,9 +31,12 @@ public class Option {
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "option", orphanRemoval = true)
+  @OneToMany(
+      fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
+      mappedBy = "option",
+      orphanRemoval = true)
   private Set<OptionValue> values;
-
 
   @CreationTimestamp private Date createdAt;
 
@@ -50,8 +51,6 @@ public class Option {
     this.values.addAll(values);
     return this;
   }
-
-
 
   @Override
   public final boolean equals(Object o) {

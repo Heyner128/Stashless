@@ -36,42 +36,33 @@ public class SKUService {
     this.optionRepository = optionRepository;
     this.productRepository = productRepository;
     modelMapper
-      .typeMap(SKU.class, SKUOutputDto.class)
-      .addMappings(
-        mapper ->
-          mapper
-            .using(
-              ctx ->
-                ((Map<Option, OptionValue>) ctx.getSource())
-                  .entrySet()
-                  .stream()
-                  .collect(
-                    Collectors.toMap(
-                      e -> e.getKey().getName(),
-                      e -> e.getValue().getValue()
-                    )
-                  )
-              )
-              .map(SKU::getOptions, SKUOutputDto::setOptions));
+        .typeMap(SKU.class, SKUOutputDto.class)
+        .addMappings(
+            mapper ->
+                mapper
+                    .using(
+                        ctx ->
+                            ((Map<Option, OptionValue>) ctx.getSource())
+                                .entrySet().stream()
+                                    .collect(
+                                        Collectors.toMap(
+                                            e -> e.getKey().getName(),
+                                            e -> e.getValue().getValue())))
+                    .map(SKU::getOptions, SKUOutputDto::setOptions));
     modelMapper
-      .typeMap(SKU.class,SKUOutputDto.class)
-      .addMappings(
-        mapper ->
-          mapper
-            .using(
-             ctx ->
-              ((Product) ctx.getSource()).getId()
-            )
-           .map(SKU::getProduct, SKUOutputDto::setProductUuid)
-
-      );
+        .typeMap(SKU.class, SKUOutputDto.class)
+        .addMappings(
+            mapper ->
+                mapper
+                    .using(ctx -> ((Product) ctx.getSource()).getId())
+                    .map(SKU::getProduct, SKUOutputDto::setProductUuid));
   }
 
   private SKU joinProduct(SKU sku, UUID productUuid) throws EntityNotFoundException {
     Product product =
         productRepository
-          .findById(productUuid)
-          .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+            .findById(productUuid)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
     return sku.setProduct(product);
   }
@@ -82,20 +73,19 @@ public class SKUService {
     for (Entry<String, String> entry : optionValueNames.entrySet()) {
       Option option =
           optionRepository
-            .findByNameAndProductId(productId, entry.getKey())
-            .orElseThrow(() -> new EntityNotFoundException("Option not found"));
+              .findByNameAndProductId(productId, entry.getKey())
+              .orElseThrow(() -> new EntityNotFoundException("Option not found"));
 
       OptionValue optionValue =
           option.getValues().stream()
-            .filter(ov -> ov.getValue().equals(entry.getValue()))
-            .findFirst()
-            .orElseThrow(() -> new EntityNotFoundException("Option value not found"));
+              .filter(ov -> ov.getValue().equals(entry.getValue()))
+              .findFirst()
+              .orElseThrow(() -> new EntityNotFoundException("Option value not found"));
 
       options.put(option, optionValue);
     }
     return sku.setOptions(options);
   }
-
 
   public SKU saveSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
     SKU sku = modelMapper.map(skuDto, SKU.class);
@@ -111,8 +101,8 @@ public class SKUService {
     return sku;
   }
 
-
-  public SKUOutputDto saveAndMapSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
+  public SKUOutputDto saveAndMapSKU(UUID productUuid, SKUInputDto skuDto)
+      throws EntityNotFoundException {
 
     SKU sku = saveSKU(productUuid, skuDto);
     return modelMapper.map(sku, SKUOutputDto.class);
@@ -130,11 +120,9 @@ public class SKUService {
     existingSku = joinProduct(existingSku, skuDto.getProductUuid());
     existingSku = joinOptions(existingSku, existingSku.getProduct().getId(), skuDto.getOptions());
 
-
     logger.info("Updating SKU: {}", existingSku);
     return skuRepository.save(existingSku);
   }
-
 
   public List<SKUOutputDto> getSkus(UUID productUuid) throws EntityNotFoundException {
     List<SKU> skus = skuRepository.findByProductId(productUuid);
@@ -142,18 +130,17 @@ public class SKUService {
     return skus.stream().map(sku -> modelMapper.map(sku, SKUOutputDto.class)).toList();
   }
 
-
   public List<SKUOutputDto> updateSkus(UUID productUuid, List<SKUInputDto> skuDtos)
       throws EntityNotFoundException {
     List<SKU> skus = skuRepository.findByProductId(productUuid);
 
-    for(SKU sku: skus) {
+    for (SKU sku : skus) {
       skuRepository.delete(sku);
     }
 
     List<SKU> savedSkus = new ArrayList<>();
 
-    for(SKUInputDto skuDto: skuDtos) {
+    for (SKUInputDto skuDto : skuDtos) {
 
       SKU newSku = modelMapper.map(skuDto, SKU.class);
       newSku = joinProduct(newSku, productUuid);
@@ -163,8 +150,6 @@ public class SKUService {
       savedSkus.add(newSku);
     }
 
-    return savedSkus.stream()
-        .map(sku -> modelMapper.map(sku, SKUOutputDto.class))
-        .toList();
+    return savedSkus.stream().map(sku -> modelMapper.map(sku, SKUOutputDto.class)).toList();
   }
 }

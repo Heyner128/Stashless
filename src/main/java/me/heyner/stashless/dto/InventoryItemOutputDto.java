@@ -1,15 +1,13 @@
 package me.heyner.stashless.dto;
 
-
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.UUID;
 
 @Getter
 @Setter

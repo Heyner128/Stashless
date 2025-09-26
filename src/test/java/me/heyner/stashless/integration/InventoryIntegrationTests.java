@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -45,7 +44,6 @@ class InventoryIntegrationTests {
 
     inventoryRepository.deleteAll();
 
-
     skuRepository.deleteAll();
 
     optionRepository.deleteAll();
@@ -55,7 +53,11 @@ class InventoryIntegrationTests {
     userRepository.deleteAll();
 
     RegisterUserDto registerUserDto =
-        new RegisterUserDto().setEmail(email).setUsername(username).setPassword(password).setMatchingPassword(password);
+        new RegisterUserDto()
+            .setEmail(email)
+            .setUsername(username)
+            .setPassword(password)
+            .setMatchingPassword(password);
 
     restTemplate.postForLocation("/users", registerUserDto);
 
@@ -106,11 +108,11 @@ class InventoryIntegrationTests {
 
     SKUInputDto skuInputDto =
         new SKUInputDto()
-          .setName("ADITSHIRT")
-          .setCostPrice(new BigDecimal("9.99"))
-          .setAmountAvailable(99L)
-          .setMarginPercentage(10)
-          .setOptions(Map.of("Color", "Red"));
+            .setName("ADITSHIRT")
+            .setCostPrice(new BigDecimal("9.99"))
+            .setAmountAvailable(99L)
+            .setMarginPercentage(10)
+            .setOptions(Map.of("Color", "Red"));
 
     RequestEntity<SKUInputDto> requestSKUCreation =
         RequestEntity.post("/users/test/products/" + productUuid + "/skus")
@@ -135,7 +137,8 @@ class InventoryIntegrationTests {
             .header("Authorization", "Bearer " + loginToken)
             .build();
 
-    ResponseEntity<InventoryOutputDto> response = restTemplate.exchange(request, InventoryOutputDto.class);
+    ResponseEntity<InventoryOutputDto> response =
+        restTemplate.exchange(request, InventoryOutputDto.class);
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     assertThat(response.getBody(), equalTo(createdInventory));
@@ -152,7 +155,8 @@ class InventoryIntegrationTests {
             .header("Authorization", "Bearer " + loginToken)
             .body(inventoryInputDto, InventoryInputDto.class);
 
-    ResponseEntity<InventoryOutputDto> response = restTemplate.exchange(request, InventoryOutputDto.class);
+    ResponseEntity<InventoryOutputDto> response =
+        restTemplate.exchange(request, InventoryOutputDto.class);
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     assertThat(response.getBody().getName(), equalTo(inventoryInputDto.getName()));
@@ -184,18 +188,14 @@ class InventoryIntegrationTests {
 
     InventoryItemInputDto inventoryItemInputDto =
         new InventoryItemInputDto()
-          .setName("Shirt")
-          .setAmountAvailable(1L)
-          .setMarginPercentage(10)
-          .setProductUuid(createdProduct.getId())
-          .setOptions(
-              Map.of(
-                createdOption.getName(),
-                createdOption.getValues().iterator().next()
-              )
-          )
-          .setCostPrice(BigDecimal.valueOf(1L))
-          .setQuantity(99);
+            .setName("Shirt")
+            .setAmountAvailable(1L)
+            .setMarginPercentage(10)
+            .setProductUuid(createdProduct.getId())
+            .setOptions(
+                Map.of(createdOption.getName(), createdOption.getValues().iterator().next()))
+            .setCostPrice(BigDecimal.valueOf(1L))
+            .setQuantity(99);
 
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
@@ -216,8 +216,7 @@ class InventoryIntegrationTests {
 
     SKUOutputDto createdSKU = createSKU(createdProduct.getId()).getBody();
 
-    InventoryItemInputDto inventoryItemInputDto =
-        new InventoryItemInputDto().setQuantity(99);
+    InventoryItemInputDto inventoryItemInputDto = new InventoryItemInputDto().setQuantity(99);
 
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")

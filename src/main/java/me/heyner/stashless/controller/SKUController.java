@@ -30,12 +30,14 @@ public class SKUController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public SKUOutputDto createSKU(@PathVariable UUID productUuid, @Valid @RequestBody SKUInputDto skuDto) {
+  public SKUOutputDto createSKU(
+      @PathVariable UUID productUuid, @Valid @RequestBody SKUInputDto skuDto) {
     return skuService.saveAndMapSKU(productUuid, skuDto);
   }
 
   @PutMapping
-  public List<SKUOutputDto> updateSKUs(@PathVariable UUID productUuid, @RequestBody List<SKUInputDto> skuDtos) {
+  public List<SKUOutputDto> updateSKUs(
+      @PathVariable UUID productUuid, @RequestBody List<SKUInputDto> skuDtos) {
     return skuService.updateSkus(productUuid, skuDtos);
   }
 }

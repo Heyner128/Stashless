@@ -3,7 +3,6 @@ package me.heyner.stashless.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
-
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,11 +40,11 @@ public class SKU {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
-    name = "sku_options",
-    joinColumns = @JoinColumn(name = "sku_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "option_value_id", referencedColumnName = "id"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"sku_id", "option_id", "option_value_id"})
-  )
+      name = "sku_options",
+      joinColumns = @JoinColumn(name = "sku_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "option_value_id", referencedColumnName = "id"),
+      uniqueConstraints =
+          @UniqueConstraint(columnNames = {"sku_id", "option_id", "option_value_id"}))
   @MapKeyJoinColumn(name = "option_id", referencedColumnName = "id")
   private Map<Option, OptionValue> options;
 

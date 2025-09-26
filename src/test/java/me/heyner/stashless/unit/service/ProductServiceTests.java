@@ -1,17 +1,15 @@
 package me.heyner.stashless.unit.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+import java.util.*;
 import me.heyner.stashless.dto.ProductOutputDto;
 import me.heyner.stashless.model.Product;
 import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.ProductRepository;
 import me.heyner.stashless.service.ProductService;
 import me.heyner.stashless.service.UserService;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-import java.util.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +33,7 @@ class ProductServiceTests {
 
   @Autowired
   public ProductServiceTests(
-    ProductRepository productRepository,
-    UserService userService,
-    ProductService productService
-  ) {
+      ProductRepository productRepository, UserService userService, ProductService productService) {
     this.productRepository = productRepository;
     this.userService = userService;
     this.productService = productService;
@@ -69,7 +64,6 @@ class ProductServiceTests {
     user.setAuthorities(new HashSet<>());
   }
 
-
   void setupDto() {
     productOutputDto = new ProductOutputDto();
     productOutputDto.setId(UUID.randomUUID());
@@ -82,8 +76,7 @@ class ProductServiceTests {
     when(productRepository.findById(productOutputDto.getId()))
         .thenReturn(Optional.ofNullable(product));
 
-    when(productRepository.findByUser_username(user.getUsername()))
-        .thenReturn(List.of(product));
+    when(productRepository.findByUser_username(user.getUsername())).thenReturn(List.of(product));
 
     when(userService.loadUserByUsername(user.getUsername())).thenReturn(user);
   }

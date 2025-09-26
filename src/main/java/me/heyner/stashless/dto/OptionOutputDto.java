@@ -1,10 +1,8 @@
 package me.heyner.stashless.dto;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +15,9 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class OptionOutputDto {
-    private UUID id;
-    private String name;
-    private Set<String> values;
-    private Date createdAt;
-    private Date updatedAt;
+  private UUID id;
+  private String name;
+  private Set<String> values;
+  private Date createdAt;
+  private Date updatedAt;
 }

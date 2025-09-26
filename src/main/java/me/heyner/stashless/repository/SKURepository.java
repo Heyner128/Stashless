@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
 public interface SKURepository extends ListCrudRepository<SKU, UUID> {
-    @Query("SELECT s FROM SKU s WHERE s.product.id = :productId")
-    List<SKU> findByProductId(UUID productId);
+  @Query("SELECT s FROM SKU s WHERE s.product.id = :productId")
+  List<SKU> findByProductId(UUID productId);
 }

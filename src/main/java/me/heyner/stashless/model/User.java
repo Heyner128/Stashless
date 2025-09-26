@@ -3,10 +3,8 @@ package me.heyner.stashless.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.proxy.HibernateProxy;
