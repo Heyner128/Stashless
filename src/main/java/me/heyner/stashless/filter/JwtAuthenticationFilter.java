@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Stream;
-
 import me.heyner.stashless.model.Cookies;
 import me.heyner.stashless.service.JwtService;
 import me.heyner.stashless.service.UserService;
@@ -53,8 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     Cookie[] cookies = request.getCookies() != null ? request.getCookies() : new Cookie[0];
 
     boolean isOnCookie =
-        Stream.of(cookies)
-            .anyMatch(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN));
+        Stream.of(cookies).anyMatch(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN));
 
     if (isOnBearerHeader) {
       return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
@@ -83,7 +81,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
     try {
-        final String username = jwtService.extractUsername(jwtToken);
+      final String username = jwtService.extractUsername(jwtToken);
 
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -109,7 +107,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
 
     RequestMatcher protectedRoutesMatcher =
-
         new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/users/**"));
 
     RequestMatcher matcher =
