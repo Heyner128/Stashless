@@ -89,7 +89,7 @@ public class UserController {
 
   @SecurityRequirement(name = "JWT token")
   @PostMapping("/{username}/logout")
-  public ResponseEntity<Void> logout(@PathVariable String username) {
+  public ResponseEntity<Void> logout() {
     ResponseCookie sessionCookie =
         ResponseCookie.from(Cookies.SESSION_TOKEN, "")
             .httpOnly(true)

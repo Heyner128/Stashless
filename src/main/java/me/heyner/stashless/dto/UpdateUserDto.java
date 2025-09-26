@@ -44,10 +44,6 @@ public class UpdateUserDto {
 
   @Setter private String newMatchingPassword;
 
-  public boolean passwordMatches() {
-    return newPassword.equals(newMatchingPassword);
-  }
-
   // Spring Security shit don't touch
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities =

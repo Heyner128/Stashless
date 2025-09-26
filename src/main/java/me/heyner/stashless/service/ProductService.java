@@ -1,7 +1,5 @@
 package me.heyner.stashless.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.UUID;
 import me.heyner.stashless.dto.ProductInputDto;
@@ -32,20 +30,16 @@ public class ProductService {
 
   private final UserService userService;
 
-  @PersistenceContext private final EntityManager entityManager;
-
   private final ModelMapper modelMapper = new ModelMapper();
 
   public ProductService(
       ProductRepository productRepository,
       OptionRepository optionRepository,
       SKURepository skuRepository,
-      EntityManager entityManager,
       UserService userService) {
     this.productRepository = productRepository;
     this.optionRepository = optionRepository;
     this.skuRepository = skuRepository;
-    this.entityManager = entityManager;
     this.userService = userService;
   }
 

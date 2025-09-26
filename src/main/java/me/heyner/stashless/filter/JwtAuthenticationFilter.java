@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
+
 import me.heyner.stashless.model.Cookies;
 import me.heyner.stashless.service.JwtService;
 import me.heyner.stashless.service.UserService;
@@ -19,7 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -52,13 +54,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     Cookie[] cookies = request.getCookies() != null ? request.getCookies() : new Cookie[0];
 
     boolean isOnCookie =
-        List.of(cookies).stream()
+        Stream.of(cookies)
             .anyMatch(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN));
 
     if (isOnBearerHeader) {
       return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
     } else if (isOnCookie) {
-      return List.of(cookies).stream()
+      return Stream.of(cookies)
           .filter(cookie -> cookie.getName().equals(Cookies.SESSION_TOKEN))
           .findFirst()
           .orElseThrow()
@@ -82,15 +84,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
     try {
-      final String jwt = jwtToken;
-      final String username = jwtService.extractUsername(jwt);
+        final String username = jwtService.extractUsername(jwtToken);
 
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
       if (username != null && authentication == null) {
         UserDetails userDetails = userService.loadUserByUsername(username);
 
-        if (jwtService.isTokenValid(jwt, userDetails)) {
+        if (jwtService.isTokenValid(jwtToken, userDetails)) {
           UsernamePasswordAuthenticationToken authenticationToken =
               new UsernamePasswordAuthenticationToken(
                   userDetails, null, userDetails.getAuthorities());
@@ -106,16 +107,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+  protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
 
     RequestMatcher protectedRoutesMatcher =
-        new NegatedRequestMatcher(new AntPathRequestMatcher("/users/**"));
+
+        new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/users/**"));
 
     RequestMatcher matcher =
         new OrRequestMatcher(
             protectedRoutesMatcher,
-            new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
-            new AntPathRequestMatcher("/users", HttpMethod.POST.name()));
+            PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/users/login"),
+            PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/users"));
 
     return matcher.matches(request);
   }

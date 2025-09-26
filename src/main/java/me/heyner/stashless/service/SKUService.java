@@ -134,9 +134,7 @@ public class SKUService {
       throws EntityNotFoundException {
     List<SKU> skus = skuRepository.findByProductId(productUuid);
 
-    for (SKU sku : skus) {
-      skuRepository.delete(sku);
-    }
+    skuRepository.deleteAll(skus);
 
     List<SKU> savedSkus = new ArrayList<>();
 
