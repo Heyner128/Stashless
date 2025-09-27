@@ -1,23 +1,17 @@
-import java.util.Properties
 import net.ltgt.gradle.errorprone.CheckSeverity
 import net.ltgt.gradle.errorprone.errorprone
+import java.io.FileInputStream
 import java.util.Locale
+import java.util.Properties
+import kotlin.apply
+import org.gradle.api.tasks.JavaExec
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath(libs.liquibase.core)
-    }
-}
 
 plugins {
     java
     jacoco
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
-    alias(libs.plugins.liquibase)
     alias(libs.plugins.spotless)
     alias(libs.plugins.errorprone)
 }
@@ -54,6 +48,38 @@ configurations {
     }
 }
 
+val liquibaseRuntime by configurations.creating
+
+
+fun loadEnvironmentProperties() : Properties {
+    val environmentFile = file(".env")
+    return Properties().apply { load(FileInputStream(environmentFile)) }
+}
+
+fun liquibaseArgs(vararg command: String): List<String> {
+    val properties = loadEnvironmentProperties()
+
+    val url  = System.getenv("DB_URL") ?: properties["DB_URL"]
+    val user = System.getenv("DB_USER") ?: properties["DB_USER"]
+    val password = System.getenv("DB_PASSWORD") ?: properties["DB_PASSWORD"]
+
+    val searchPath = "${project.layout.buildDirectory.get().asFile}/resources/main"
+    val changelogFile = "db/changelog/db.changelog-master.yaml"
+
+    val args = mutableListOf(
+        "--changeLogFile=$changelogFile",
+        "--url=$url",
+        "--username=$user",
+        "--password=$password",
+        "--classpath=$searchPath",
+        "--logLevel=warn",
+        "--defaultSchemaName=public"
+    )
+
+    args.addAll(command)
+    return args
+}
+
 repositories {
     mavenCentral()
 }
@@ -70,15 +96,12 @@ dependencies {
     implementation(libs.bundles.jjwt)
     implementation(libs.liquibase.core)
 
-    add("liquibaseRuntime", libs.liquibase.core)
-    add("liquibaseRuntime", libs.picocli)
-    add("liquibaseRuntime", libs.snakeyaml)
-    add("liquibaseRuntime", libs.driver.postgresql)
-
     errorprone(libs.errorprone)
     errorprone(libs.nullaway)
     implementation(libs.jspecify)
 
+    liquibaseRuntime(libs.liquibase.core)
+    liquibaseRuntime(libs.driver.postgresql)
 
     developmentOnly(libs.spring.boot.devtools)
 
@@ -91,35 +114,6 @@ dependencies {
     testImplementation(libs.spring.security.test)
 }
 
-
-
-val envProperties = Properties()
-val defaultEnvPropertiesFile = file("default.env")
-val envPropertiesFile = file(".env")
-
-if (defaultEnvPropertiesFile.exists()) {
-    defaultEnvPropertiesFile.reader(Charsets.UTF_8).use { reader ->
-        envProperties.load(reader)
-    }
-}
-
-if (envPropertiesFile.exists()) {
-    envPropertiesFile.reader(Charsets.UTF_8).use { reader ->
-        envProperties.load(reader)
-    }
-}
-
-
-liquibase {
-    jvmArgs = arrayOf(
-        "-Dliquibase.command.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml",
-        "-Dliquibase.command.url=${System.getenv("DB_URL") ?: envProperties.getProperty("DB_URL")}",
-        "-Dliquibase.command.username=${System.getenv("DB_USER") ?: envProperties.getProperty("DB_USER")}",
-        "-Dliquibase.command.password=${System.getenv("DB_PASSWORD") ?: envProperties.getProperty("DB_PASSWORD")}",
-        "-Dliquibase.command.referenceUrl=${System.getenv("DB_URL") ?: envProperties.getProperty("DB_URL")}"
-    )
-    activities.register("main")
-}
 tasks.withType<Test> {
     environment("SPRING_PROFILES_ACTIVE", "test")
     useJUnitPlatform()
@@ -141,4 +135,36 @@ tasks.jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+tasks.register<JavaExec>("liquibaseUpdate") {
+    group = "liquibase"
+    description = "Run Liquibase update"
+    classpath = liquibaseRuntime
+    mainClass.set("liquibase.integration.commandline.Main")
+    args = liquibaseArgs("update")
+}
+
+tasks.register<JavaExec>("liquibaseStatus") {
+    group = "liquibase"
+    description = "Show Liquibase status"
+    classpath = liquibaseRuntime
+    mainClass.set("liquibase.integration.commandline.Main")
+    args = liquibaseArgs("status")
+}
+
+tasks.register<JavaExec>("liquibaseRollback") {
+    group = "liquibase"
+    description = "Rollback last Liquibase changeset"
+    classpath = liquibaseRuntime
+    mainClass.set("liquibase.integration.commandline.Main")
+    args = liquibaseArgs("rollbackCount", "1")
+}
+
+tasks.register<JavaExec>("liquibaseDropAll") {
+    group = "liquibase"
+    description = "Drop all objects in the database"
+    classpath = liquibaseRuntime
+    mainClass.set("liquibase.integration.commandline.Main")
+    args = liquibaseArgs("dropAll")
 }

@@ -2,14 +2,11 @@
 liquibase =  "4.29.2"
 spring-boot = "3.5.6"
 spring-dependency-management = "1.1.7"
-liquibase-plugin = "3.0.2"
 modelmapper = "3.2.0"
 jjwt = "0.13.0"
 springdoc = "2.8.6"
 postgresql = "42.7.7"
 h2 = "2.3.232"
-picocli = "4.7.5"
-snakeyaml = "1.33"
 spotless = "8.0.0"
 errorprone = "2.42.0"
 errorprone-plugin = "4.3.0"
@@ -29,8 +26,6 @@ modelmapper = { group = "org.modelmapper", name = "modelmapper", version.ref = "
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }
-picocli = { group = "info.picocli", name = "picocli", version.ref = "picocli" }
-snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
 lombok = { group = "org.projectlombok", name = "lombok" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
@@ -45,7 +40,6 @@ jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify"
 jjwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]
 
 [plugins]
-liquibase = { id = "org.liquibase.gradle", version.ref = "liquibase-plugin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management"}
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
