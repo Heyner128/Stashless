@@ -3,6 +3,7 @@ package me.heyner.stashless.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,14 @@ import org.springframework.stereotype.Service;
 public class JwtService {
 
   @Value("${security.jwt.secret-key}")
-  private String secretKey;
+  private String secretKey = "88cd2108b5347d973cf39cdf9053d7dd42704876d8c9a9bd8e2d168259d3ddf7";
 
+  @Getter
   @Value("${security.jwt.expiration-time}")
-  private Long jwtExpiration;
-
-  public Long getJwtExpiration() {
-    return jwtExpiration;
-  }
+  private Long jwtExpiration = 3600000L;
 
   private SecretKey getSignInKey() {
-    return Keys.hmacShaKeyFor(secretKey.getBytes());
+    return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
   }
 
   private Claims extractAllClaims(String token) {
@@ -63,10 +62,6 @@ public class JwtService {
 
   public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
     return buildToken(claims, userDetails, Clock.systemUTC(), jwtExpiration);
-  }
-
-  public long getExpirationTime() {
-    return jwtExpiration;
   }
 
   public String buildToken(

@@ -3,23 +3,20 @@ package me.heyner.stashless.dto;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class InventoryOutputDto {
-  private UUID id;
-  private String name;
-  private String description;
-  private List<InventoryItemOutputDto> items;
-  private UserDto user;
-  private Date createdAt;
-  private Date updatedAt;
+  @Nullable private UUID id;
+  @Nullable private String name;
+  @Nullable private String description;
+  @Nullable private List<InventoryItemOutputDto> items;
+  @Nullable private UserDto user;
+  @Nullable private Date createdAt;
+  @Nullable private Date updatedAt;
 }

@@ -3,21 +3,18 @@ package me.heyner.stashless.dto;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class OptionOutputDto {
-  private UUID id;
-  private String name;
-  private Set<String> values;
-  private Date createdAt;
-  private Date updatedAt;
+  @Nullable private UUID id;
+  @Nullable private String name;
+  @Nullable private Set<String> values;
+  @Nullable private Date createdAt;
+  @Nullable private Date updatedAt;
 }

@@ -3,13 +3,27 @@ package me.heyner.stashless.integration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import me.heyner.stashless.dto.*;
-import me.heyner.stashless.repository.*;
+import me.heyner.stashless.dto.InventoryInputDto;
+import me.heyner.stashless.dto.InventoryItemInputDto;
+import me.heyner.stashless.dto.InventoryItemOutputDto;
+import me.heyner.stashless.dto.InventoryOutputDto;
+import me.heyner.stashless.dto.LoginUserDto;
+import me.heyner.stashless.dto.OptionInputDto;
+import me.heyner.stashless.dto.OptionOutputDto;
+import me.heyner.stashless.dto.ProductInputDto;
+import me.heyner.stashless.dto.ProductOutputDto;
+import me.heyner.stashless.dto.RegisterUserDto;
+import me.heyner.stashless.repository.InventoryRepository;
+import me.heyner.stashless.repository.OptionRepository;
+import me.heyner.stashless.repository.ProductRepository;
+import me.heyner.stashless.repository.SKURepository;
+import me.heyner.stashless.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,34 +118,18 @@ class InventoryIntegrationTests {
     return restTemplate.exchange(requestOptionCreation, OptionOutputDto.class);
   }
 
-  public ResponseEntity<SKUOutputDto> createSKU(UUID productUuid) {
-
-    SKUInputDto skuInputDto =
-        new SKUInputDto()
-            .setName("ADITSHIRT")
-            .setCostPrice(new BigDecimal("9.99"))
-            .setAmountAvailable(99L)
-            .setMarginPercentage(10)
-            .setOptions(Map.of("Color", "Red"));
-
-    RequestEntity<SKUInputDto> requestSKUCreation =
-        RequestEntity.post("/users/test/products/" + productUuid + "/skus")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(skuInputDto, SKUInputDto.class);
-
-    return restTemplate.exchange(requestSKUCreation, SKUOutputDto.class);
-  }
-
   @Test
   void createInventoryTest() {
     ResponseEntity<InventoryOutputDto> response = createInventory();
     assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+    assertNotNull(response.getBody());
     assertThat(response.getBody().getName(), equalTo("MyTestInventory"));
   }
 
   @Test
   void getInventory() {
     InventoryOutputDto createdInventory = createInventory().getBody();
+    assertNotNull(createdInventory);
     RequestEntity<Void> request =
         RequestEntity.get("/users/test/inventory/" + createdInventory.getId())
             .header("Authorization", "Bearer " + loginToken)
@@ -150,6 +148,7 @@ class InventoryIntegrationTests {
 
     InventoryInputDto inventoryInputDto = new InventoryInputDto().setName("UpdatedTestInventory");
 
+    assertNotNull(createdInventory);
     RequestEntity<InventoryInputDto> request =
         RequestEntity.put("/users/test/inventory/" + createdInventory.getId())
             .header("Authorization", "Bearer " + loginToken)
@@ -159,12 +158,14 @@ class InventoryIntegrationTests {
         restTemplate.exchange(request, InventoryOutputDto.class);
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    assertNotNull(response.getBody());
     assertThat(response.getBody().getName(), equalTo(inventoryInputDto.getName()));
   }
 
   @Test
   void deleteInventory() {
     InventoryOutputDto createdInventory = createInventory().getBody();
+    assertNotNull(createdInventory);
     RequestEntity<Void> request =
         RequestEntity.delete("/users/test/inventory/" + createdInventory.getId())
             .header("Authorization", "Bearer " + loginToken)
@@ -181,9 +182,12 @@ class InventoryIntegrationTests {
 
     ProductOutputDto createdProduct = createProduct().getBody();
 
+    assertNotNull(createdProduct);
     OptionOutputDto createdOption = createOption(createdProduct.getId()).getBody();
 
+    assertNotNull(createdOption);
     assertThat(createdOption.getName(), notNullValue());
+    assertNotNull(createdOption.getValues());
     assertThat(createdOption.getValues().size(), equalTo(3));
 
     InventoryItemInputDto inventoryItemInputDto =
@@ -197,6 +201,7 @@ class InventoryIntegrationTests {
             .setCostPrice(BigDecimal.valueOf(1L))
             .setQuantity(99);
 
+    assertNotNull(createdInventory);
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
             .header("Authorization", "Bearer " + loginToken)
@@ -212,12 +217,9 @@ class InventoryIntegrationTests {
   void deleteInventoryItem() {
     InventoryOutputDto createdInventory = createInventory().getBody();
 
-    ProductOutputDto createdProduct = createProduct().getBody();
-
-    SKUOutputDto createdSKU = createSKU(createdProduct.getId()).getBody();
-
     InventoryItemInputDto inventoryItemInputDto = new InventoryItemInputDto().setQuantity(99);
 
+    assertNotNull(createdInventory);
     RequestEntity<InventoryItemInputDto> requestInventoryCreation =
         RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
             .header("Authorization", "Bearer " + loginToken)

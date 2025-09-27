@@ -1,17 +1,17 @@
 package me.heyner.stashless.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class ProductInputDto {
-  private String name;
+  @Nullable private String name;
 
-  private String description;
+  @Nullable private String description;
 
-  private String brand;
+  @Nullable private String brand;
 }

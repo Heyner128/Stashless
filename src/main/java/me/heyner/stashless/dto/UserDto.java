@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
 import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.validation.PasswordMatches;
 import me.heyner.stashless.validation.ValidEmail;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
 @Getter
@@ -23,13 +24,22 @@ import org.springframework.security.core.GrantedAuthority;
 @EqualsAndHashCode
 @PasswordMatches
 public class UserDto {
-  @Setter @NotNull private String username;
+  @SuppressWarnings("NullAway.Init")
+  @Setter
+  @NotNull
+  private String username;
 
-  @NotNull @ValidEmail @Setter private String email;
+  @SuppressWarnings("NullAway.Init")
+  @NotNull
+  @ValidEmail
+  @Setter
+  private String email;
 
+  @Nullable
   @Size(min = 1)
   private Set<Authority> authorities;
 
+  @Nullable
   @Setter
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;

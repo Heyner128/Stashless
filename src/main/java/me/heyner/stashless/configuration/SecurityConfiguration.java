@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import java.util.Arrays;
 import java.util.Collections;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 public class SecurityConfiguration {
 
   @Value("${cors.frontend-url}")
+  @Nullable
   private String corsFrontendUrl;
 
   @Bean

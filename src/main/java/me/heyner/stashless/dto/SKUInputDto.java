@@ -1,21 +1,25 @@
 package me.heyner.stashless.dto;
 
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.UUID;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class SKUInputDto {
+  @SuppressWarnings("NullAway.Init")
+  @NotNull
   private UUID productUuid;
-  private BigDecimal costPrice;
-  private Long amountAvailable;
+
+  @Nullable private BigDecimal costPrice;
+  @Nullable private Long amountAvailable;
   private int marginPercentage;
-  private String name;
-  private Map<String, String> options;
+  @Nullable private String name;
+  @Nullable private Map<String, String> options;
 }

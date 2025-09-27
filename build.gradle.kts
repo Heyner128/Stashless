@@ -1,4 +1,7 @@
 import java.util.Properties
+import net.ltgt.gradle.errorprone.CheckSeverity
+import net.ltgt.gradle.errorprone.errorprone
+import java.util.Locale
 
 buildscript {
     repositories {
@@ -16,6 +19,7 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.liquibase)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.errorprone)
 }
 
 group = "me.heyner"
@@ -34,6 +38,14 @@ spotless {
 
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
+    options.errorprone.check("NullAway", CheckSeverity.ERROR)
+    options.errorprone.option("NullAway:AnnotatedPackages", "me.heyner")
+    options.errorprone.disable("JavaUtilDate")
+    options.errorprone.disable("EqualsGetClass")
+    options.errorprone.check("WildcardImport", CheckSeverity.ERROR)
+    if (name.lowercase(Locale.getDefault()).contains("test") ) {
+        options.errorprone.disable("NullAway")
+    }
 }
 
 configurations {
@@ -62,6 +74,11 @@ dependencies {
     add("liquibaseRuntime", libs.picocli)
     add("liquibaseRuntime", libs.snakeyaml)
     add("liquibaseRuntime", libs.driver.postgresql)
+
+    errorprone(libs.errorprone)
+    errorprone(libs.nullaway)
+    implementation(libs.jspecify)
+
 
     developmentOnly(libs.spring.boot.devtools)
 
@@ -113,10 +130,6 @@ tasks.register("devBootRun") {
         tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "dev")
     }
     finalizedBy(tasks.bootRun)
-}
-
-tasks.test {
-    finalizedBy(tasks.jacocoTestCoverageVerification)
 }
 
 tasks.jacocoTestCoverageVerification {

@@ -4,25 +4,22 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class SKUOutputDto {
-  private UUID id;
-  private UUID productUuid;
-  private String name;
-  private BigDecimal costPrice;
-  private Long amountAvailable;
+  @Nullable private UUID id;
+  @Nullable private UUID productUuid;
+  @Nullable private String name;
+  @Nullable private BigDecimal costPrice;
+  @Nullable private Long amountAvailable;
   private int marginPercentage;
-  private Map<String, String> options;
-  private Date createdAt;
-  private Date updatedAt;
+  @Nullable private Map<String, String> options;
+  @Nullable private Date createdAt;
+  @Nullable private Date updatedAt;
 }

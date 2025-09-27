@@ -3,24 +3,21 @@ package me.heyner.stashless.dto;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.UUID;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 public class InventoryItemOutputDto {
-  private UUID uuid;
-  private UUID productUuid;
-  private BigDecimal costPrice;
-  private Long amountAvailable;
+  @Nullable private UUID uuid;
+  @Nullable private UUID productUuid;
+  @Nullable private BigDecimal costPrice;
+  @Nullable private Long amountAvailable;
   private int marginPercentage;
-  private String name;
-  private Map<String, String> options;
+  @Nullable private String name;
+  @Nullable private Map<String, String> options;
   private int quantity;
 }

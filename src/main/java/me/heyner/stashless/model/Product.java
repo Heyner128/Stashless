@@ -1,14 +1,27 @@
 package me.heyner.stashless.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
+import org.jspecify.annotations.Nullable;
 
 @Entity
 @Getter
@@ -21,46 +34,60 @@ public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "product_id")
+  @Nullable
   private UUID id;
 
   @Column(nullable = false)
+  @Nullable
   private String name;
 
   @Column(nullable = false)
+  @Nullable
   private String description;
 
   @Column(nullable = false)
+  @Nullable
   private String brand;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(nullable = false)
+  @Nullable
   private User user;
 
-  @CreationTimestamp private Date createdAt;
+  @CreationTimestamp @Nullable private Date createdAt;
 
-  @UpdateTimestamp private Date updatedAt;
+  @UpdateTimestamp @Nullable private Date updatedAt;
 
   @Override
   public final boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null) return false;
-    Class<?> oEffectiveClass =
-        o instanceof HibernateProxy
-            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-            : o.getClass();
-    Class<?> thisEffectiveClass =
-        this instanceof HibernateProxy
-            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
-            : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    Class<?> objectEffectiveClass = o.getClass();
+    if (o instanceof HibernateProxy objectHibernateProxy) {
+      objectEffectiveClass =
+          objectHibernateProxy.getHibernateLazyInitializer().getPersistentClass();
+    }
+    Class<?> thisEffectiveClass = this.getClass();
+    if (this instanceof HibernateProxy thisHibernateProxy) {
+      thisEffectiveClass = thisHibernateProxy.getHibernateLazyInitializer().getPersistentClass();
+    }
+    if (objectEffectiveClass != thisEffectiveClass) {
+      return false;
+    }
     Product product = (Product) o;
     return getId() != null && Objects.equals(getId(), product.getId());
   }
 
   @Override
   public final int hashCode() {
-    return this instanceof HibernateProxy
-        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
-        : getClass().hashCode();
+    int hashCode = this.getClass().hashCode();
+    if (this instanceof HibernateProxy hibernateProxy) {
+      hashCode = hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode();
+    }
+    return hashCode;
   }
 }

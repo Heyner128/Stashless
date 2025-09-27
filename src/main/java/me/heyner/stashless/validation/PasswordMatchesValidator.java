@@ -2,6 +2,7 @@ package me.heyner.stashless.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import java.util.Objects;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
 
@@ -14,7 +15,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     return switch (obj) {
       case UpdateUserDto user ->
           user.getOldPassword() == null
-              || user.getNewPassword().equals(user.getNewMatchingPassword());
+              || Objects.equals(user.getNewPassword(), user.getNewMatchingPassword());
       case RegisterUserDto registerUser ->
           registerUser.getPassword() != null
               && registerUser.getPassword().equals(registerUser.getMatchingPassword());

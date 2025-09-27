@@ -1,11 +1,16 @@
 package me.heyner.stashless.unit.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import me.heyner.stashless.model.*;
+import me.heyner.stashless.model.Authority;
+import me.heyner.stashless.model.Option;
+import me.heyner.stashless.model.OptionValue;
+import me.heyner.stashless.model.Product;
+import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.OptionRepository;
 import me.heyner.stashless.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +59,7 @@ class OptionServiceTests {
   @BeforeEach
   public void setUp() {
     setUpMocks();
+    assertNotNull(mockProduct.getId());
     when(productRepository.findById(mockProduct.getId()))
         .thenReturn(Optional.ofNullable(mockProduct));
 

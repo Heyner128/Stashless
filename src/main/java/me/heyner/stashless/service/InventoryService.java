@@ -4,7 +4,12 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import me.heyner.stashless.dto.*;
+import java.util.stream.Collectors;
+import me.heyner.stashless.dto.InventoryInputDto;
+import me.heyner.stashless.dto.InventoryItemInputDto;
+import me.heyner.stashless.dto.InventoryItemOutputDto;
+import me.heyner.stashless.dto.InventoryOutputDto;
+import me.heyner.stashless.dto.SKUInputDto;
 import me.heyner.stashless.exception.EntityNotFoundException;
 import me.heyner.stashless.exception.ExistingEntityException;
 import me.heyner.stashless.model.Inventory;
@@ -56,7 +61,8 @@ public class InventoryService {
       return modelMapper.map(savedInventory, InventoryOutputDto.class);
     } catch (DataIntegrityViolationException e) {
       logger.error("Inventory already exists: {}", e.getMessage());
-      throw new ExistingEntityException(inventoryInputDto.getName());
+      String name = inventoryInputDto.getName();
+      throw new ExistingEntityException(name != null ? name : "Unknown inventory");
     }
   }
 
@@ -66,8 +72,12 @@ public class InventoryService {
         inventoryRepository
             .findById(uuid)
             .orElseThrow(() -> new EntityNotFoundException("not found"));
-    inventory.setName(inventoryInputDto.getName());
-    inventory.setDescription(inventoryInputDto.getDescription());
+    if (inventoryInputDto.getName() != null) {
+      inventory.setName(inventoryInputDto.getName());
+    }
+    if (inventoryInputDto.getDescription() != null) {
+      inventory.setDescription(inventoryInputDto.getDescription());
+    }
     Inventory savedInventory = inventoryRepository.save(inventory);
     logger.info("Inventory updated: {}", inventory);
     return modelMapper.map(savedInventory, InventoryOutputDto.class);
@@ -76,16 +86,23 @@ public class InventoryService {
   private InventoryItemOutputDto mapInventoryItem(Map.Entry<SKU, Integer> item) {
     InventoryItemOutputDto inventoryItemOutputDto = new InventoryItemOutputDto();
     inventoryItemOutputDto.setUuid(item.getKey().getId());
-    inventoryItemOutputDto.setProductUuid(item.getKey().getProduct().getId());
+    if (item.getKey().getProduct() != null && item.getKey().getProduct().getId() != null) {
+      inventoryItemOutputDto.setProductUuid(item.getKey().getProduct().getId());
+    }
     inventoryItemOutputDto.setCostPrice(item.getKey().getCostPrice());
     inventoryItemOutputDto.setAmountAvailable(item.getKey().getAmountAvailable());
     inventoryItemOutputDto.setMarginPercentage(item.getKey().getMarginPercentage());
     inventoryItemOutputDto.setName(item.getKey().getName());
-    inventoryItemOutputDto.setOptions(
-        item.getKey().getOptions().entrySet().stream()
-            .collect(
-                java.util.stream.Collectors.toMap(
-                    e -> e.getKey().getName(), e -> e.getValue().getValue())));
+    if (!item.getKey().getOptions().isEmpty()) {
+      inventoryItemOutputDto.setOptions(
+          item.getKey().getOptions().entrySet().stream()
+              .collect(
+                  Collectors.toMap(
+                      e -> e.getKey().getName(),
+                      e ->
+                          e.getValue().getValue() == null ? "NO_VALUE" : e.getValue().getValue())));
+    }
+
     inventoryItemOutputDto.setQuantity(item.getValue());
     return inventoryItemOutputDto;
   }
@@ -120,14 +137,20 @@ public class InventoryService {
             .setName(inventoryItemInputDto.getName())
             .setOptions(inventoryItemInputDto.getOptions());
 
-    SKU savedSku = skuService.saveSKU(inventoryItemInputDto.getProductUuid(), skuInputDto);
+    UUID productUuid = inventoryItemInputDto.getProductUuid();
+    if (productUuid == null) {
+      throw new IllegalArgumentException("Product UUID cannot be null");
+    }
+    SKU savedSku = skuService.saveSKU(productUuid, skuInputDto);
 
     inventory.getItems().put(savedSku, inventoryItemInputDto.getQuantity());
 
     logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
 
     return inventory.getItems().entrySet().stream()
-        .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
+        .filter(
+            entry ->
+                entry.getKey().getId() != null && entry.getKey().getId().equals(savedSku.getId()))
         .findFirst()
         .map(this::mapInventoryItem)
         .orElseThrow(() -> new EntityNotFoundException("Item not found in inventory"));
@@ -157,7 +180,9 @@ public class InventoryService {
     logger.info("Item {} added to inventory {}", savedSku.getName(), inventory.getId());
 
     return inventory.getItems().entrySet().stream()
-        .filter(entry -> entry.getKey().getId().equals(savedSku.getId()))
+        .filter(
+            entry ->
+                entry.getKey().getId() != null && entry.getKey().getId().equals(savedSku.getId()))
         .findFirst()
         .map(this::mapInventoryItem)
         .orElseThrow(() -> new EntityNotFoundException("Item not found in inventory"));
@@ -172,9 +197,9 @@ public class InventoryService {
 
     SKU sku = skuService.getSKU(skuUuid);
 
-    var removedItem = inventory.getItems().remove(sku);
-
-    if (removedItem == null) {
+    if (inventory.getItems().containsKey(sku)) {
+      inventory.getItems().remove(sku);
+    } else {
       throw new EntityNotFoundException("not found");
     }
 

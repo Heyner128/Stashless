@@ -4,13 +4,17 @@ spring-boot = "3.5.6"
 spring-dependency-management = "1.1.7"
 liquibase-plugin = "3.0.2"
 modelmapper = "3.2.0"
-jjwt = "0.12.6"
+jjwt = "0.13.0"
 springdoc = "2.8.6"
 postgresql = "42.7.7"
 h2 = "2.3.232"
 picocli = "4.7.5"
 snakeyaml = "1.33"
 spotless = "8.0.0"
+errorprone = "2.42.0"
+errorprone-plugin = "4.3.0"
+nullaway = "0.12.10"
+jspecify = "1.0.0"
 
 [libraries]
 liquibase-core = { group = "org.liquibase", name = "liquibase-core",version.ref = "liquibase"}
@@ -33,6 +37,9 @@ spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 driver-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 driver-h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
+errorprone = { group = "com.google.errorprone", name = "error_prone_core", version.ref = "errorprone" }
+nullaway = { group = "com.uber.nullaway", name = "nullaway", version.ref = "nullaway" }
+jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
 
 [bundles]
 jjwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]
@@ -42,3 +49,4 @@ liquibase = { id = "org.liquibase.gradle", version.ref = "liquibase-plugin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management"}
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }

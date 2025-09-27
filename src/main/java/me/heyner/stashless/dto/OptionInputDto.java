@@ -1,15 +1,15 @@
 package me.heyner.stashless.dto;
 
 import java.util.Set;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.Nullable;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class OptionInputDto {
-  private String name;
-  private Set<String> values;
+  @Nullable private String name;
+  @Nullable private Set<String> values;
 }

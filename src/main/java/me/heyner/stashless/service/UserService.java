@@ -38,9 +38,15 @@ public class UserService implements UserDetailsService {
 
   public UserDto updateUser(String username, UpdateUserDto userDto) {
     User user = loadUserByUsername(username);
-    user.setUsername(userDto.getUsername());
-    user.setEmail(userDto.getEmail());
-    user.setAuthorities(userDto.getAuthorities());
+    if (userDto.getUsername() != null) {
+      user.setUsername(userDto.getUsername());
+    }
+    if (userDto.getEmail() != null) {
+      user.setEmail(userDto.getEmail());
+    }
+    if (userDto.getAuthorities() != null) {
+      user.setAuthorities(userDto.getAuthorities());
+    }
     if (userDto.getNewPassword() != null) {
       if (!passwordEncoder.matches(userDto.getOldPassword(), user.getPassword())) {
         throw new IllegalArgumentException("Invalid password");

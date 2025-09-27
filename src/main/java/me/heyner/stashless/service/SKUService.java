@@ -10,7 +10,10 @@ import java.util.stream.Collectors;
 import me.heyner.stashless.dto.SKUInputDto;
 import me.heyner.stashless.dto.SKUOutputDto;
 import me.heyner.stashless.exception.EntityNotFoundException;
-import me.heyner.stashless.model.*;
+import me.heyner.stashless.model.Option;
+import me.heyner.stashless.model.OptionValue;
+import me.heyner.stashless.model.Product;
+import me.heyner.stashless.model.SKU;
 import me.heyner.stashless.repository.OptionRepository;
 import me.heyner.stashless.repository.ProductRepository;
 import me.heyner.stashless.repository.SKURepository;
@@ -75,14 +78,15 @@ public class SKUService {
           optionRepository
               .findByNameAndProductId(productId, entry.getKey())
               .orElseThrow(() -> new EntityNotFoundException("Option not found"));
+      if (option.getValues() != null && !option.getValues().isEmpty()) {
+        OptionValue optionValue =
+            option.getValues().stream()
+                .filter(ov -> ov.getValue() != null && ov.getValue().equals(entry.getValue()))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Option value not found"));
 
-      OptionValue optionValue =
-          option.getValues().stream()
-              .filter(ov -> ov.getValue().equals(entry.getValue()))
-              .findFirst()
-              .orElseThrow(() -> new EntityNotFoundException("Option value not found"));
-
-      options.put(option, optionValue);
+        options.put(option, optionValue);
+      }
     }
     return sku.setOptions(options);
   }
@@ -90,7 +94,10 @@ public class SKUService {
   public SKU saveSKU(UUID productUuid, SKUInputDto skuDto) throws EntityNotFoundException {
     SKU sku = modelMapper.map(skuDto, SKU.class);
     sku = joinProduct(sku, productUuid);
-    sku = joinOptions(sku, productUuid, skuDto.getOptions());
+    Map<String, String> options = skuDto.getOptions();
+    if (options != null) {
+      sku = joinOptions(sku, productUuid, options);
+    }
 
     logger.info("Creating SKU: {}", sku);
 
@@ -118,7 +125,11 @@ public class SKUService {
     SKU existingSku = getSKU(skuUuid);
 
     existingSku = joinProduct(existingSku, skuDto.getProductUuid());
-    existingSku = joinOptions(existingSku, existingSku.getProduct().getId(), skuDto.getOptions());
+    if (existingSku.getProduct() != null
+        && existingSku.getProduct().getId() != null
+        && skuDto.getOptions() != null) {
+      existingSku = joinOptions(existingSku, existingSku.getProduct().getId(), skuDto.getOptions());
+    }
 
     logger.info("Updating SKU: {}", existingSku);
     return skuRepository.save(existingSku);
@@ -142,7 +153,9 @@ public class SKUService {
 
       SKU newSku = modelMapper.map(skuDto, SKU.class);
       newSku = joinProduct(newSku, productUuid);
-      newSku = joinOptions(newSku, productUuid, skuDto.getOptions());
+      if (skuDto.getOptions() != null) {
+        newSku = joinOptions(newSku, productUuid, skuDto.getOptions());
+      }
       skuRepository.save(newSku);
       logger.info("SKU updated: {}", newSku);
       savedSkus.add(newSku);

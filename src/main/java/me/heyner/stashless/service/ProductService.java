@@ -81,9 +81,15 @@ public class ProductService {
         productRepository
             .findById(uuid)
             .orElseThrow(() -> new EntityNotFoundException("Not found"));
-    productToUpdate.setName(productDto.getName());
-    productToUpdate.setDescription(productDto.getDescription());
-    productToUpdate.setBrand(productDto.getBrand());
+    if (productDto.getName() != null) {
+      productToUpdate.setName(productDto.getName());
+    }
+    if (productDto.getDescription() != null) {
+      productToUpdate.setDescription(productDto.getDescription());
+    }
+    if (productDto.getBrand() != null) {
+      productToUpdate.setBrand(productDto.getBrand());
+    }
     Product savedProduct = productRepository.save(productToUpdate);
     logger.info("{} Product successfully updated", productToUpdate.getName());
     return modelMapper.map(savedProduct, ProductOutputDto.class);

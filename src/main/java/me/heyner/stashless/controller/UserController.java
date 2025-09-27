@@ -19,7 +19,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Users")
 @RestController
@@ -34,8 +41,8 @@ public class UserController {
 
   private final ModelMapper modelMapper = new ModelMapper();
 
-  @Value("${spring.profiles.active:prod}")
-  private String profile;
+  @Value("${spring.profiles.active}")
+  private String profile = "prod";
 
   public UserController(
       UserService userService, JwtService jwtService, AuthenticationService authenticationService) {

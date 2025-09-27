@@ -1,9 +1,13 @@
 package me.heyner.stashless.unit.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import me.heyner.stashless.dto.ProductOutputDto;
 import me.heyner.stashless.model.Product;
 import me.heyner.stashless.model.User;
@@ -65,14 +69,16 @@ class ProductServiceTests {
   }
 
   void setupDto() {
-    productOutputDto = new ProductOutputDto();
-    productOutputDto.setId(UUID.randomUUID());
-    productOutputDto.setName("Test Product");
-    productOutputDto.setDescription("Test Description");
-    productOutputDto.setBrand("Test Brand");
+    productOutputDto =
+        new ProductOutputDto()
+            .setId(UUID.randomUUID())
+            .setName("Test product")
+            .setDescription("Test Description")
+            .setBrand("Test Brand");
   }
 
   void setupMockBeans() {
+    assertNotNull(productOutputDto.getId());
     when(productRepository.findById(productOutputDto.getId()))
         .thenReturn(Optional.ofNullable(product));
 
@@ -85,8 +91,8 @@ class ProductServiceTests {
   void testGetProducts() {
     List<ProductOutputDto> products = productService.getProducts("testUser");
     assertEquals(1, products.size());
-    assertEquals(product.getName(), products.get(0).getName());
-    assertEquals(product.getDescription(), products.get(0).getDescription());
-    assertEquals(product.getBrand(), products.get(0).getBrand());
+    assertEquals(product.getName(), products.getFirst().getName());
+    assertEquals(product.getDescription(), products.getFirst().getDescription());
+    assertEquals(product.getBrand(), products.getFirst().getBrand());
   }
 }

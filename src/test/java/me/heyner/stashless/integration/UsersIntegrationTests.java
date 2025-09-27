@@ -1,7 +1,9 @@
 package me.heyner.stashless.integration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +12,11 @@ import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
 import me.heyner.stashless.dto.UserDto;
 import me.heyner.stashless.model.Authority;
-import me.heyner.stashless.repository.*;
+import me.heyner.stashless.repository.InventoryRepository;
+import me.heyner.stashless.repository.OptionRepository;
+import me.heyner.stashless.repository.ProductRepository;
+import me.heyner.stashless.repository.SKURepository;
+import me.heyner.stashless.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,6 +75,7 @@ class UsersIntegrationTests {
     var response = registerRequest();
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+    assertNotNull(response.getBody());
     assertThat(response.getBody().getUsername(), equalTo("test"));
     assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
   }
@@ -83,6 +90,7 @@ class UsersIntegrationTests {
     var response = loginRequest();
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    assertNotNull(response.getBody());
     assertThat(response.getBody().get("token"), notNullValue());
     assertThat(response.getBody().get("username"), equalTo("test"));
   }
@@ -97,6 +105,7 @@ class UsersIntegrationTests {
     var loginResponse = loginRequest();
 
     // creates an authenticated request
+    assertNotNull(loginResponse.getBody());
     RequestEntity<Void> request =
         RequestEntity.get("/users/test")
             .header("Authorization", "Bearer " + loginResponse.getBody().get("token"))
@@ -106,6 +115,7 @@ class UsersIntegrationTests {
     ResponseEntity<UserDto> response = restTemplate.exchange(request, UserDto.class);
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    assertNotNull(response.getBody());
     assertThat(response.getBody().getUsername(), equalTo("test"));
     assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
   }
@@ -120,6 +130,7 @@ class UsersIntegrationTests {
     var loginResponse = loginRequest();
 
     // creates an authenticated request
+    assertNotNull(loginResponse.getBody());
     RequestEntity<UpdateUserDto> request =
         RequestEntity.put("/users/test")
             .header("Authorization", "Bearer " + loginResponse.getBody().get("token"))
@@ -133,6 +144,9 @@ class UsersIntegrationTests {
     ResponseEntity<UserDto> response = restTemplate.exchange(request, UserDto.class);
 
     assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    assertThat(response.getBody(), notNullValue());
+    assertThat(response.getBody().getUsername(), notNullValue());
+    assertThat(response.getBody().getEmail(), notNullValue());
     assertThat(response.getBody().getUsername(), equalTo("test2"));
     assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
   }

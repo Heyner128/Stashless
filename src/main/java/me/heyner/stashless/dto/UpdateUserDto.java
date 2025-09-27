@@ -8,33 +8,42 @@ import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.validation.PasswordMatches;
 import me.heyner.stashless.validation.ValidEmail;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
-@Getter
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode
 @PasswordMatches
 public class UpdateUserDto {
-  @Setter @NotNull private String username;
+  @SuppressWarnings("NullAway.Init")
+  @Setter
+  @NotNull
+  private String username;
 
-  @NotNull @ValidEmail @Setter private String email;
+  @SuppressWarnings("NullAway.Init")
+  @NotNull
+  @ValidEmail
+  @Setter
+  private String email;
 
+  @Nullable
   @Size(min = 1)
   private Set<Authority> authorities;
 
+  @Nullable
   @Setter
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String oldPassword;
 
+  @Nullable
   @Setter
   @Pattern(
       regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
@@ -42,7 +51,7 @@ public class UpdateUserDto {
           "The password should contain an uppercase letter, a lowercase letter, a digit an special character in @$!%*?& and be at least 8 characters long")
   private String newPassword;
 
-  @Setter private String newMatchingPassword;
+  @Nullable @Setter private String newMatchingPassword;
 
   // Spring Security shit don't touch
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
