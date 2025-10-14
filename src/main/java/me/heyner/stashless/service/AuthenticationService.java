@@ -12,11 +12,9 @@ import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +27,7 @@ public class AuthenticationService {
 
   private final ModelMapper modelMapper = new ModelMapper();
 
-  public AuthenticationService(
-      UserRepository userRepository,
-      PasswordEncoder passwordEncoder) {
+  public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }

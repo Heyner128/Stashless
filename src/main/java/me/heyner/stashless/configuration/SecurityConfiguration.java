@@ -55,27 +55,25 @@ public class SecurityConfiguration {
 
   @Bean
   @Order(1)
-  public SecurityFilterChain authenticationServerSecurityFilterChain(
-      HttpSecurity http) throws Exception {
+  public SecurityFilterChain authenticationServerSecurityFilterChain(HttpSecurity http)
+      throws Exception {
 
-    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+        new OAuth2AuthorizationServerConfigurer();
 
-    http
-            .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
-            .with(authorizationServerConfigurer, (authorizationServer) ->
-                    authorizationServer.oidc(Customizer.withDefaults())
-            );
+    http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
+        .with(
+            authorizationServerConfigurer,
+            (authorizationServer) -> authorizationServer.oidc(Customizer.withDefaults()));
 
     return http.build();
-
   }
 
   @Bean
   @Order(2)
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-    http
-        .cors(Customizer.withDefaults())
+    http.cors(Customizer.withDefaults())
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(HttpMethod.GET, "/actuator/health")
