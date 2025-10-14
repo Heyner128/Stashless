@@ -6,25 +6,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
 @SecurityScheme(
     name = "JWT token",
@@ -53,32 +49,32 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(
-      org.springframework.security.config.annotation.authentication.configuration
-              .AuthenticationConfiguration
-          config)
-      throws Exception {
-    return config.getAuthenticationManager();
-  }
-
-  @Bean
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
   @Bean
-  public FilterRegistrationBean<DelegatingFilterProxy> jwtFilterRegistration() {
-    FilterRegistrationBean<DelegatingFilterProxy> registrationBean = new FilterRegistrationBean<>();
-    registrationBean.setFilter(new DelegatingFilterProxy("jwtAuthenticationFilter"));
-    registrationBean.addUrlPatterns("/*");
-    return registrationBean;
+  @Order(1)
+  public SecurityFilterChain authenticationServerSecurityFilterChain(
+      HttpSecurity http) throws Exception {
+
+    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+
+    http
+            .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
+            .with(authorizationServerConfigurer, (authorizationServer) ->
+                    authorizationServer.oidc(Customizer.withDefaults())
+            );
+
+    return http.build();
+
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  @Order(2)
+  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-    http.httpBasic(Customizer.withDefaults())
-        .csrf(AbstractHttpConfigurer::disable)
+    http
         .cors(Customizer.withDefaults())
         .authorizeHttpRequests(
             auth ->
@@ -95,11 +91,7 @@ public class SecurityConfiguration {
                     .hasVariable("username")
                     .equalTo(Authentication::getName)
                     .anyRequest()
-                    .permitAll())
-        .sessionManagement(
-            configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(
-            jwtFilterRegistration().getFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .permitAll());
 
     return http.build();
   }

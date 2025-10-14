@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
-  private final AuthenticationManager authenticationManager;
-
   private final PasswordEncoder passwordEncoder;
 
   private final UserRepository userRepository;
@@ -32,19 +30,15 @@ public class AuthenticationService {
   private final ModelMapper modelMapper = new ModelMapper();
 
   public AuthenticationService(
-      AuthenticationManager authenticationManager,
       UserRepository userRepository,
       PasswordEncoder passwordEncoder) {
-    this.authenticationManager = authenticationManager;
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }
 
   public UserDto authenticate(@Valid LoginUserDto loginUserDto)
       throws DisabledException, LockedException, BadCredentialsException {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginUserDto.getUsername(), loginUserDto.getPassword()));
+    // TODO authenticate the user ...
 
     return modelMapper.map(
         userRepository
