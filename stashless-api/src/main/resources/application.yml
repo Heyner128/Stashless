@@ -1,0 +1,33 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+        check_nullability: true
+  liquibase:
+    enabled: true
+  messages:
+    always-use-message-format: false
+
+springdoc:
+  show-actuator: true
+  packages-to-scan: me.heyner.stashless.controller
+
+security:
+  jwt:
+    secret-key: ${JWT_KEY:88cd2108b5347d973cf39cdf9053d7dd42704876d8c9a9bd8e2d168259d3ddf7}
+    expiration-time: 3600000
+
+cors:
+  frontend-url: ${CORS_FRONTEND_URL}
