@@ -497,6 +497,6 @@ databaseChangeLog:
         referencedTableName: application_user
         validate: true
 - includeAll:
-    path: changelog/
+    path: migrations/
     relativeToChangelogFile: true
 
