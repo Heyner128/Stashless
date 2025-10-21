@@ -26,7 +26,7 @@ fun liquibaseArgs(vararg command: String): List<String> {
     val user = System.getenv("DB_USER") ?: properties["DB_USER"]
     val password = System.getenv("DB_PASSWORD") ?: properties["DB_PASSWORD"]
 
-    val searchPath = "${project.layout.buildDirectory.get().asFile}/resources/main"
+    val searchPath = "${projectDir.path}/src/main/resources"
     val changelogFile = "db/changelog/db.changelog-master.yaml"
 
     val args = mutableListOf(

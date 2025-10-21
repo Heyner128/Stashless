@@ -20,6 +20,7 @@ spring-boot-starter-validation = { group = "org.springframework.boot", name = "s
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
 spring-boot-starter-oauth2-authorization-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-authorization-server" }
 spring-session = { group = "org.springframework.session", name = "spring-session-core" }
 springdoc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }

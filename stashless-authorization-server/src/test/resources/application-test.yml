@@ -1,22 +1,19 @@
+
 spring:
-  main:
-    banner-mode: off
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:h2:mem:test
   jpa:
-    generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
+    generate-ddl: true
     open-in-view: false
     properties:
       hibernate:
         globally_quoted_identifiers: true
         globally_quoted_identifiers_skip_column_definitions: true
         check_nullability: true
-  messages:
-    always-use-message-format: false
+  liquibase:
+    enabled: false
   security:
     user:
       name: user1
@@ -26,8 +23,8 @@ spring:
         client:
           oidc-client:
             registration:
-              client-id: "oidc-client"
-              client-secret: "{noop}secret"
+              client-id: "test-oidc-client"
+              client-secret: "{noop}test-secret"
               client-authentication-methods:
                 - "client_secret_basic"
               authorization-grant-types:
