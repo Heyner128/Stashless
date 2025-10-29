@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAu
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -16,6 +18,11 @@ public class SecurityConfiguration {
 
   public SecurityConfiguration(OAuth2AuthorizationServerProperties properties) {
     this.propertiesMapper = new OAuth2AuthorizationServerPropertiesMapper(properties);
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   @Bean

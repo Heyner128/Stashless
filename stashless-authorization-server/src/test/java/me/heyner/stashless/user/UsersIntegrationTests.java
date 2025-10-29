@@ -1,4 +1,4 @@
-package me.heyner.stashless.integration;
+package me.heyner.stashless.user;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
