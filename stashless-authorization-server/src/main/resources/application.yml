@@ -1,45 +1,6 @@
 spring:
-  main:
-    banner-mode: off
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    open-in-view: false
-    properties:
-      hibernate:
-        globally_quoted_identifiers: true
-        globally_quoted_identifiers_skip_column_definitions: true
-        check_nullability: true
-  messages:
-    always-use-message-format: false
-  security:
-    user:
-      name: user1
-      password: password
-    oauth2:
-      authorizationserver:
-        client:
-          oidc-client:
-            registration:
-              client-id: "oidc-client"
-              client-secret: "{noop}secret"
-              client-authentication-methods:
-                - "client_secret_basic"
-              authorization-grant-types:
-                - "authorization_code"
-                - "refresh_token"
-                - "client_credentials"
-              redirect-uris:
-                - "http://127.0.0.1:8080/login/oauth2/code/messaging-client-oidc"
-                - "http://127.0.0.1:8080/authorized"
-              post-logout-redirect-uris:
-                - "http://127.0.0.1:8080/logged-out"
-              scopes:
-                - "openid"
-                - "profile"
-            require-authorization-consent: true
+  profiles:
+    group:
+      "as": "core"
+      "as-dev": "as,core-dev"
+      "as-test": "as,core-test"

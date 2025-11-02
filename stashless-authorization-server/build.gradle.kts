@@ -6,6 +6,8 @@ springBoot {
     mainClass = "me.heyner.stashless.AuthorizationServerApplication"
 }
 
+projectProperties.prefix = "as"
+
 dependencies {
     implementation(project(":stashless-core"))
     implementation(libs.modelmapper)

@@ -7,6 +7,8 @@ springBoot {
     mainClass = "me.heyner.stashless.StashlessApplication"
 }
 
+projectProperties.prefix = "api"
+
 dependencies {
     implementation(project(":stashless-core"))
     implementation(libs.spring.boot.starter.data.jpa)

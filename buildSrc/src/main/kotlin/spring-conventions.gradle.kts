@@ -7,9 +7,23 @@ plugins {
     id("io.spring.dependency-management")
 }
 
+open class ProfilePropertiesExtension {
+    var prefix: String = ""
+}
+
+val projectProperties = extensions.create<ProfilePropertiesExtension>("projectProperties")
+
 tasks.withType<Test> {
-    environment("SPRING_PROFILES_ACTIVE", "test")
+    val prefix = projectProperties.prefix
+    val profile = if(prefix.isNotEmpty()) "${prefix}-test" else "test"
+    environment("SPRING_PROFILES_ACTIVE", profile)
     useJUnitPlatform()
+}
+
+tasks.bootRun {
+    val prefix = projectProperties.prefix
+    val profile = prefix.ifEmpty { "default" }
+    environment("SPRING_PROFILES_ACTIVE", profile)
 }
 
 tasks.register("run") {
@@ -18,7 +32,9 @@ tasks.register("run") {
 
 tasks.register("devRun") {
     doFirst {
-        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "dev")
+        val prefix = projectProperties.prefix
+        val profile = if(prefix.isNotEmpty()) "${prefix}-dev" else "dev"
+        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", profile)
     }
     finalizedBy(tasks.bootRun)
 }
