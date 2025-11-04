@@ -100,7 +100,9 @@ public class InventoryService {
                   Collectors.toMap(
                       e -> e.getKey().getName(),
                       e ->
-                          e.getValue().getValue() == null ? "NO_VALUE" : e.getValue().getValue())));
+                          e.getValue().getOptionValue() == null
+                              ? "NO_VALUE"
+                              : e.getValue().getOptionValue())));
     }
 
     inventoryItemOutputDto.setQuantity(item.getValue());

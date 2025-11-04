@@ -196,7 +196,7 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
-            name: value
+            name: option_value
             type: VARCHAR(255)
         - column:
             constraints:
@@ -257,8 +257,8 @@ databaseChangeLog:
     author: heyner (generated)
     changes:
     - addUniqueConstraint:
-        columnNames: value
-        constraintName: UKrf3x8gi8o9p0dosaq2qfe3kdx
+        columnNames: option_id, option_value
+        constraintName: uq_option_id_value
         tableName: option_value
 - changeSet:
     id: 1751822426957-15

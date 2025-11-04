@@ -39,7 +39,9 @@ public class OptionService {
                     .using(
                         ctx ->
                             ((Set<OptionValue>) ctx.getSource())
-                                .stream().map(OptionValue::getValue).collect(Collectors.toSet()))
+                                .stream()
+                                    .map(OptionValue::getOptionValue)
+                                    .collect(Collectors.toSet()))
                     .map(Option::getValues, OptionOutputDto::setValues));
 
     modelMapper
@@ -51,7 +53,7 @@ public class OptionService {
                         ctx ->
                             ((Set<String>) ctx.getSource())
                                 .stream()
-                                    .map(value -> new OptionValue().setValue(value))
+                                    .map(value -> new OptionValue().setOptionValue(value))
                                     .collect(Collectors.toSet()))
                     .map(OptionInputDto::getValues, Option::setValues));
   }
@@ -85,9 +87,7 @@ public class OptionService {
 
     List<Option> currentOptions = optionRepository.findByProductId(productUuid);
 
-    for (Option option : currentOptions) {
-      optionRepository.delete(option);
-    }
+    optionRepository.deleteAll(currentOptions);
 
     List<Option> savedOptions = new ArrayList<>();
 

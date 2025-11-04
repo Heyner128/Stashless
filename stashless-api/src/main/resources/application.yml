@@ -1,6 +1,0 @@
-spring:
-  profiles:
-    group:
-      "api": "core"
-      "api-dev": "api,core-dev"
-      "api-test": "api,core-test"

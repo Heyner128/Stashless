@@ -50,7 +50,7 @@ public class SKUService {
                                     .collect(
                                         Collectors.toMap(
                                             e -> e.getKey().getName(),
-                                            e -> e.getValue().getValue())))
+                                            e -> e.getValue().getOptionValue())))
                     .map(SKU::getOptions, SKUOutputDto::setOptions));
     modelMapper
         .typeMap(SKU.class, SKUOutputDto.class)
@@ -81,7 +81,9 @@ public class SKUService {
       if (option.getValues() != null && !option.getValues().isEmpty()) {
         OptionValue optionValue =
             option.getValues().stream()
-                .filter(ov -> ov.getValue() != null && ov.getValue().equals(entry.getValue()))
+                .filter(
+                    ov ->
+                        ov.getOptionValue() != null && ov.getOptionValue().equals(entry.getValue()))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Option value not found"));
 

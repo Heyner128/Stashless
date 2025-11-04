@@ -14,16 +14,22 @@ open class ProfilePropertiesExtension {
 val projectProperties = extensions.create<ProfilePropertiesExtension>("projectProperties")
 
 tasks.withType<Test> {
-    val prefix = projectProperties.prefix
-    val profile = if(prefix.isNotEmpty()) "${prefix}-test" else "test"
-    environment("SPRING_PROFILES_ACTIVE", profile)
+    doFirst {
+        val prefix = projectProperties.prefix
+        val coreProfile  = "core-test"
+        val specificProfile = if (prefix.isNotEmpty()) "${prefix}-test" else "default"
+        environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
+    }
     useJUnitPlatform()
 }
 
 tasks.bootRun {
-    val prefix = projectProperties.prefix
-    val profile = prefix.ifEmpty { "default" }
-    environment("SPRING_PROFILES_ACTIVE", profile)
+    doFirst {
+        val prefix = projectProperties.prefix
+        val coreProfile  = "core"
+        val specificProfile = prefix.ifEmpty { "default" }
+        environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
+    }
 }
 
 tasks.register("run") {
@@ -33,8 +39,9 @@ tasks.register("run") {
 tasks.register("devRun") {
     doFirst {
         val prefix = projectProperties.prefix
-        val profile = if(prefix.isNotEmpty()) "${prefix}-dev" else "dev"
-        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", profile)
+        val coreProfile  = "core,core-dev"
+        val specificProfile = if(prefix.isNotEmpty()) "${prefix}-dev" else "default"
+        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
     }
     finalizedBy(tasks.bootRun)
 }

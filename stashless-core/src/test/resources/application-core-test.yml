@@ -1,11 +1,17 @@
 spring:
-  profiles:
-    include: "core"
+  main:
+    banner-mode: off
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:h2:mem:testdb
   jpa:
+    generate-ddl: true
     hibernate:
       ddl-auto: create-drop
-    generate-ddl: true
-  liquibase:
-    enabled: false
+    open-in-view: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+        check_nullability: true
+  messages:
+    always-use-message-format: false

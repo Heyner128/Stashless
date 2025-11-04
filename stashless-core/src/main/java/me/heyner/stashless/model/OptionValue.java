@@ -34,7 +34,7 @@ import org.jspecify.annotations.Nullable;
 @Table(
     uniqueConstraints =
         @UniqueConstraint(
-            columnNames = {"option_id", "value"},
+            columnNames = {"option_id", "option_value"},
             name = "uq_option_id_value"))
 @NoArgsConstructor
 public class OptionValue {
@@ -46,7 +46,7 @@ public class OptionValue {
 
   @Column(nullable = false)
   @Nullable
-  private String value;
+  private String optionValue;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "option_id", nullable = false)
