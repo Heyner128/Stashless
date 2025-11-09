@@ -1,5 +1,6 @@
 plugins {
     id("java-conventions")
+    id("liquibase-conventions")
 }
 
 dependencies {

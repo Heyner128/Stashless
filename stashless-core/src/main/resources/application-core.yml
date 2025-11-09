@@ -12,6 +12,8 @@ spring:
     url: ${DB_URL:jdbc:h2:mem:stashlessdb}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+  liquibase:
+    enabled: true
   jpa:
     generate-ddl: false
     hibernate:

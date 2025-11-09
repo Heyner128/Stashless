@@ -16,11 +16,14 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OidcEndpointsTests {
+
+  @Autowired private JwtDecoder jwtDecoder;
 
   @TestConfiguration
   public static class PasswordEncoderConfiguration {
@@ -44,7 +47,7 @@ public class OidcEndpointsTests {
   }
 
   @Test
-  @DisplayName("token endpoint works")
+  @DisplayName("token endpoint returns a valid jwt token")
   void tokenEndpoint() {
     RegisteredClient registeredClient =
         registeredClientRepository.findByClientId(TEST_OIDC_CLIENT_ID);
@@ -63,6 +66,7 @@ public class OidcEndpointsTests {
                     + registeredClient.getClientSecret());
 
     ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
     assertThat(response.getStatusCode().is2xxSuccessful(), equalTo(true));
   }
 }

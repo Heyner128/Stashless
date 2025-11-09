@@ -1,8 +1,8 @@
 
 # @no-log
-POST {{baseURL}}/oauth2/token
+POST {{authURL}}/oauth2/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
-&client_id=oidcclient
-&client_secret={noop}secret
+&client_id=stashless
+&client_secret={bcrypt}$2a$10$NxzZ6oWTBXdWlRer6tpWjeawuX.Ftu198C3AXgWxV9qBxGiVc1e7O
