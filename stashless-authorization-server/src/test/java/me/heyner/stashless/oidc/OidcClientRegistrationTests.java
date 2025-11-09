@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OidcRegistrationTests {
+public class OidcClientRegistrationTests {
   @Autowired RegisteredClientRepository registeredClientRepository;
   @Autowired OAuth2AuthorizationServerProperties configurationProperties;
   @Autowired JdbcTemplate jdbcTemplate;

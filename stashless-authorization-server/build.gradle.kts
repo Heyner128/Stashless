@@ -16,12 +16,9 @@ dependencies {
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.oauth2.authorization.server)
-
     implementation(libs.springdoc)
-
-    implementation(libs.driver.postgresql)
-    testImplementation(libs.driver.h2)
 
     testImplementation(libs.spring.boot.starter.test)
 }

@@ -6,12 +6,14 @@ spring:
     oauth2:
       authorizationserver:
         client:
-          oidc-client:
+          oidcclient:
             registration:
-              client-id: "oidc-client"
+              client-id: "oidcclient"
               client-secret: "{noop}secret"
               client-authentication-methods:
                 - "client_secret_basic"
+                - "client_secret_post"
+                - "none"
               authorization-grant-types:
                 - "authorization_code"
                 - "refresh_token"

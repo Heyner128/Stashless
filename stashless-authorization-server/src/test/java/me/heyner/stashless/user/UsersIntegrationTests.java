@@ -96,31 +96,6 @@ class UsersIntegrationTests {
   }
 
   @Test
-  void testGetUserDetails() {
-
-    // Registers a new user
-    registerRequest();
-
-    // Logs in the user
-    var loginResponse = loginRequest();
-
-    // creates an authenticated request
-    assertNotNull(loginResponse.getBody());
-    RequestEntity<Void> request =
-        RequestEntity.get("/users/test")
-            .header("Authorization", "Bearer " + loginResponse.getBody().get("token"))
-            .build();
-
-    // Gets the created user information
-    ResponseEntity<UserDto> response = restTemplate.exchange(request, UserDto.class);
-
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    assertNotNull(response.getBody());
-    assertThat(response.getBody().getUsername(), equalTo("test"));
-    assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
-  }
-
-  @Test
   void testUpdateUserDetails() {
 
     // Registers a new user

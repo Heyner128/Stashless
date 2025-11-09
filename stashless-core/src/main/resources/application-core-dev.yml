@@ -3,7 +3,7 @@ logging:
     root: DEBUG
 spring:
   config:
-    import: file:../.env[.properties]
+    import: optional:file:../.env[.properties]
   jpa:
     show-sql: true
     properties:

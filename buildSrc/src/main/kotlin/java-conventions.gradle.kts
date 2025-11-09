@@ -34,15 +34,7 @@ repositories {
 }
 
 dependencies {
-
     implementation(libs.jspecify)
-
-    developmentOnly(libs.spring.boot.devtools)
-
     annotationProcessor(libs.lombok)
-
-    runtimeOnly(libs.driver.postgresql)
-
-    testRuntimeOnly(libs.driver.h2)
 }
 

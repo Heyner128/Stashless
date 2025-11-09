@@ -1,5 +1,11 @@
+import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.developmentOnly
+import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.runtimeOnly
+import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.testRuntimeOnly
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.withType
+
+val libs = the<LibrariesForLibs>()
 
 plugins {
     java
@@ -23,16 +29,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.bootRun {
+tasks.register("run") {
     doFirst {
         val prefix = projectProperties.prefix
         val coreProfile  = "core"
         val specificProfile = prefix.ifEmpty { "default" }
-        environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
+        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
     }
-}
-
-tasks.register("run") {
     finalizedBy(tasks.bootRun)
 }
 
@@ -41,7 +44,17 @@ tasks.register("devRun") {
         val prefix = projectProperties.prefix
         val coreProfile  = "core,core-dev"
         val specificProfile = if(prefix.isNotEmpty()) "${prefix}-dev" else "default"
-        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${specificProfile}")
+        tasks.bootRun.get().environment("SPRING_PROFILES_ACTIVE", "${coreProfile},${prefix},${specificProfile}")
     }
     finalizedBy(tasks.bootRun)
+}
+
+dependencies {
+    developmentOnly(libs.spring.boot.devtools)
+
+    runtimeOnly(libs.driver.postgresql)
+
+    runtimeOnly(libs.driver.h2)
+
+    testRuntimeOnly(libs.driver.h2)
 }
