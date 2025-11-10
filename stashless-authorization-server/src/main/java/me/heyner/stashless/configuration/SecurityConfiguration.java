@@ -53,12 +53,15 @@ public class SecurityConfiguration {
   @Bean
   @Order(2)
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    return http.authorizeHttpRequests((authorize) -> authorize.
-                    requestMatchers(HttpMethod.POST, "/users")
+    return http.authorizeHttpRequests(
+            (authorize) ->
+                authorize
+                    .requestMatchers(HttpMethod.POST, "/users")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/users/login")
                     .permitAll()
-                    .anyRequest().authenticated())
+                    .anyRequest()
+                    .authenticated())
         .cors(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(Customizer.withDefaults())

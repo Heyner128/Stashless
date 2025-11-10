@@ -1,5 +1,6 @@
 package me.heyner.stashless.configuration;
 
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -11,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -26,18 +25,20 @@ public class CoreSecurityConfiguration {
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
   public SecurityFilterChain coreSecurityFilterChain(HttpSecurity http) throws Exception {
-    final String[] ENDPOINTS_PATTERNS = {"/actuator/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**"};
+    final String[] ENDPOINTS_PATTERNS = {
+      "/actuator/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**"
+    };
 
     http.cors(Customizer.withDefaults())
-            .securityMatcher(ENDPOINTS_PATTERNS)
+        .securityMatcher(ENDPOINTS_PATTERNS)
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(HttpMethod.GET, ENDPOINTS_PATTERNS[0])
                     .permitAll()
                     .requestMatchers(
-                        HttpMethod.GET, Arrays.copyOfRange(ENDPOINTS_PATTERNS, 1, ENDPOINTS_PATTERNS.length))
-                    .permitAll()
-        );
+                        HttpMethod.GET,
+                        Arrays.copyOfRange(ENDPOINTS_PATTERNS, 1, ENDPOINTS_PATTERNS.length))
+                    .permitAll());
 
     return http.build();
   }

@@ -7,7 +7,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { requestedWithInterceptor } from './interceptor/requested-with.interceptor';
-import { withCredentialsInterceptor } from './interceptor/with-credentials.interceptor';
+import { authInterceptor } from './interceptor/auth.interceptor';
 import { errorInterceptor } from './interceptor/error.interceptor';
 import {provideOAuthClient} from "angular-oauth2-oidc";
 
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([requestedWithInterceptor, withCredentialsInterceptor, errorInterceptor]),
+      withInterceptors([requestedWithInterceptor, authInterceptor, errorInterceptor]),
       withFetch()
     ),
     provideClientHydration(withEventReplay()),

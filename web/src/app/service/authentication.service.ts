@@ -37,30 +37,16 @@ export class AuthenticationService {
     }
   }
 
-  getUsername(): Observable<string> {
-    return of(this.isAuthenticated())
-      .pipe(
-        switchMap(isAuthenticated => {
-          if(isAuthenticated) {
-            // TODO when the token expires, loadUserProfiles fails silently, catch the error and logout the user
-            return fromPromise(this.oauthService.loadUserProfile())
-              .pipe(
-                map(
-                  (profile) => {
-                    return (profile as {info: UserInfo}).info.sub
-                  }
-                )
-              )
-          } else {
-            this.logout();
-            throw new Error("User not found not authenticated")
-          }
-        })
-      )
+  getUsername(): string | undefined {
+    return (this.oauthService.getIdentityClaims() as UserInfo)?.sub;
   }
 
   isAuthenticated(): boolean {
-    return this.oauthService.hasValidAccessToken() && this.oauthService.hasValidIdToken();
+    try {
+      return this.oauthService.hasValidAccessToken() && this.oauthService.hasValidIdToken();
+    } catch {
+      return false;
+    }
   }
 
   login(): Observable<boolean> {
@@ -69,6 +55,10 @@ export class AuthenticationService {
 
   logout(): void {
     this.oauthService.logOut()
+  }
+
+  getAccessToken(): string {
+    return this.oauthService.getAccessToken();
   }
 
   signup(newUser: NewUser): Observable<User> {
