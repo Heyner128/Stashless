@@ -35,6 +35,6 @@ repositories {
 
 dependencies {
     implementation(libs.jspecify)
-    annotationProcessor(libs.lombok)
+
 }
 

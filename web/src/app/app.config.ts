@@ -9,6 +9,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { requestedWithInterceptor } from './interceptor/requested-with.interceptor';
 import { withCredentialsInterceptor } from './interceptor/with-credentials.interceptor';
 import { errorInterceptor } from './interceptor/error.interceptor';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,6 @@ export const appConfig: ApplicationConfig = {
       withFetch()
     ),
     provideClientHydration(withEventReplay()),
+    provideOAuthClient(),
     provideAnimationsAsync()]
 };

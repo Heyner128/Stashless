@@ -30,6 +30,10 @@ spring:
     restart:
       enabled: false
 
+
 springdoc:
   show-actuator: true
   packages-to-scan: me.heyner.stashless.controller
+cors:
+  allowed-origins:
+    - ${CORS_FRONTEND_URL:http://localhost:4200}

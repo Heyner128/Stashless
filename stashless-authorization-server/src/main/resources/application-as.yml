@@ -15,10 +15,18 @@ spring:
               client-authentication-methods:
                 - "client_secret_basic"
                 - "client_secret_post"
+                - "none"
               authorization-grant-types:
+                - "authorization_code"
                 - "client_credentials"
+              redirect-uris:
+                - ${CORS_FRONTEND_URL:http://localhost:4200}
+              post-logout-redirect-uris:
+                - ${CORS_FRONTEND_URL:http://localhost:4200}
               scopes:
                 - "openid"
                 - "profile"
-            require-authorization-consent: true
+                - "email"
+                - "offline_access"
+            require-authorization-consent: false
             require-proof-key: true

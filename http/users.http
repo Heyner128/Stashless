@@ -1,6 +1,6 @@
 # @no-log
 # @name create user
-POST {{baseURL}}/users HTTP/1.1
+POST {{authURL}}/users HTTP/1.1
 Content-Type: application/json
 Origin: http://localhost:4200
 
@@ -16,7 +16,7 @@ Origin: http://localhost:4200
 # @no-log
 # @no-cookie-jar
 # @name login
-POST {{baseURL}}/users/login HTTP/1.1
+POST {{authURL}}/users/login HTTP/1.1
 Content-Type: application/json
 
 {

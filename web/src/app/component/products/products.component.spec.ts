@@ -71,7 +71,7 @@ describe('ProductsComponent', () => {
   }
 
   function stubAuthentication() {
-    spyOn(authenticationService, 'isAuthenticated').and.returnValue(of(true));
+    spyOn(authenticationService, "isAuthenticated").and.returnValue(true);
   }
 
   function stubProducts() {

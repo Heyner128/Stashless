@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.annotationProcessor
 import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.developmentOnly
 import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.runtimeOnly
 import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.testRuntimeOnly
@@ -50,6 +51,10 @@ tasks.register("devRun") {
 }
 
 dependencies {
+    annotationProcessor(libs.lombok)
+
+    annotationProcessor(libs.spring.boot.configuration.processor)
+
     developmentOnly(libs.spring.boot.devtools)
 
     runtimeOnly(libs.driver.postgresql)

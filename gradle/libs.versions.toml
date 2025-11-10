@@ -25,6 +25,7 @@ spring-boot-starter-oauth2-resource-server = { group = "org.springframework.boot
 springdoc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 modelmapper = { group = "org.modelmapper", name = "modelmapper", version.ref = "modelmapper" }
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
+spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
 lombok = { group = "org.projectlombok", name = "lombok" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }

@@ -10,7 +10,7 @@
     [hasArrow]="true"
 >
     <div class="user-badge__popover-item__title">
-        <span>{{getUsername()}}</span>
+        <span>{{username$ | async}}</span>
     </div>
     <a
             type="button"

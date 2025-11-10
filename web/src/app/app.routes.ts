@@ -1,5 +1,4 @@
-import { Routes } from '@angular/router';   
-import { LoginComponent } from './component/login/login.component';
+import { Routes } from '@angular/router';
 import { LayoutComponent } from './component/layout/layout.component';
 import { loginGuard } from './guard/login.guard';
 import { InventoriesComponent } from './component/inventories/inventories.component';
@@ -14,10 +13,6 @@ import { EditProductComponent  } from './component/products/edit-product/edit-pr
 import {EditUserComponent} from "./component/edit-user/edit-user.component";
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
   {
     path: 'signup',
     component: SignupComponent,
