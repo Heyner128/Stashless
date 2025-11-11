@@ -1,19 +1,21 @@
 package me.heyner.stashless.inventory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import me.heyner.stashless.dto.InventoryInputDto;
 import me.heyner.stashless.dto.InventoryItemInputDto;
-import me.heyner.stashless.dto.InventoryItemOutputDto;
 import me.heyner.stashless.dto.InventoryOutputDto;
-import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.OptionInputDto;
 import me.heyner.stashless.dto.OptionOutputDto;
 import me.heyner.stashless.dto.ProductInputDto;
@@ -24,19 +26,21 @@ import me.heyner.stashless.repository.OptionRepository;
 import me.heyner.stashless.repository.ProductRepository;
 import me.heyner.stashless.repository.SKURepository;
 import me.heyner.stashless.repository.UserRepository;
+import me.heyner.stashless.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 class InventoryIntegrationTests {
 
-  @Autowired TestRestTemplate restTemplate;
+  @Autowired MockMvc mvc;
 
   @Autowired InventoryRepository inventoryRepository;
 
@@ -48,7 +52,9 @@ class InventoryIntegrationTests {
 
   @Autowired UserRepository userRepository;
 
-  private String loginToken;
+  @Autowired UserService userService;
+
+  @Autowired ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setup() {
@@ -73,122 +79,141 @@ class InventoryIntegrationTests {
             .setPassword(password)
             .setMatchingPassword(password);
 
-    restTemplate.postForLocation("/users", registerUserDto);
-
-    LoginUserDto loginUserDto = new LoginUserDto().setUsername(username).setPassword(password);
-
-    this.loginToken =
-        (String) restTemplate.postForObject("/users/login", loginUserDto, Map.class).get("token");
+    userService.signUp(registerUserDto);
   }
 
-  public ResponseEntity<InventoryOutputDto> createInventory() {
+  public InventoryOutputDto createInventory() throws Exception {
     InventoryInputDto inventoryInputDto = new InventoryInputDto().setName("MyTestInventory");
 
-    RequestEntity<InventoryInputDto> request =
-        RequestEntity.post("/users/test/inventory")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(inventoryInputDto, InventoryInputDto.class);
-    return restTemplate.exchange(request, InventoryOutputDto.class);
+    String response =
+        mvc.perform(
+                post("/users/test/inventory")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(inventoryInputDto)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    return objectMapper.readValue(response, InventoryOutputDto.class);
   }
 
-  public ResponseEntity<ProductOutputDto> createProduct() {
+  public ProductOutputDto createProduct() throws Exception {
     ProductInputDto productInputDto =
         new ProductInputDto()
             .setName("T-Shirt")
             .setBrand("Adidas")
             .setDescription("An adidas t-shirt");
 
-    RequestEntity<ProductInputDto> requestProductCreation =
-        RequestEntity.post("/users/test/products")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(productInputDto, ProductInputDto.class);
+    String response =
+        mvc.perform(
+                post("/users/test/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(productInputDto)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    return restTemplate.exchange(requestProductCreation, ProductOutputDto.class);
+    return objectMapper.readValue(response, ProductOutputDto.class);
   }
 
-  public ResponseEntity<OptionOutputDto> createOption(UUID productUuid) {
+  public OptionOutputDto createOption(UUID productUuid) throws Exception {
     OptionInputDto optionInputDto =
         new OptionInputDto().setName("Color").setValues(Set.of("Red", "Blue", "Orange"));
 
-    RequestEntity<OptionInputDto> requestOptionCreation =
-        RequestEntity.post("/users/test/products/" + productUuid + "/options")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(optionInputDto, OptionInputDto.class);
+    String response =
+        mvc.perform(
+                post("/users/test/products/" + productUuid + "/options")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(optionInputDto)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    return restTemplate.exchange(requestOptionCreation, OptionOutputDto.class);
+    return objectMapper.readValue(response, OptionOutputDto.class);
   }
 
   @Test
-  void createInventoryTest() {
-    ResponseEntity<InventoryOutputDto> response = createInventory();
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-    assertNotNull(response.getBody());
-    assertThat(response.getBody().getName(), equalTo("MyTestInventory"));
-  }
+  @WithMockUser(username = "test")
+  void createInventoryTest() throws Exception {
 
-  @Test
-  void getInventory() {
-    InventoryOutputDto createdInventory = createInventory().getBody();
+    InventoryOutputDto createdInventory = createInventory();
+
     assertNotNull(createdInventory);
-    RequestEntity<Void> request =
-        RequestEntity.get("/users/test/inventory/" + createdInventory.getId())
-            .header("Authorization", "Bearer " + loginToken)
-            .build();
-
-    ResponseEntity<InventoryOutputDto> response =
-        restTemplate.exchange(request, InventoryOutputDto.class);
-
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(response.getBody(), equalTo(createdInventory));
+    assertNotNull(createdInventory.getId());
+    assertNotNull(createdInventory.getName());
+    assertEquals("MyTestInventory", createdInventory.getName());
   }
 
   @Test
-  void updateInventory() {
-    InventoryOutputDto createdInventory = createInventory().getBody();
+  @WithMockUser(username = "test")
+  void getInventory() throws Exception {
+
+    InventoryOutputDto createdInventory = createInventory();
+
+    String response =
+        mvc.perform(get("/users/test/inventory/" + createdInventory.getId()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    InventoryOutputDto fetched = objectMapper.readValue(response, InventoryOutputDto.class);
+    assertNotNull(fetched);
+    assertEquals(createdInventory.getId(), fetched.getId());
+    assertEquals(createdInventory.getName(), fetched.getName());
+  }
+
+  @Test
+  @WithMockUser(username = "test")
+  void updateInventory() throws Exception {
+
+    InventoryOutputDto createdInventory = createInventory();
 
     InventoryInputDto inventoryInputDto = new InventoryInputDto().setName("UpdatedTestInventory");
 
-    assertNotNull(createdInventory);
-    RequestEntity<InventoryInputDto> request =
-        RequestEntity.put("/users/test/inventory/" + createdInventory.getId())
-            .header("Authorization", "Bearer " + loginToken)
-            .body(inventoryInputDto, InventoryInputDto.class);
+    String response =
+        mvc.perform(
+                put("/users/test/inventory/" + createdInventory.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(inventoryInputDto)))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    ResponseEntity<InventoryOutputDto> response =
-        restTemplate.exchange(request, InventoryOutputDto.class);
-
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    assertNotNull(response.getBody());
-    assertThat(response.getBody().getName(), equalTo(inventoryInputDto.getName()));
+    InventoryOutputDto updated = objectMapper.readValue(response, InventoryOutputDto.class);
+    assertNotNull(updated);
+    assertEquals(inventoryInputDto.getName(), updated.getName());
+    assertEquals(createdInventory.getId(), updated.getId());
   }
 
   @Test
-  void deleteInventory() {
-    InventoryOutputDto createdInventory = createInventory().getBody();
-    assertNotNull(createdInventory);
-    RequestEntity<Void> request =
-        RequestEntity.delete("/users/test/inventory/" + createdInventory.getId())
-            .header("Authorization", "Bearer " + loginToken)
-            .build();
+  @WithMockUser(username = "test")
+  void deleteInventory() throws Exception {
 
-    ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+    InventoryOutputDto createdInventory = createInventory();
 
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+    mvc.perform(delete("/users/test/inventory/" + createdInventory.getId()))
+        .andExpect(status().isNoContent());
   }
 
   @Test
-  void addInventoryItem() {
-    InventoryOutputDto createdInventory = createInventory().getBody();
+  @WithMockUser(username = "test")
+  void addInventoryItem() throws Exception {
 
-    ProductOutputDto createdProduct = createProduct().getBody();
+    InventoryOutputDto createdInventory = createInventory();
 
+    ProductOutputDto createdProduct = createProduct();
     assertNotNull(createdProduct);
-    OptionOutputDto createdOption = createOption(createdProduct.getId()).getBody();
 
+    OptionOutputDto createdOption = createOption(createdProduct.getId());
     assertNotNull(createdOption);
-    assertThat(createdOption.getName(), notNullValue());
+    assertNotNull(createdOption.getName());
     assertNotNull(createdOption.getValues());
-    assertThat(createdOption.getValues().size(), equalTo(3));
+    assertEquals(3, createdOption.getValues().size());
 
     InventoryItemInputDto inventoryItemInputDto =
         new InventoryItemInputDto()
@@ -201,40 +226,45 @@ class InventoryIntegrationTests {
             .setCostPrice(BigDecimal.valueOf(1L))
             .setQuantity(99);
 
-    assertNotNull(createdInventory);
-    RequestEntity<InventoryItemInputDto> requestInventoryCreation =
-        RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(inventoryItemInputDto, InventoryItemInputDto.class);
-
-    ResponseEntity<InventoryItemOutputDto> responseInventoryCreation =
-        restTemplate.exchange(requestInventoryCreation, InventoryItemOutputDto.class);
-
-    assertThat(responseInventoryCreation.getStatusCode(), equalTo(HttpStatus.CREATED));
+    mvc.perform(
+            post("/users/test/inventory/" + createdInventory.getId() + "/item")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inventoryItemInputDto)))
+        .andExpect(status().isCreated());
   }
 
   @Test
-  void deleteInventoryItem() {
-    InventoryOutputDto createdInventory = createInventory().getBody();
+  @WithMockUser(username = "test")
+  void deleteInventoryItem() throws Exception {
 
-    InventoryItemInputDto inventoryItemInputDto = new InventoryItemInputDto().setQuantity(99);
+    InventoryOutputDto createdInventory = createInventory();
 
-    assertNotNull(createdInventory);
-    RequestEntity<InventoryItemInputDto> requestInventoryCreation =
-        RequestEntity.post("/users/test/inventory/" + createdInventory.getId() + "/item")
-            .header("Authorization", "Bearer " + loginToken)
-            .body(inventoryItemInputDto, InventoryItemInputDto.class);
+    ProductOutputDto createdProduct = createProduct();
+    assertNotNull(createdProduct);
 
-    restTemplate.exchange(requestInventoryCreation, InventoryItemOutputDto.class);
+    OptionOutputDto createdOption = createOption(createdProduct.getId());
+    assertNotNull(createdOption);
 
-    RequestEntity<Void> requestInventoryItemDeletion =
-        RequestEntity.delete("/users/test/inventory/" + createdInventory.getId())
-            .header("Authorization", "Bearer " + loginToken)
-            .build();
+    assertNotNull(createdOption.getName());
+    assertNotNull(createdOption.getValues());
+    InventoryItemInputDto inventoryItemInputDto =
+        new InventoryItemInputDto()
+            .setName("Shirt")
+            .setAmountAvailable(1L)
+            .setMarginPercentage(10)
+            .setProductUuid(createdProduct.getId())
+            .setOptions(
+                Map.of(createdOption.getName(), createdOption.getValues().iterator().next()))
+            .setCostPrice(BigDecimal.valueOf(1L))
+            .setQuantity(99);
 
-    ResponseEntity<Void> responseInventoryItemDeletion =
-        restTemplate.exchange(requestInventoryItemDeletion, Void.class);
+    mvc.perform(
+            post("/users/test/inventory/" + createdInventory.getId() + "/item")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inventoryItemInputDto)))
+        .andExpect(status().isCreated());
 
-    assertThat(responseInventoryItemDeletion.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+    mvc.perform(delete("/users/test/inventory/" + createdInventory.getId()))
+        .andExpect(status().isNoContent());
   }
 }

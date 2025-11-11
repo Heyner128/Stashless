@@ -81,21 +81,6 @@ class UsersIntegrationTests {
   }
 
   @Test
-  @DisplayName("POST to /login with email and password logs in the user")
-  void testLoginUser() {
-    // Registers a new user
-    registerRequest();
-
-    // Tests the login
-    var response = loginRequest();
-
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    assertNotNull(response.getBody());
-    assertThat(response.getBody().get("token"), notNullValue());
-    assertThat(response.getBody().get("username"), equalTo("test"));
-  }
-
-  @Test
   void testUpdateUserDetails() {
 
     // Registers a new user

@@ -1,13 +1,18 @@
 package me.heyner.stashless.service;
 
+import jakarta.validation.Valid;
+import java.util.Set;
+import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
 import me.heyner.stashless.dto.UserDto;
-import me.heyner.stashless.exception.EntityNotFoundException;
+import me.heyner.stashless.exception.ExistingEntityException;
+import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.model.User;
 import me.heyner.stashless.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,14 +31,19 @@ public class UserService implements UserDetailsService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User findByEmail(String email) throws EntityNotFoundException {
-    User user =
-        userRepository
-            .findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-    logger.info("Found user: {}", user);
-    return user;
+  public UserDto signUp(@Valid RegisterUserDto registerUserDto) throws ExistingEntityException {
+    try {
+      User user =
+          new User()
+              .setAuthorities(Set.of(Authority.USER))
+              .setEmail(registerUserDto.getEmail())
+              .setUsername(registerUserDto.getUsername())
+              .setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+      userRepository.save(user);
+      return modelMapper.map(user, UserDto.class);
+    } catch (DataIntegrityViolationException e) {
+      throw new ExistingEntityException(registerUserDto.getEmail());
+    }
   }
 
   public UserDto updateUser(String username, UpdateUserDto userDto) {

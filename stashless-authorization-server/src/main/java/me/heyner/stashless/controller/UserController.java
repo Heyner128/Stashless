@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
 import me.heyner.stashless.dto.UserDto;
-import me.heyner.stashless.service.AuthenticationService;
 import me.heyner.stashless.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -26,19 +25,16 @@ public class UserController {
 
   private final UserService userService;
 
-  private final AuthenticationService authenticationService;
-
   private final ModelMapper modelMapper = new ModelMapper();
 
-  public UserController(UserService userService, AuthenticationService authenticationService) {
+  public UserController(UserService userService) {
     this.userService = userService;
-    this.authenticationService = authenticationService;
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public UserDto register(@RequestBody @Valid RegisterUserDto registerUserDto) {
-    return authenticationService.signUp(registerUserDto);
+    return userService.signUp(registerUserDto);
   }
 
   @SecurityRequirement(name = "JWT token")
