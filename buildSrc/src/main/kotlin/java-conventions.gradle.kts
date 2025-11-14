@@ -7,7 +7,6 @@ plugins {
     id("jacoco-conventions")
     id("spotless-conventions")
     id("errorprone-conventions")
-    id("spring-conventions")
 }
 
 group = "me.heyner"

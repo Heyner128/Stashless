@@ -1,5 +1,7 @@
 plugins {
     id("java-conventions")
+    id("spring-conventions")
+    id("frontend-conventions")
 }
 
 springBoot {
@@ -21,4 +23,5 @@ dependencies {
     implementation(libs.springdoc)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.security.test)
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { map, Observable } from 'rxjs';
 import { Option } from '../model/option';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
 
 @Injectable({

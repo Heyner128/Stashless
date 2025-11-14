@@ -3,14 +3,14 @@ package me.heyner.stashless.user;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
-import me.heyner.stashless.dto.LoginUserDto;
 import me.heyner.stashless.dto.RegisterUserDto;
 import me.heyner.stashless.dto.UpdateUserDto;
-import me.heyner.stashless.dto.UserDto;
 import me.heyner.stashless.model.Authority;
 import me.heyner.stashless.repository.InventoryRepository;
 import me.heyner.stashless.repository.OptionRepository;
@@ -21,21 +21,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 class UsersIntegrationTests {
 
+  @Autowired MockMvc mvc;
   @Autowired TestRestTemplate restTemplate;
   @Autowired InventoryRepository inventoryRepository;
   @Autowired SKURepository skuRepository;
   @Autowired OptionRepository optionRepository;
   @Autowired ProductRepository productRepository;
   @Autowired UserRepository userRepository;
+
+  ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setUp() {
@@ -50,7 +55,7 @@ class UsersIntegrationTests {
     userRepository.deleteAll();
   }
 
-  public ResponseEntity<UpdateUserDto> registerRequest() {
+  public UpdateUserDto createUser() throws Exception {
     RegisterUserDto registerUserDto =
         new RegisterUserDto()
             .setEmail("test@test.com")
@@ -58,56 +63,57 @@ class UsersIntegrationTests {
             .setPassword("teeeST@1")
             .setMatchingPassword("teeeST@1");
 
-    return restTemplate.postForEntity("/users", registerUserDto, UpdateUserDto.class);
-  }
+    String response =
+        mvc.perform(
+                post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(registerUserDto)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-  public ResponseEntity<Map> loginRequest() {
-    LoginUserDto loginUserDto = new LoginUserDto().setUsername("test").setPassword("teeeST@1");
-
-    return restTemplate.postForEntity("/users/login", loginUserDto, Map.class);
+    return objectMapper.readValue(response, UpdateUserDto.class);
   }
 
   @Test
   @DisplayName(
       "POST to /users with email, username and password returns OK and the user information ")
-  public void testRegisterUser() {
+  public void testRegisterUser() throws Exception {
 
-    var response = registerRequest();
+    UpdateUserDto createdUser = createUser();
 
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-    assertNotNull(response.getBody());
-    assertThat(response.getBody().getUsername(), equalTo("test"));
-    assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
+    assertThat(createdUser.getUsername(), equalTo("test"));
+    assertThat(createdUser.getEmail(), equalTo("test@test.com"));
   }
 
   @Test
-  void testUpdateUserDetails() {
+  @WithMockUser(username = "test")
+  void testUpdateUserDetails() throws Exception {
 
-    // Registers a new user
-    registerRequest();
+    UpdateUserDto created = createUser();
 
-    // Logs in the user
-    var loginResponse = loginRequest();
+    UpdateUserDto toUpdate =
+        new UpdateUserDto()
+            .setUsername("test2")
+            .setEmail("test@test.com")
+            .setAuthorities(Set.of(Authority.USER));
 
-    // creates an authenticated request
-    assertNotNull(loginResponse.getBody());
-    RequestEntity<UpdateUserDto> request =
-        RequestEntity.put("/users/test")
-            .header("Authorization", "Bearer " + loginResponse.getBody().get("token"))
-            .body(
-                new UpdateUserDto()
-                    .setUsername("test2")
-                    .setEmail("test@test.com")
-                    .setAuthorities(Set.of(Authority.USER)));
+    String response =
+        mvc.perform(
+                put("/users/" + created.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(toUpdate)))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    // Gets the created user information
-    ResponseEntity<UserDto> response = restTemplate.exchange(request, UserDto.class);
+    UpdateUserDto updated = objectMapper.readValue(response, UpdateUserDto.class);
 
-    assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(response.getBody(), notNullValue());
-    assertThat(response.getBody().getUsername(), notNullValue());
-    assertThat(response.getBody().getEmail(), notNullValue());
-    assertThat(response.getBody().getUsername(), equalTo("test2"));
-    assertThat(response.getBody().getEmail(), equalTo("test@test.com"));
+    assertThat(updated.getUsername(), notNullValue());
+    assertThat(updated.getEmail(), notNullValue());
+    assertThat(updated.getUsername(), equalTo("test2"));
+    assertThat(updated.getEmail(), equalTo("test@test.com"));
   }
 }

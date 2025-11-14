@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._24c08a5a081fe29647e836babef36c8b.implementation
 import java.io.FileInputStream
 import java.util.Properties
 import kotlin.apply
@@ -8,6 +7,10 @@ import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
+
+plugins {
+    java
+}
 
 val libs = the<LibrariesForLibs>()
 

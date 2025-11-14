@@ -9,9 +9,7 @@
     ]
   },
   "files": [
-    "src/app/main.ts",
-    "src/app/main.server.ts",
-    "src/app/server.ts"
+    "src/auth/main.ts",
   ],
   "include": [
     "src/**/*.d.ts"

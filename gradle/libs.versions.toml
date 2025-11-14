@@ -9,6 +9,7 @@ h2 = "2.4.240"
 spotless = "8.0.0"
 errorprone = "2.42.0"
 errorprone-plugin = "4.3.0"
+node-plugin = "7.1.0"
 nullaway = "0.12.10"
 jspecify = "1.0.0"
 
@@ -38,4 +39,4 @@ spring-boot-gradle = { group = "org.springframework.boot", name="spring-boot-gra
 spring-dependency-management-gradle = { group = "io.spring.dependency-management", name="io.spring.dependency-management.gradle.plugin", version.ref = "spring-dependency-management"}
 spotless-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 errorprone-gradle = { group = "net.ltgt.errorprone", name = "net.ltgt.errorprone.gradle.plugin", version.ref = "errorprone-plugin" }
-
+node-gradle = { group = "com.github.node-gradle", name = "gradle-node-plugin", version.ref = "node-plugin" }

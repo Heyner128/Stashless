@@ -3,7 +3,7 @@ import { HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/ht
 
 import { authInterceptor } from './auth.interceptor';
 import { Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
 describe('authInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) => 

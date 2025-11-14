@@ -1,6 +1,6 @@
 plugins {
     id("java-conventions")
-    id("liquibase-conventions")
+    id("spring-conventions")
 }
 
 springBoot {

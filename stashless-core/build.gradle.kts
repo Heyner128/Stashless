@@ -1,7 +1,9 @@
 plugins {
     id("java-conventions")
     id("liquibase-conventions")
+    id("spring-library-conventions")
 }
+
 
 dependencies {
     implementation(libs.spring.boot.starter.web)

@@ -1,0 +1,21 @@
+<div class="content">
+    <div class="login-form">
+        <h1>Login to Stashless</h1>
+
+        <form method="post" action="/login" ngNativeValidate>
+            <div class="login-form__input">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" [formControl]="loginForm.controls.username" required>
+            </div>
+            <div class="login-form__input">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" [formControl]="loginForm.controls.password" required>
+            </div>
+            <span>Don't have an account? <a class="login-form__signup" routerLink="/signup">sign up</a></span>
+            @if (statusMessage()) {
+                <span class="login-form__status">{{statusMessage()}}</span>
+            }
+            <button class="login-form__submit" type="submit">Login</button>
+        </form>
+    </div>
+</div>
