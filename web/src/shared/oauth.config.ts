@@ -4,7 +4,7 @@ import {environment} from "../environments/environment";
 export function getOAuthConfig(): AuthConfig {
   return {
     issuer: environment.authUrl,
-    redirectUri: window.location.origin,
+    redirectUri: environment.authUrl.replace('/auth', ''),
     clientId: 'stashless',
     responseType: 'code',
     scope: 'openid profile email offline_access',
