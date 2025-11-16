@@ -55,7 +55,7 @@ services:
         restart: true
     healthcheck:
       interval: 30s
-      start_period: 90s
+      start_period: 60s
       retries: 3
       test:
         [
@@ -77,7 +77,7 @@ services:
         restart: true
     healthcheck:
       interval: 30s
-      start_period: 90s
+      start_period: 60s
       retries: 3
       test:
         [
