@@ -1,6 +1,6 @@
 FROM node:24 AS builder
 WORKDIR /app
-COPY package*.json ./
+COPY web/package*.json ./
 RUN npm install
 COPY web/public public
 COPY web/src src
