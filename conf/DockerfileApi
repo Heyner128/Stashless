@@ -9,7 +9,7 @@ COPY settings.gradle.kts /app
 COPY buildSrc /app/buildSrc
 COPY gradle /app/gradle
 WORKDIR /app
-RUN gradle :stashless-api:bootJar -x test
+RUN gradle :stashless-api:bootJar -x test --no-daemon
 
 FROM eclipse-temurin:25
 COPY --from=build /app/stashless-api/build/libs/stashless-api-0.0.1.jar /app/app.jar

@@ -13,7 +13,7 @@ COPY web/src /app/web/src
 COPY web/*.json /app/web
 COPY web/*.js /app/web
 WORKDIR /app
-RUN gradle :stashless-authorization-server:bootJar -x test
+RUN gradle :stashless-authorization-server:bootJar -x test --no-daemon
 
 FROM eclipse-temurin:25
 COPY --from=build /app/stashless-authorization-server/build/libs/stashless-authorization-server-0.0.1.jar /app/app.jar
