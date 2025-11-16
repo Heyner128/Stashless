@@ -12,6 +12,8 @@ WORKDIR /app
 RUN gradle :stashless-api:bootJar -x test --no-daemon
 
 FROM eclipse-temurin:25
+RUN apt update
+RUN apt install -y curl
 COPY --from=build /app/stashless-api/build/libs/stashless-api-0.0.1.jar /app/app.jar
 ENV SPRING_PROFILES_ACTIVE=core,api
 CMD ["java", "-jar", "/app/app.jar"]
