@@ -10,7 +10,7 @@ public class WebLoginStaticResourceConfiguration implements WebMvcConfigurer {
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry
         .addResourceHandler(
-            "/{filename:.*\\.css|.*\\.ico|.*\\.svg|.*\\.webp|.*\\.js|.*\\.woff|.*\\.woff2|.*\\.png}")
+            "/{filename:.*\\.css|.*\\.ico|.*\\.svg|.*\\.webp|.*\\.js|.*\\.js.map|.*\\.css.map|.*\\.woff|.*\\.woff2|.*\\.png}")
         .addResourceLocations("classpath:/");
   }
 }

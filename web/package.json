@@ -7,6 +7,7 @@
     "start:auth": "ng serve --configuration development auth",
     "build": "ng build app",
     "build:auth": "ng build auth",
+    "build:auth:dev": "ng build auth --configuration development",
     "watch": "ng build --watch --configuration development app",
     "watch:auth": "ng build --watch --configuration development auth",
     "test": "ng test app",

@@ -28,8 +28,21 @@ tasks.register("buildNpm", NpmTask::class) {
     args.set(listOf("run","build:auth"))
 }
 
+tasks.register("buildNpmDev", NpmTask::class) {
+    dependsOn("installNpm")
+    workingDir = file(frontendDir)
+    inputs.dir(frontendDir)
+    group = BasePlugin.BUILD_GROUP
+    args.set(listOf("run","build:auth:dev"))
+}
+
 tasks.processResources {
-    dependsOn("buildNpm")
+    var requestedTasks = project.gradle.startParameter.taskNames
+    if(requestedTasks.any { it.contains("dev") }) {
+        dependsOn("buildNpmDev")
+    } else {
+        dependsOn("buildNpm")
+    }
     from("$frontendDir/dist/auth") {
         into("/")
     }
