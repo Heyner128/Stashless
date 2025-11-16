@@ -59,7 +59,7 @@ services:
       retries: 3
       test:
         [
-          "CMD-SHELL curl -f http://localhost:8080/api/actuator/health",
+          "CMD-SHELL",  "curl -f http://localhost:8080/api/actuator/health",
         ]
       timeout: 30s
 
@@ -81,7 +81,7 @@ services:
       retries: 3
       test:
         [
-          "CMD-SHELL curl -f http://web:4000",
+          "CMD-SHELL",  "curl -f http://web:4000",
         ]
       timeout: 30s
 
