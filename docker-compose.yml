@@ -5,7 +5,7 @@ services:
     env_file:
       - ./.env
     environment:
-      - POSTGRES_DB=stashless_dev
+      - POSTGRES_DB=${DB_NAME:stashless}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
