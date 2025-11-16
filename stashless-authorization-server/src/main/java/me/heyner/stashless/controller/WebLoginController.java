@@ -16,7 +16,9 @@ public class WebLoginController {
   public void login(HttpServletResponse response) throws IOException {
     ClassPathResource htmlFile = new ClassPathResource("login.html");
     response.setContentType(MediaType.TEXT_HTML_VALUE);
-    Files.copy(htmlFile.getFile().toPath(), response.getOutputStream());
+    try (var in = htmlFile.getInputStream(); var out = response.getOutputStream()) {
+      in.transferTo(out);
+    }
     response.flushBuffer();
   }
 }

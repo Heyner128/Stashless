@@ -16,9 +16,9 @@ jobs:
           STASHLESS_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           STASHLESS_FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run:
-          echo DB_NAME=$STASHLESS_DB_NAME >> .env &
-          echo DB_USER=$STASHLESS_DB_USER >> .env &
-          echo DB_PASSWORD=$STASHLESS_DB_PASSWORD >> .env &
+          echo DB_NAME=$STASHLESS_DB_NAME >> .env &&
+          echo DB_USER=$STASHLESS_DB_USER >> .env &&
+          echo DB_PASSWORD=$STASHLESS_DB_PASSWORD >> .env &&
           echo FRONTEND_URL=$STASHLESS_FRONTEND_URL >> .env
 
       - name: Run with compose
