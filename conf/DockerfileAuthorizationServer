@@ -1,4 +1,4 @@
-FROM gradle:9.1.0-jdk25 AS build
+FROM gradle:9.2.0-jdk25 AS build
 COPY stashless-core/src /app/stashless-core/src
 COPY stashless-core/build.gradle.kts /app/stashless-core
 COPY stashless-authorization-server/src /app/stashless-authorization-server/src
