@@ -3,9 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { UserBadgeComponent } from './user-badge.component';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { AuthenticationService } from '../../../../shared/service/authentication.service';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 describe('UserBadgeComponent', () => {
   const MOCK_USERNAME = "testUser";
@@ -20,6 +21,7 @@ describe('UserBadgeComponent', () => {
     await TestBed.configureTestingModule({
       imports: [UserBadgeComponent],
       providers: [
+        provideOAuthClient(),
         provideHttpClient(),
         provideRouter([{
           path: '**', component: UserBadgeComponent
@@ -42,7 +44,6 @@ describe('UserBadgeComponent', () => {
 
   function stubAuthentication() {
     spyOn(authenticationService, "getUsername").and.returnValue(MOCK_USERNAME);
-    spyOn(authenticationService, "logout").and.returnValue(of({}));
   }
 
   async function initializeRouter() {
@@ -63,21 +64,4 @@ describe('UserBadgeComponent', () => {
       harness.routeNativeElement?.textContent
     ).toContain(MOCK_USERNAME);
   });
-
-  it('should redirect to login page when the logout button is clicked', async () => {
-    const logoutButton = searchForLogoutButton();
-    expect(logoutButton).toBeTruthy();
-    logoutButton.click();
-    await harness.fixture.whenStable();
-    expect(router.url).toContain('/login');
-  });
-
-  function searchForLogoutButton() {
-    const buttons = Array.from(
-      harness.routeNativeElement?.querySelectorAll("button") ?? []
-    );
-    return buttons.find((button) =>
-      button.textContent?.includes("Logout")
-    ) as HTMLButtonElement;
-  }
 });

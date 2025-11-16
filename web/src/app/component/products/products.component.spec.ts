@@ -5,10 +5,11 @@ import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { ProductsService } from '../../service/products.service';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../shared/service/authentication.service';
 import { of } from 'rxjs';
-import { User } from '../../model/user';
+import { User } from '../../../shared/model/user';
 import { Product } from '../../model/product';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -50,6 +51,7 @@ describe('ProductsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ProductsComponent],
       providers: [
+        provideOAuthClient(),
         provideHttpClient(),
         provideRouter([{
           path: '**', component: ProductsComponent

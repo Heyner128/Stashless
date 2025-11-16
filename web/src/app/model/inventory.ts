@@ -1,5 +1,5 @@
 import type { Item } from "./item";
-import type { User } from "./user";
+import type { User } from "../../shared/model/user";
 
 export type Inventory = {
     id: string;

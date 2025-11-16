@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from './authentication.service';
-import { environment } from '../environments/environment';
+import { AuthenticationService } from '../../shared/service/authentication.service';
+import { environment } from '../../environments/environment';
 import { map, Observable, switchMap } from 'rxjs';
 import type { Inventory } from '../model/inventory';
 import { Item, NewItem } from '../model/item';

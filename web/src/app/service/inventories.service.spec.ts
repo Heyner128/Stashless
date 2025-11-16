@@ -3,13 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { InventoriesService } from './inventories.service';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { User } from '../model/user';
+import { User } from '../../shared/model/user';
 import { Inventory } from '../model/inventory';
-import { AuthenticationService } from './authentication.service';
-import { errorInterceptor } from '../interceptor/error.interceptor';
+import { AuthenticationService } from '../../shared/service/authentication.service';
+import { errorInterceptor } from '../../shared/interceptor/error.interceptor';
 import { ApiTesting } from '../../testing/api';
 import { Item, NewItem } from '../model/item';
 import { Option } from '../model/option';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -97,6 +98,7 @@ describe('InventoriesService', () => {
         AuthenticationService,
         provideHttpClient(withInterceptors([errorInterceptor]), withFetch()),
         provideHttpClientTesting(),
+        provideOAuthClient()
       ],
     });
     injectDependencies();

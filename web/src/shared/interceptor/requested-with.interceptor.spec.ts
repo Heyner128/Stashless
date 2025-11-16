@@ -3,7 +3,7 @@ import { HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/ht
 
 import { requestedWithInterceptor } from './requested-with.interceptor';
 import { Observable, of } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 describe('requestedWithInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) => 

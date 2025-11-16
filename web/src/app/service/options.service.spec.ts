@@ -4,8 +4,9 @@ import { OptionsService } from './options.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Option } from '../model/option';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from '../../shared/service/authentication.service';
 import { ApiTesting } from '../../testing/api';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_DATE = new Date(Date.UTC(2022, 1, 1));
 
@@ -38,6 +39,7 @@ describe('OptionsService', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideOAuthClient()
       ]
     });
     injectDependencies();

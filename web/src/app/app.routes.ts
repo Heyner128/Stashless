@@ -5,7 +5,6 @@ import { InventoriesComponent } from './component/inventories/inventories.compon
 import { CreateInventoryComponent  } from './component/inventories/create-inventory/create-inventory.component';
 import { EditInventoryComponent  } from './component/inventories/edit-inventory/edit-inventory.component';
 import { HomeComponent } from './component/home/home.component';
-import { SignupComponent } from './component/signup/signup.component';
 import { ErrorComponent } from './component/error/error.component';
 import { ProductsComponent } from './component/products/products.component';
 import { CreateProductComponent  } from './component/products/create-product/create-product.component';
@@ -13,10 +12,6 @@ import { EditProductComponent  } from './component/products/edit-product/edit-pr
 import {EditUserComponent} from "./component/edit-user/edit-user.component";
 
 export const routes: Routes = [
-  {
-    path: 'signup',
-    component: SignupComponent,
-  },
   {
     path: '',
     component: LayoutComponent,

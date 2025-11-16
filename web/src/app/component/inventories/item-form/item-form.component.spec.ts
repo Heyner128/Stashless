@@ -5,11 +5,12 @@ import { provideHttpClient } from '@angular/common/http';
 import {OptionsService} from "../../../service/options.service";
 import {Product} from "../../../model/product";
 import {Option} from "../../../model/option";
-import {User} from "../../../model/user";
+import {User} from "../../../../shared/model/user";
 import {of} from "rxjs";
 import {ProductsService} from "../../../service/products.service";
 import {provideRouter} from "@angular/router";
 import {NewItem} from "../../../model/item";
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 
 const MOCK_USER: User = {
@@ -62,6 +63,7 @@ describe('ItemForm', () => {
       imports: [ItemFormComponent],
       providers: [
         provideHttpClient(),
+        provideOAuthClient(),
         provideRouter([
           {
             path: "**",

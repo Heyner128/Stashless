@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 
 import { LayoutComponent } from './layout.component';
 import { provideRouter, Router } from '@angular/router';
-import { routes } from '../../app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../shared/service/authentication.service';
 import { of } from 'rxjs';
 import { InventoriesService } from '../../service/inventories.service';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -25,6 +25,7 @@ describe('LayoutComponent', () => {
         provideRouter([{
           path: '**', component: LayoutComponent
         }]),
+        provideOAuthClient(),
         provideAnimationsAsync(),
       ],
     }).compileComponents();

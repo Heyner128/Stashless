@@ -5,11 +5,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { InventoriesService } from '../../service/inventories.service';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../shared/service/authentication.service';
 import { of, throwError } from 'rxjs';
-import { User } from '../../model/user';
+import { User } from '../../../shared/model/user';
 import { Inventory } from '../../model/inventory';
 import { ErrorComponent } from '../error/error.component';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -51,7 +52,7 @@ describe('InventoriesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [InventoriesComponent],
-      providers: [provideHttpClient(), provideRouter([
+      providers: [provideOAuthClient(), provideHttpClient(), provideRouter([
         { path: 'error', component: ErrorComponent },
         { path: '**', component: InventoriesComponent },
       ])]

@@ -1,11 +1,11 @@
 FROM node:24 AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
+COPY web/package*.json ./
+RUN npm install
+COPY web .
 RUN npm run build
 FROM node:24 AS runner
 WORKDIR /app
 COPY --from=builder /app/dist ./
 EXPOSE 4000
-CMD ["node", "stashless/server/server.mjs"]
+CMD ["node", "app/server/server.mjs"]

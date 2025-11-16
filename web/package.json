@@ -11,7 +11,7 @@
     "watch:auth": "ng build --watch --configuration development auth",
     "test": "ng test app",
     "test:auth": "ng test auth",
-    "test:watch": "ng test --watch",
+    "test:watch": "ng test --watch app",
     "test:watch:auth": "ng test --watch auth",
     "serve:ssr:stashless": "node dist/app/server/server.mjs"
   },

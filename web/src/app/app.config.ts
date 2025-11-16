@@ -6,9 +6,9 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { requestedWithInterceptor } from './interceptor/requested-with.interceptor';
-import { authInterceptor } from './interceptor/auth.interceptor';
-import { errorInterceptor } from './interceptor/error.interceptor';
+import { requestedWithInterceptor } from '../shared/interceptor/requested-with.interceptor';
+import { authInterceptor } from '../shared/interceptor/auth.interceptor';
+import { errorInterceptor } from '../shared/interceptor/error.interceptor';
 import {provideOAuthClient} from "angular-oauth2-oidc";
 
 export const appConfig: ApplicationConfig = {

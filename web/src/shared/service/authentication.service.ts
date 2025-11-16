@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import {afterNextRender, inject, Injectable, PLATFORM_ID} from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import {catchError, map, Observable, of, switchMap, tap} from 'rxjs';
 import { User, NewUser } from '../model/user';
 import {OAuthService} from "angular-oauth2-oidc";

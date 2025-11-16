@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { CreateInventoryComponent } from './create-inventory.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
-import { User } from '../../../model/user';
+import { User } from '../../../../shared/model/user';
 import { Inventory } from '../../../model/inventory';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { InventoriesService } from '../../../service/inventories.service';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { AuthenticationService } from '../../../../shared/service/authentication.service';
 import { of, throwError } from 'rxjs';
 import { InputTesting } from '../../../../testing/input';
 import { ProductsService } from '../../../service/products.service';
@@ -15,6 +15,7 @@ import { NewItem } from '../../../model/item';
 import { OptionsService } from '../../../service/options.service';
 import { Product } from '../../../model/product';
 import { Option } from '../../../model/option';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -88,6 +89,7 @@ describe('CreateInventoryComponent', () => {
       imports: [CreateInventoryComponent],
       providers: [
         provideHttpClient(),
+        provideOAuthClient(),
         provideRouter([
           {
             path: "**",

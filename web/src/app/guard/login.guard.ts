@@ -1,8 +1,6 @@
-import { CanActivateFn, Router } from '@angular/router';
-import {afterNextRender, inject, PLATFORM_ID} from '@angular/core';
-import { AuthenticationService } from '../service/authentication.service';
-import { tap } from 'rxjs';
-import {isPlatformBrowser} from "@angular/common";
+import { CanActivateFn } from '@angular/router';
+import {inject} from '@angular/core';
+import { AuthenticationService } from '../../shared/service/authentication.service';
 
 
 

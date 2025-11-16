@@ -1,14 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../shared/service/authentication.service';
 import { Router } from '@angular/router';
-import { ApiError } from '../../model/apiError';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'auth-signup',
   imports: [ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',

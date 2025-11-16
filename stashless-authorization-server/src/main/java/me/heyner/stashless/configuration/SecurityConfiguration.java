@@ -60,6 +60,8 @@ public class SecurityConfiguration {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/users/login")
                     .permitAll()
+                    .requestMatchers("/signup")
+                    .permitAll()
                     .requestMatchers(
                         (HttpMethod) null,
                         "/{filename:.*\\.css|.*\\.ico|.*\\.svg|.*\\.webp|.*\\.js|.*\\.woff|.*\\.woff2|.*\\.png}")

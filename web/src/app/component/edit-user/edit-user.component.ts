@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AuthenticationService} from "../../service/authentication.service";
+import {AuthenticationService} from "../../../shared/service/authentication.service";
 import {rxResource} from "@angular/core/rxjs-interop";
-import {User} from "../../model/user";
+import {User} from "../../../shared/model/user";
 
 @Component({
   selector: 'app-edit-user',

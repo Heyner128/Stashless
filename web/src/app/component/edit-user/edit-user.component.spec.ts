@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditUserComponent } from './edit-user.component';
 import {provideHttpClient} from "@angular/common/http";
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 describe('EditUserComponent', () => {
   let component: EditUserComponent;
@@ -11,6 +12,7 @@ describe('EditUserComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EditUserComponent],
       providers: [
+        provideOAuthClient(),
         provideHttpClient()
       ]
     })

@@ -3,10 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { ProductsService } from './products.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from '../../shared/service/authentication.service';
 import { ApiTesting } from '../../testing/api';
-import { User } from '../model/user';
+import { User } from '../../shared/model/user';
 import { Product } from '../model/product';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: 'test_user',
@@ -47,6 +48,7 @@ describe('ProductsService', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideOAuthClient()
       ]
     });
     injectDependencies();

@@ -1,15 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CreateProductComponent } from './create-product.component';
-import { User } from '../../../model/user';
+import { User } from '../../../../shared/model/user';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { ProductsService } from '../../../service/products.service';
 import { provideRouter, Router } from '@angular/router';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { AuthenticationService } from '../../../../shared/service/authentication.service';
 import { OptionsService } from '../../../service/options.service';
 import { of, throwError } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { InputTesting } from '../../../../testing/input';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 const MOCK_USER: User = {
   username: "test_user",
@@ -67,6 +68,7 @@ describe('CreateProductComponent', () => {
           path: '**', component: CreateProductComponent
         }]),
         provideHttpClient(),
+        provideOAuthClient()
       ]
     })
     .compileComponents();

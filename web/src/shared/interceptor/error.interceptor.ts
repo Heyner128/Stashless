@@ -1,6 +1,5 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError } from 'rxjs';
-import { ApiError } from '../model/apiError';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
@@ -9,7 +8,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         throw new Error(error.message);
       }
       if(isBackendError(error)) {
-        const errorResponseBody = error.error as ApiError;
+        const errorResponseBody = error.error;
         throw new Error(errorResponseBody.message);
       };
       throw new Error('Unknown error');

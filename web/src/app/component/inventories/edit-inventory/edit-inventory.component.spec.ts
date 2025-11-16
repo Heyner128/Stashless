@@ -5,9 +5,9 @@ import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { InventoriesService } from '../../../service/inventories.service';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { AuthenticationService } from '../../../../shared/service/authentication.service';
 import { Inventory } from '../../../model/inventory';
-import { User } from '../../../model/user';
+import { User } from '../../../../shared/model/user';
 import { of, throwError } from 'rxjs';
 import { InputTesting } from '../../../../testing/input';
 import { InventoriesComponent } from '../inventories.component';
@@ -17,6 +17,7 @@ import { Item, NewItem } from '../../../model/item';
 import { Option } from '../../../model/option';
 import { ProductsService } from '../../../service/products.service';
 import { OptionsService } from '../../../service/options.service';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 
 const MOCK_USER: User = {
@@ -97,7 +98,7 @@ describe('EditInventoryComponent', () => {
         { path: "inventories/:id", component: EditInventoryComponent },
         { path: "inventories", component: InventoriesComponent },
         { path: "error", component: ErrorComponent },
-      ]), provideHttpClient()]
+      ]), provideHttpClient(), provideOAuthClient()]
     })
     .compileComponents();
     injectDependencies();

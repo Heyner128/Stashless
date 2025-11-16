@@ -1,0 +1,17 @@
+FROM gradle:9.1.0-jdk25 AS build
+COPY stashless-core/src /app/stashless-core/src
+COPY stashless-core/build.gradle.kts /app/stashless-core
+COPY stashless-authorization-server/src /app/stashless-authorization-server/src
+COPY stashless-authorization-server/build.gradle.kts /app/stashless-authorization-server
+COPY stashless-api/src /app/stashless-api/src
+COPY stashless-api/build.gradle.kts /app/stashless-api
+COPY settings.gradle.kts /app
+COPY buildSrc /app/buildSrc
+COPY gradle /app/gradle
+COPY web /app/web
+WORKDIR /app
+RUN gradle :stashless-authorization-server:bootJar -x test
+
+FROM eclipse-temurin:25
+COPY --from=build /app/stashless-authorization-server/build/libs/*.jar /app/app.jar
+CMD ["java", "-jar", "/app/app.jar"]

@@ -16,12 +16,14 @@ services:
     ports:
         - "5432:5432"
     volumes:
-      - /var/db/stashless:/var/lib/postgresql/data
+      - /var/stashless/db:/var/lib/postgresql/data
 
-  api:
+  auth:
     env_file:
       - ./.env
-    build: .
+    build:
+      dockerfile: conf/DockerfileAuthorizationServer
+      context: .
     restart: unless-stopped
     depends_on:
       db:
@@ -36,19 +38,70 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:8080/actuator/health"
+          "http://localhost:8090/auth/actuator/health"
         ]
       timeout: 30s
-    ports:
-      - "7077:8080"
+
+  api:
+    env_file:
+      - ./.env
+    build:
+      dockerfile: conf/DockerfileApi
+      context: .
+    restart: unless-stopped
+    depends_on:
+      auth:
+        condition: service_healthy
+        restart: true
+      db:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      interval: 30s
+      start_period: 60s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/api/actuator/health"
+        ]
+      timeout: 30s
 
   web:
-    build: 
-      context: ./web
+    build:
+      dockerfile: conf/DockerfileWeb
+      context: .
     restart: unless-stopped
     depends_on:
       api:
         condition: service_healthy
         restart: true
+    healthcheck:
+      interval: 30s
+      start_period: 60s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:4000"
+        ]
+      timeout: 30s
+
+  proxy:
+    image: caddy:2.10.0
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+        restart: true
+    cap_add:
+      - NET_ADMIN
     ports:
-      - "4400:4000"
+      - "80:8888"
+    volumes:
+      - ./conf:/etc/caddy
+      - /var/stashless/caddy:/data

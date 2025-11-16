@@ -4,10 +4,11 @@ import { SignupComponent } from './signup.component';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { provideRouter, Router } from '@angular/router';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../shared/service/authentication.service';
 import { of, throwError } from 'rxjs';
-import { User } from '../../model/user';
+import { User } from '../../../shared/model/user';
 import { InputTesting } from '../../../testing/input';
+import {provideOAuthClient} from "angular-oauth2-oidc";
 
 describe('SignupComponent', () => {
   const MOCK_USER: User = {
@@ -36,7 +37,8 @@ describe('SignupComponent', () => {
         provideRouter([{
           path: '**', component: SignupComponent
         }]),
-        provideHttpClient()
+        provideHttpClient(),
+        provideOAuthClient(),
       ]
     })
     .compileComponents();

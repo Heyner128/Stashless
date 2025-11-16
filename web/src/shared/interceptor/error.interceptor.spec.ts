@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse, HttpEvent, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { errorInterceptor } from './error.interceptor';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Observable, of, throwError } from 'rxjs';
 
 describe('errorInterceptor', () => {

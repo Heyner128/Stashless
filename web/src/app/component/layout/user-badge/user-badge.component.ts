@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal, WritableSignal} from '@angular/core';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { AuthenticationService } from '../../../../shared/service/authentication.service';
 import {Router, RouterLink} from '@angular/router';
 import { PopoverComponent } from "../../popover/popover.component";
 
@@ -8,14 +8,13 @@ import { PopoverComponent } from "../../popover/popover.component";
   imports: [PopoverComponent, RouterLink],
   templateUrl: './user-badge.component.html',
   styleUrl: './user-badge.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserBadgeComponent {
   isMenuOpen: WritableSignal<boolean> = signal(false);
 
   constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly router: Router
   ) {
   }
 
