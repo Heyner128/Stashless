@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping({"/login","/signup"})
+@RequestMapping({"/login", "/signup"})
 public class WebLoginController {
   @GetMapping
   public void login(HttpServletResponse response) throws IOException {

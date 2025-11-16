@@ -12,5 +12,6 @@ WORKDIR /app
 RUN gradle :stashless-api:bootJar -x test
 
 FROM eclipse-temurin:25
-COPY --from=build /app/stashless-api/build/libs/*.jar /app/app.jar
+COPY --from=build /app/stashless-api/build/libs/stashless-api-0.0.1.jar /app/app.jar
+ENV SPRING_PROFILES_ACTIVE=core,api
 CMD ["java", "-jar", "/app/app.jar"]
