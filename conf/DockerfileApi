@@ -9,7 +9,7 @@ COPY settings.gradle.kts /app
 COPY buildSrc /app/buildSrc
 COPY gradle /app/gradle
 WORKDIR /app
-RUN gradle :stashless-api:bootJar -x test --no-daemon
+RUN gradle :stashless-api:bootJar -x test --no-daemon --parallel
 
 FROM eclipse-temurin:25
 RUN apt update
