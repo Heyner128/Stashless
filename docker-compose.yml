@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 5
     ports:
-        - "5432:5432"
+        - "15432:5432"
     volumes:
       - /var/stashless/db:/var/lib/postgresql/data
 
@@ -29,8 +29,6 @@ services:
       db:
         condition: service_healthy
         restart: true
-    ports:
-      - "8090:18090"
     healthcheck:
       interval: 30s
       start_period: 60s
@@ -40,7 +38,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:18090/auth/actuator/health"
+          "http://auth:8090/auth/actuator/health"
         ]
       timeout: 30s
 
@@ -51,8 +49,6 @@ services:
       dockerfile: conf/DockerfileApi
       context: .
     restart: unless-stopped
-    ports:
-      - "8080:18080"
     depends_on:
       auth:
         condition: service_healthy
@@ -69,7 +65,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:18080/api/actuator/health"
+          "http://api:8080/api/actuator/health"
         ]
       timeout: 30s
 
@@ -94,7 +90,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:4000"
+          "http://web:4000"
         ]
       timeout: 30s
 
@@ -108,7 +104,7 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - "80:8888"
+      - "8888:80"
     volumes:
       - ./conf:/etc/caddy
       - /var/stashless/caddy:/data
