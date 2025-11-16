@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-login',
@@ -16,9 +17,12 @@ export class LoginComponent {
     password: new FormControl('')
   })
 
+  protected readonly environment = environment;
+
   statusMessage: WritableSignal<string | undefined> = signal(undefined)
 
   constructor(
   ) {
   }
+
 }
