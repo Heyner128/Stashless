@@ -2,6 +2,7 @@ spring:
   security:
     oauth2:
       authorizationserver:
+        issuer: http://localhost:8090/auth
         client:
           stashless:
             registration:

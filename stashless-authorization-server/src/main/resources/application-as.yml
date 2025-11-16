@@ -9,7 +9,7 @@ spring:
       password: password
     oauth2:
       authorizationserver:
-        issuer: ${FRONTEND_URL:http://localhost:4000}
+        issuer: ${FRONTEND_URL:http://localhost:4000}/auth
         client:
           stashless:
             registration:
