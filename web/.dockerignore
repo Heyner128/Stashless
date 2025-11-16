@@ -1,9 +1,0 @@
-#node
-
-**/node_modules
-**/.angular
-**/coverage
-
-#angular
-**/coverage
-**/dist

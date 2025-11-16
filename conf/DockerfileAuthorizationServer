@@ -8,7 +8,10 @@ COPY stashless-api/build.gradle.kts /app/stashless-api
 COPY settings.gradle.kts /app
 COPY buildSrc /app/buildSrc
 COPY gradle /app/gradle
-COPY web /app/web
+COPY web/public /app/web/public
+COPY web/src /app/web/src
+COPY web/*.json /app/web
+COPY web/*.js /app/web
 WORKDIR /app
 RUN gradle :stashless-authorization-server:bootJar -x test
 
