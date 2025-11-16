@@ -13,6 +13,6 @@ WORKDIR /app
 RUN gradle :stashless-authorization-server:bootJar -x test
 
 FROM eclipse-temurin:25
-COPY --from=build /app/stashless-authorization-server/build/libs/stashless-authorization-server.jar /app/app.jar
+COPY --from=build /app/stashless-authorization-server/build/libs/stashless-authorization-server-0.0.1.jar /app/app.jar
 ENV SPRING_PROFILES_ACTIVE=core,as
 CMD ["java", "-jar", "/app/app.jar"]
