@@ -29,6 +29,8 @@ services:
       db:
         condition: service_healthy
         restart: true
+    ports:
+      - "8090:18090"
     healthcheck:
       interval: 30s
       start_period: 60s
@@ -38,7 +40,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:8090/auth/actuator/health"
+          "http://localhost:18090/auth/actuator/health"
         ]
       timeout: 30s
 
@@ -49,6 +51,8 @@ services:
       dockerfile: conf/DockerfileApi
       context: .
     restart: unless-stopped
+    ports:
+      - "8080:18080"
     depends_on:
       auth:
         condition: service_healthy
@@ -65,7 +69,7 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:8080/api/actuator/health"
+          "http://localhost:18080/api/actuator/health"
         ]
       timeout: 30s
 
@@ -75,6 +79,9 @@ services:
       context: .
     restart: unless-stopped
     depends_on:
+      auth:
+        condition: service_healthy
+        restart: true
       api:
         condition: service_healthy
         restart: true
