@@ -1,0 +1,11 @@
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        client:
+          stashless:
+            registration:
+              redirect-uris:
+                - http://localhost:4200
+              post-logout-redirect-uris:
+                - http://localhost:4200

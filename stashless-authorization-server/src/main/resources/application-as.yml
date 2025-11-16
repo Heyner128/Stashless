@@ -22,9 +22,9 @@ spring:
                 - "authorization_code"
                 - "client_credentials"
               redirect-uris:
-                - ${FRONTEND_URL:http://localhost:4200}
+                - ${FRONTEND_URL:http://localhost:4000}
               post-logout-redirect-uris:
-                - ${FRONTEND_URL:http://localhost:4200}
+                - ${FRONTEND_URL:http://localhost:4000}
               scopes:
                 - "openid"
                 - "profile"
