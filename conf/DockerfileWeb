@@ -1,11 +1,11 @@
 FROM node:24 AS builder
 WORKDIR /app
-COPY web/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY web/public /app/web/public
-COPY web/src /app/web/src
-COPY web/*.json /app/web
-COPY web/*.js /app/web
+COPY public public
+COPY src src
+COPY *.json .
+COPY *.js .
 RUN npm run build
 FROM node:24 AS runner
 WORKDIR /app

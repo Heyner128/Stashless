@@ -1,9 +1,0 @@
-databaseChangeLog:
-- changeSet:
-    id: 001-drop-unique-option-value
-    author: heyner
-    changes:
-      - dropUniqueConstraint:
-          constraintName: UKrf3x8gi8o9p0dosaq2qfe3kdx
-          tableName: option_value
-          schemaName: public

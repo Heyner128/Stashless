@@ -1,0 +1,25 @@
+name: Self hosted production deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    environment: 'Selfhosted production'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Create .env file
+        env:
+          STASHLESS_DB_NAME: ${{ vars.DB_NAME }}
+          STASHLESS_DB_USER: ${{ vars.DB_USER }}
+          STASHLESS_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          STASHLESS_FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+        run:
+          echo DB_NAME=$STASHLESS_DB_NAME >> .env &
+          echo DB_USER=$STASHLESS_DB_USER >> .env &
+          echo DB_PASSWORD=$STASHLESS_DB_PASSWORD >> .env &
+          echo FRONTEND_URL=$STASHLESS_FRONTEND_URL >> .env
+
+      - name: Run with compose
+        run: docker compose up --build -d

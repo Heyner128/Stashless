@@ -18,7 +18,7 @@ Create a `.env` file with the following variables:
 DB_URL=jdbc:postgresql://localhost:5432/stashless
 DB_USER=user
 DB_PASSWORD=password
-CORS_FRONTEND_URL=https://stashless.example.com
+FRONTEND_URL=https://stashless.example.com
 ```
 
 
