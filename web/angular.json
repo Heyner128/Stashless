@@ -130,6 +130,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "baseHref": "/auth/",
             "outputPath": {
               "base": "dist/auth",
               "browser": ""
