@@ -1,10 +1,10 @@
 :80 {
     handle /auth* {
-                      reverse_proxy http://auth:8090/auth
+                      reverse_proxy http://auth:8090
                   }
 
     handle /api* {
-                     reverse_proxy http://api:8080/api
+                     reverse_proxy http://api:8080
                  }
 
     handle {
