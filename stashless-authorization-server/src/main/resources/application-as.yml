@@ -12,6 +12,8 @@ spring:
         issuer: ${FRONTEND_URL:http://localhost:4000}/auth
         client:
           stashless:
+            token:
+              access-token-time-to-live: 3600s
             registration:
               client-id: "stashless"
               client-secret: "${OIDC_CLIENT_SECRET:{bcrypt}$2a$10$NxzZ6oWTBXdWlRer6tpWjeawuX.Ftu198C3AXgWxV9qBxGiVc1e7O}"

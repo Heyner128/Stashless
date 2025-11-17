@@ -11,6 +11,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${authToken}`
       }
     });
+    return next(req);
   }
+  authenticationService.logout();
   return next(req);
 };
