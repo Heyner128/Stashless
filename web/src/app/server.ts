@@ -42,7 +42,7 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', (req: IncomingMessage | Http2ServerRequest, res: ServerResponse<IncomingMessage> | Http2ServerResponse<Http2ServerRequest>, next: ((reason: any) => PromiseLike<never>) | (() => any)) => {
+app.use('*', (req: IncomingMessage | Http2ServerRequest, res: ServerResponse<IncomingMessage> | Http2ServerResponse<Http2ServerRequest>, next: ((reason: any) => PromiseLike<never>) | (() => any)) => {
   angularApp
     .handle(req)
     .then((response) =>
