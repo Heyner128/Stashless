@@ -61,6 +61,10 @@ export class AuthenticationService {
     return this.oauthService.getAccessToken();
   }
 
+  isAccessTokenExpired(): boolean {
+    return !!this.getAccessToken() && !this.oauthService.hasValidAccessToken();
+  }
+
   signup(newUser: NewUser): Observable<User> {
     return this.httpClient
       .post(

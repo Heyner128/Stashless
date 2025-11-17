@@ -11,6 +11,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${authToken}`
       }
     });
+  } else if (authenticationService.isAccessTokenExpired()) {
+    authenticationService.logout();
   }
   return next(req);
 };
