@@ -64,7 +64,7 @@ public class SecurityConfiguration {
                     .permitAll()
                     .requestMatchers(
                         (HttpMethod) null,
-                            "/{filename:.*\\.css|.*\\.ico|.*\\.svg|.*\\.webp|.*\\.js|.*\\.js.map|.*\\.css.map|.*\\.woff|.*\\.woff2|.*\\.png}")
+                        "/{filename:.*\\.css|.*\\.ico|.*\\.svg|.*\\.webp|.*\\.js|.*\\.js.map|.*\\.css.map|.*\\.woff|.*\\.woff2|.*\\.png}")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

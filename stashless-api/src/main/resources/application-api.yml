@@ -6,5 +6,5 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth:8090/auth
-          jwk-set-uri: http://auth:8090/auth/oauth2/jwks
+          issuer-uri: ${FRONTEND_URL:http://localhost:4000}/auth
+          jwk-set-uri: ${FRONTEND_URL:http://localhost:4000}/auth/oauth2/jwks
