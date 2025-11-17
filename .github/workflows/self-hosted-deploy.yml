@@ -26,4 +26,4 @@ jobs:
           echo FRONTEND_URL=$STASHLESS_FRONTEND_URL >> .env
 
       - name: Run with compose
-        run: docker compose down && docker compose up --build -d
+        run: docker compose up --build -d
