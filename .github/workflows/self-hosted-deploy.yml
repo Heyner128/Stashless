@@ -20,7 +20,7 @@ jobs:
           STASHLESS_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           STASHLESS_FRONTEND_URL: ${{ vars.FRONTEND_URL }}
         run:
-          echo DB_URL=$STASHLESS_DB_URL >> .env &&
+          echo DB_URL=$STASHLESS_DB_URL > .env &&
           echo DB_USER=$STASHLESS_DB_USER >> .env &&
           echo DB_PASSWORD=$STASHLESS_DB_PASSWORD >> .env &&
           echo FRONTEND_URL=$STASHLESS_FRONTEND_URL >> .env
