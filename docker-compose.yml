@@ -30,9 +30,9 @@ services:
         condition: service_healthy
         restart: true
     healthcheck:
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      interval: 60s
+      start_period: 90s
+      retries: 5
       test:
         [
           "CMD-SHELL","curl -f http://localhost:8090/auth/actuator/health",
@@ -54,9 +54,9 @@ services:
         condition: service_healthy
         restart: true
     healthcheck:
-      interval: 30s
-      start_period: 60s
-      retries: 3
+      interval: 60s
+      start_period: 90s
+      retries: 5
       test:
         [
           "CMD-SHELL",  "curl -f http://localhost:8080/api/actuator/health",
