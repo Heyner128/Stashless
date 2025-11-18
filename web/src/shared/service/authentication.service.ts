@@ -50,7 +50,7 @@ export class AuthenticationService {
   }
 
   login(): Observable<boolean> {
-    return fromPromise(this.oauthService.loadDiscoveryDocumentAndLogin());
+    return fromPromise(this.oauthService.loadDiscoveryDocumentAndLogin({state: window.location.href}));
   }
 
   logout(): void {

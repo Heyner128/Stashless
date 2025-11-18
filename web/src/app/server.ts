@@ -5,8 +5,6 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { IncomingMessage, ServerResponse } from 'http';
-import { Http2ServerRequest, Http2ServerResponse } from 'http2';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -42,11 +40,11 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', (req: IncomingMessage | Http2ServerRequest, res: ServerResponse<IncomingMessage> | Http2ServerResponse<Http2ServerRequest>, next: ((reason: any) => PromiseLike<never>) | (() => any)) => {
+app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(undefined),
+      response ? writeResponseToNodeResponse(response, res) : next(),
     )
     .catch(next);
 });
