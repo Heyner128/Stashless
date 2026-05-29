@@ -35,6 +35,7 @@ driver-h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
 errorprone = { group = "com.google.errorprone", name = "error_prone_core", version.ref = "errorprone" }
 nullaway = { group = "com.uber.nullaway", name = "nullaway", version.ref = "nullaway" }
 jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
+micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
 spring-boot-gradle = { group = "org.springframework.boot", name="spring-boot-gradle-plugin", version.ref = "spring-boot" }
 spring-dependency-management-gradle = { group = "io.spring.dependency-management", name="io.spring.dependency-management.gradle.plugin", version.ref = "spring-dependency-management"}
 spotless-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }

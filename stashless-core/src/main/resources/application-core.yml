@@ -1,8 +1,11 @@
 management:
   endpoints:
+    jmx:
+      exposure:
+        include: '*'
     web:
       exposure:
-        include: "*"
+        include: '*'
 spring:
   config:
     import: optional:file:../.env[.properties]

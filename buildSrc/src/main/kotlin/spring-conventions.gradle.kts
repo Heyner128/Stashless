@@ -51,6 +51,7 @@ dependencies {
     annotationProcessor(libs.lombok)
     annotationProcessor(libs.spring.boot.configuration.processor)
     developmentOnly(libs.spring.boot.devtools)
+    runtimeOnly(libs.micrometer.registry.prometheus)
     runtimeOnly(libs.driver.postgresql)
     runtimeOnly(libs.driver.h2)
     testRuntimeOnly(libs.driver.h2)
